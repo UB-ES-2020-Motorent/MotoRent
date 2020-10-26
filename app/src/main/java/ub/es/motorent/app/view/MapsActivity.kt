@@ -1,4 +1,4 @@
-package ub.es.motorent.vista
+package ub.es.motorent.app.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

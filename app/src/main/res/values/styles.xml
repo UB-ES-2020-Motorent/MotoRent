@@ -7,5 +7,19 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <!-- Font style -->
+    <style name="cts_motorent">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+    <!-- Welcome Activity -->
+    <style name="ET_Color_Welcome" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@color/colorETGrayWelcome</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColorHint">@color/colorDarkWhite</item>
+        <item name="android:padding">10dp</item>
+    </style>
 
 </resources>

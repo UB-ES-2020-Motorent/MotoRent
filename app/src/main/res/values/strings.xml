@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">MotoRent</string>
     <string name="title_activity_maps">Map</string>
+    <string name="web_client_id">657403564853-b9ptfip8htece81dpttceh1slf9hp9di.apps.googleusercontent.com</string>
+    <string name="fail_google_auth">Google sign in failed</string>
+    <string name="fail_auth">Authentication Failed</string>
+    <string name="ok_auth">Authenticated</string>
+    <string name="welcome">Welcome</string>
+    <string name="ask_name">Enter your name</string>
+    <string name="example_user">Nickname here</string>
+    <string name="go">GO</string>
+    <string name="user_name_exist">User name already exist</string>
+    <string name="bad_user_name">Bad username</string>
+    <string name="user_created">User created</string>
+    <string name="fail_create_user">User cannot be created at this moment</string>
+    <string name="imp_create_user">Impossible to create this user</string>
+    <string name="loading_content">Loading</string>
+    <string name="signin">Sign In</string>
 </resources>

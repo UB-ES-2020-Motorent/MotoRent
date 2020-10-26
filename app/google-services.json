@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "657403564853",
+    "firebase_url": "https://motorent-7cb40.firebaseio.com",
+    "project_id": "motorent-7cb40",
+    "storage_bucket": "motorent-7cb40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657403564853:android:3322d2286282a19f39b27c",
+        "android_client_info": {
+          "package_name": "ub.es.motorent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "657403564853-bcqf0a6qemp4380fkkeortc66v6bl0gv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ub.es.motorent",
+            "certificate_hash": "3971573ce212eb51e596234be4ecc1f075ad56da"
+          }
+        },
+        {
+          "client_id": "657403564853-b9ptfip8htece81dpttceh1slf9hp9di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGuc3cYkFMrjYYhKZ6OF2yJs-PKJ9qj3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "657403564853-b9ptfip8htece81dpttceh1slf9hp9di.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
