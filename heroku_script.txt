@@ -1,0 +1,6 @@
+heroku login
+heroku apps:create <nom_deploy>
+heroku git:remote -a <nom_deploy>
+heroku config:set PRODUCTION=True -a <nom_deploy>
+heroku config:set SECRET_KEY=<clau_secreta> -a <nom_deploy>
+heroku run bash -a <nom_deploy>
