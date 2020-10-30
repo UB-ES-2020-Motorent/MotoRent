@@ -9,7 +9,7 @@ class UsersModel(db.Model):
     """
 
     __tablename__ = 'users'
-    id = db.Column(db.String(30), primary_key=True, unique=True, nullable=False)
+    id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False,autoincrement=True)
     name = db.Column(db.String(), nullable=False)
     surname = db.Column(db.String(), nullable=True)
     password = db.Column(db.String(), nullable=False)
