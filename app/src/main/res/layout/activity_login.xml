@@ -7,18 +7,123 @@
     android:layout_height="match_parent"
     tools:context=".app.view.LoginActivity"
     android:orientation="vertical"
-    android:background="@color/colorWhite"
-    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
+    android:background="@drawable/fons_login"
+    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root"
+    >
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="100dp" app:srcCompat="@drawable/moto_toast"
         android:id="@+id/motorent_logo"
-        android:contentDescription="@string/app_name" android:layout_gravity="center_horizontal"
-        android:adjustViewBounds="true" android:layout_marginTop="40dp" android:layout_marginBottom="20dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/moto_toast" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="fill_parent" android:id="@+id/fragment_login">
+
+        <TextView
+            android:id="@+id/username_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nom_d_usuari"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/UserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/pswtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contrasenya"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:autofillHints="" />
+
+        <Button
+            android:id="@+id/log_in_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/iniciar_sessi" />
+
+        <Button
+            android:id="@+id/recu_psw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/recuperar_contrasenya"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold|italic" />
+
+        <Button
+            android:id="@+id/register_mail_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/o_registrar_se_v_a_mail"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/registrar_sm_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/registrar_amb"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWelcomeName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/google_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/google" />
+
+            <Button
+                android:id="@+id/facebook_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/facebook" />
+
+            <Button
+                android:id="@+id/twitter_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/twitter"
+                />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
