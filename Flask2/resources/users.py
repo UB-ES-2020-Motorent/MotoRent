@@ -79,7 +79,6 @@ class UsersList(Resource):
     """
     API Restful methods for AccountsList
     """
-
     def get(self):
         """
         GET method
