@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.view.LoginActivity"
+    android:orientation="vertical"
+    android:background="@drawable/fons_login"
+    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
+
+    <ImageView
+        android:id="@+id/motorent_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/moto_toast" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" android:id="@+id/fragment_login">
+
+        <TextView
+            android:id="@+id/txt_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nom_d_usuari"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etx_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/txt_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etx_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email_example"
+            android:inputType="textPersonName"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/txt_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contrasenya"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etx_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/txt_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contrasenya"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etx_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:autofillHints="" />
+
+        <Button
+            android:id="@+id/btn_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/registrar" />
+
+    </LinearLayout>
+</LinearLayout>

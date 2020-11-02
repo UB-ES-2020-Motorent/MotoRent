@@ -62,7 +62,7 @@
             android:autofillHints="" />
 
         <Button
-            android:id="@+id/log_in_btn"
+            android:id="@+id/sign_in_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/iniciar_sessi" />
