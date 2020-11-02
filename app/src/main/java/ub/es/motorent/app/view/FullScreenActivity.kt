@@ -110,4 +110,8 @@ abstract class FullScreenActivity : AppCompatActivity() {
         return toast
     }
 
+    fun toast(text: String) {
+        customToast(text, Toast.LENGTH_SHORT).show()
+    }
+
 }

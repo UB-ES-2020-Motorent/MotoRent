@@ -27,4 +27,7 @@
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
     <string name="recuperar_contrasenya">Recuperar contrasenya</string>
+    <string name="email">Email:</string>
+    <string name="email_example">motorent@exemple.com</string>
+    <string name="registrar">Registrar-me</string>
 </resources>

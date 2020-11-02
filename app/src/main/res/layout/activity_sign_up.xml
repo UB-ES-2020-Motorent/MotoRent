@@ -8,8 +8,7 @@
     tools:context=".app.view.LoginActivity"
     android:orientation="vertical"
     android:background="@drawable/fons_login"
-    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root"
-    >
+    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
 
     <ImageView
         android:id="@+id/motorent_logo"
@@ -28,7 +27,7 @@
         android:layout_height="fill_parent" android:id="@+id/fragment_login">
 
         <TextView
-            android:id="@+id/username_text"
+            android:id="@+id/txt_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nom_d_usuari"
@@ -36,7 +35,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/UserName"
+            android:id="@+id/etx_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -45,7 +44,24 @@
             android:autofillHints="" />
 
         <TextView
-            android:id="@+id/pswtext"
+            android:id="@+id/txt_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etx_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email_example"
+            android:inputType="textPersonName"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/txt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contrasenya"
@@ -53,7 +69,24 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/Password"
+            android:id="@+id/etx_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/txt_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contrasenya"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etx_password2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -62,68 +95,10 @@
             android:autofillHints="" />
 
         <Button
-            android:id="@+id/sign_in_btn"
+            android:id="@+id/btn_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/iniciar_sessi" />
-
-        <Button
-            android:id="@+id/recu_psw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/recuperar_contrasenya"
-            android:textColor="@color/colorWelcomeName"
-            android:textStyle="bold|italic" />
-
-        <Button
-            android:id="@+id/register_mail_link"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/o_registrar_se_v_a_mail"
-            android:textAllCaps="true"
-            android:textColor="@color/colorWelcomeName"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:id="@+id/registrar_sm_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/registrar_amb"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWelcomeName" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/google_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/google" />
-
-            <Button
-                android:id="@+id/facebook_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/facebook" />
-
-            <Button
-                android:id="@+id/twitter_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/twitter"
-                />
-        </LinearLayout>
+            android:text="@string/registrar" />
 
     </LinearLayout>
 </LinearLayout>
