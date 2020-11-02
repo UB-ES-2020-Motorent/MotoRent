@@ -16,4 +16,10 @@
     <string name="imp_create_user">Impossible to create this user</string>
     <string name="loading_content">Loading</string>
     <string name="signin">Sign In</string>
+    <string name="introdueix_el_nom_d_usuari">Introdueix el nom d\'usuari</string>
+    <string name="nom_d_usuari">Nom d\'usuari</string>
+    <string name="enviar_correu">Enviar Correu</string>
+    <string name="cancel_lar">Cancel·lar</string>
+    <string name="intrdueix_el_email_del_teu_perfil">Intrdueix el email del teu perfil</string>
+    <string name="email_usat">Email usat</string>
 </resources>
