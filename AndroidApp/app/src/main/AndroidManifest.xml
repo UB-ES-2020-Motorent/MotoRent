@@ -18,15 +18,12 @@
         <activity android:name=".app.view.SignUpActivity">
         </activity>
         <activity android:name=".app.view.RecuperarContraActivity">
-
-
         </activity>
         <activity
             android:name=".app.view.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
