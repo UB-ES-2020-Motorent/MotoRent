@@ -42,8 +42,4 @@ class SignUpActivity : FullScreenActivity() {
     }
      */
 
-
-
-
-
 }

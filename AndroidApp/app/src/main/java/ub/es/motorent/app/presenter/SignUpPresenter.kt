@@ -24,7 +24,7 @@ class SignUpPresenter (var activity: SignUpActivity) {
                     activity.toast("Authentication success.")
                 } else {
                     // If sign in fails, display a message to the user.
-                    activity.toast("Authentication failed.")
+                    activity.toast(task.exception?.message.toString())
                     //updateUI(null)
                 }
             }
