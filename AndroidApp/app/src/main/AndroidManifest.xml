@@ -17,6 +17,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".app.view.SignUpActivity">
         </activity>
+        <activity android:name=".app.view.RecuperarContraActivity">
+
+
+        </activity>
         <activity
             android:name=".app.view.LoginActivity"
             android:screenOrientation="portrait">
