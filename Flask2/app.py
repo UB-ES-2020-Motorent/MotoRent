@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 
 from resources.users import Users, UsersList
-from resources.moto_coords import MotoCoords, MotoCoordsList
+from resources.map_coords import MapCoords, MapCoordsList
 
 from db import db
 
@@ -23,8 +23,8 @@ def create_app():
         api.add_resource(Users, '/user/<string:name>', '/user')
         api.add_resource(UsersList, '/users')
 
-        api.add_resource(MotoCoords, '/motocoord/<string:moto_id>', '/motocoord')
-        api.add_resource(MotoCoordsList, '/motocoords')
+        api.add_resource(MapCoords, '/mapcoord')
+        api.add_resource(MapCoordsList, '/mapcoords')
 
     return app
 
