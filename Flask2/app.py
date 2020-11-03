@@ -12,8 +12,8 @@ from db import db
 def create_app():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:MotoRent@localhost:5432/motorent_api'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:MotoRent@localhost:5432/motorent_api'
+    #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
     with app.app_context():
         db.init_app(app)
