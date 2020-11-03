@@ -31,16 +31,16 @@
             android:id="@+id/username_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nom_d_usuari"
+            android:text="@string/email"
             android:textColor="@color/colorWelcomeName"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/UserName"
+            android:id="@+id/login_txt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/username"
+            android:hint="@string/email_example"
             android:inputType="textPersonName"
             android:autofillHints="" />
 
@@ -53,7 +53,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/Password"
+            android:id="@+id/login_txt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -62,7 +62,7 @@
             android:autofillHints="" />
 
         <Button
-            android:id="@+id/sign_in_btn"
+            android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/iniciar_sessi" />
