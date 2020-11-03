@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -50,6 +53,22 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         ViewAdjuster.adjustView(findViewById(R.id.motorent_logo))
 
         supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
+
+
+        // set login btn
+        val txtEmail : TextView =findViewById(R.id.login_txt_email)
+        val txtPassword : TextView =findViewById(R.id.login_txt_password)
+        val btnRegister : Button = findViewById(R.id.login_btn)
+        btnRegister.setOnClickListener(View.OnClickListener() {
+            mAuth.signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString())
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        toast("Authentication success.")
+                    } else {
+                        toast(task.exception?.message.toString())
+                    }
+                }
+        })
 
     }
 
