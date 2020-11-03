@@ -27,4 +27,7 @@
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
     <string name="recuperar_contrasenya">Recuperar contrasenya</string>
+    <string name="facebook_app_id">1088984701532674</string>
+    <string name="fb_login_protocol_scheme">fb1088984701532674</string>
+
 </resources>

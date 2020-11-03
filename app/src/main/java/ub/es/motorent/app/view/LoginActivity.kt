@@ -4,22 +4,33 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.widget.Button
 import android.widget.Toast
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import ub.es.motorent.R
 import ub.es.motorent.app.model.Data
 import ub.es.motorent.app.model.USER_NAME
 import ub.es.motorent.app.model.User
+import ub.es.motorent.app.view.login.FacebookActivity
 import ub.es.motorent.app.view.login.LoginSignFragment
 import ub.es.motorent.app.view.login.LoginWaitFragment
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+
 
 const val USERS = "users"
 
@@ -31,6 +42,11 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+
+    private val callbackManager = CallbackManager.Factory.create()
+
+    private var loginTwitterBtn : Button ? = null
+    private var loginFacebookBtn : Button ? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +66,11 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         ViewAdjuster.adjustView(findViewById(R.id.motorent_logo))
 
         supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
+
+        loginTwitterBtn = findViewById(R.id.twitter_btn)
+        loginFacebookBtn = findViewById(R.id.facebook_btn)
+
+        loginFacebookBtn?.setOnClickListener { loginFacebook() }
 
     }
 
@@ -133,7 +154,52 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         }
     }
 
+    private fun loginFacebook() {
+
+        LoginManager.getInstance().logInWithReadPermissions(this, listOf("email"))
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult>{
+                override fun onSuccess(result: LoginResult?) {
+                    result?.let {
+                        val facebookToken = it.accessToken
+                        val credential = FacebookAuthProvider.getCredential(facebookToken.token)
+
+                        mAuth.signInWithCredential(credential).addOnCompleteListener {
+                            if(it.isSuccessful){
+                                val user = mAuth.currentUser
+                                setAuth(user)
+                            } else {
+                                Log.w(TAG, "signInWithFAcebook:failure")
+                                customImageToast(
+                                    R.drawable.moto_toast, getString(R.string.fail_auth),
+                                    Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
+                                supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancel() {
+
+                }
+
+                override fun onError(error: FacebookException?) {
+                    Log.w(TAG, "signInWithFAcebook:failure")
+                    customImageToast(
+                        R.drawable.moto_toast, getString(R.string.fail_auth),
+                        Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
+                }
+            })
+
+        val intent =
+            Intent(this@LoginActivity, FacebookActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun onLoginSign() {
         signIn()
     }
+
+
 }
