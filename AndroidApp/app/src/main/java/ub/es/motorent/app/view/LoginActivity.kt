@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_login.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.Data
 import ub.es.motorent.app.model.USER_NAME
@@ -39,6 +41,8 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        val recu_psw_btn: Button= findViewById(R.id.recu_psw)
+        val register_mail_link_btn: Button = findViewById(R.id.register_mail_link)
         ViewAdjuster.adjustViewLayoutPadding(findViewById(R.id.root))
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -55,6 +59,17 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
 
 
+        recu_psw_btn.setOnClickListener {
+            val intentI = Intent(this, RecuperarContraActivity::class.java)
+            startActivity(intentI)
+        }
+
+        register_mail_link_btn.setOnClickListener {
+            val intentI = Intent(this, SignUpActivity::class.java)
+            startActivity(intentI)
+        }
+
+
         // set login btn
         val txtEmail : TextView =findViewById(R.id.login_txt_email)
         val txtPassword : TextView =findViewById(R.id.login_txt_password)
@@ -64,6 +79,9 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         toast("Authentication success.")
+                        val intentI = Intent(this, MapsActivity::class.java)
+                        startActivity(intentI)
+
                     } else {
                         toast(task.exception?.message.toString())
                     }

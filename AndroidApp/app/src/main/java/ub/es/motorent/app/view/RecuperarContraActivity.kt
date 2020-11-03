@@ -1,5 +1,6 @@
 package ub.es.motorent.app.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -17,7 +18,8 @@ class RecuperarContraActivity : FullScreenActivity() {
         setContentView(R.layout.activity_recuperar_contra)
         username = findViewById(R.id.email_fill)
         enviarMail = findViewById(R.id.sendMail)
-        cancelar = findViewById(R.id.cancelMail)
+        val cancelarBtn: Button = findViewById(R.id.cancelMail)
+
 
 
         enviarMail.setOnClickListener(){
@@ -34,6 +36,11 @@ class RecuperarContraActivity : FullScreenActivity() {
             }else{
                 customToast("Ompla el camp amb l'email",Toast.LENGTH_LONG).show()
             }
+        }
+
+
+        cancelarBtn.setOnClickListener(){
+            finish()
         }
     }
 
