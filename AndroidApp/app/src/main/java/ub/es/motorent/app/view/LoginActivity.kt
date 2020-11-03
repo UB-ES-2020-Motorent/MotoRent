@@ -7,7 +7,6 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageButton
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -80,6 +79,9 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         toast("Authentication success.")
+                        val intentI = Intent(this, MapsActivity::class.java)
+                        startActivity(intentI)
+
                     } else {
                         toast(task.exception?.message.toString())
                     }
