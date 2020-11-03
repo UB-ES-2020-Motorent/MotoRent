@@ -1,11 +1,13 @@
 package ub.es.motorent.app.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -26,10 +28,22 @@ class SignUpActivity : FullScreenActivity() {
         val txtUserName : TextView=findViewById(R.id.etx_user_name)
         val txtEmail : TextView=findViewById(R.id.etx_mail)
         val txtPassword : TextView=findViewById(R.id.etx_password)
+        val txtPassword2 : TextView=findViewById(R.id.etx_password2)
+
 
         val btnRegister : Button = findViewById(R.id.btn_sign_in)
+
+
         btnRegister.setOnClickListener(View.OnClickListener() {
-            presenter.createAccount(txtUserName.text.toString(), txtEmail.text.toString(), txtPassword.text.toString())
+            if(txtPassword.text.toString() == txtPassword2.text.toString()){
+                if((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")){  //afegir tots els filtres de certificació de dades
+                    presenter.createAccount(txtUserName.text.toString(), txtEmail.text.toString(), txtPassword.text.toString())
+                    val intentI = Intent(this, MapsActivity::class.java)
+                    startActivity(intentI)
+                }
+            }else{
+               customToast("No coincideixen la contrasenya en el camp de text", Toast.LENGTH_LONG).show()
+            }
         });
     }
 
