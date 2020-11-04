@@ -24,7 +24,7 @@ class MapCoords(Resource):
         Return: dict (account ok / message)
         """
 
-        data = admin_parser.parse_args()
+        data = parser.parse_args()
 
         if not data['admin_code']:
             return {"message": "You need an admin code to see map coords"}, 400
