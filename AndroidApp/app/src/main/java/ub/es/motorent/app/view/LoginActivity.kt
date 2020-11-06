@@ -79,7 +79,7 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
 
 
         recu_psw_btn.setOnClickListener {
-            val intentI = Intent(this, RecuperarContraActivity::class.java)
+            val intentI = Intent(this, ResetPswdActivity::class.java)
             startActivity(intentI)
         }
 
