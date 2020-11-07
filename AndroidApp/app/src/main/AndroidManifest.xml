@@ -6,8 +6,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--          Permission to enable Login with Facebook -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Permission to enable Login with Facebook -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -17,19 +16,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".app.view.ResetPswdActivity"></activity>
-        <activity android:name=".app.view.SignUpActivity"></activity>
-        <activity android:name=".app.view.ResetPswActivity"></activity>
+
+        <activity android:name=".app.view.WelcomeActivity"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+        <activity android:name=".app.view.ResetPswdActivity" />
+
+        <activity android:name=".app.view.SignUpActivity" />
+
         <activity
             android:name=".app.view.LoginActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".app.view.WelcomeActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,7 +49,7 @@
 
         <activity
             android:name=".app.view.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
