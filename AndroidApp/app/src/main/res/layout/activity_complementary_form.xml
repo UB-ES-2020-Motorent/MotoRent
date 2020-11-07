@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.view.ComplementaryFormActivity"
+    android:orientation="vertical"
+    android:background="@drawable/fons_login"
+    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
+
+    <ImageView
+        android:id="@+id/motorent_logo"
+        android:layout_width="80dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/moto_toast" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="352dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dadesPersonalText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dades_personals"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nomCogmomText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nom_i_cognoms"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/nomCognomFill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/nom_i_cognoms"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/paisIdentiText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/introdueix_el_pa_s_i_num_document_identitat"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/country_code_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                app:ccp_defaultLanguage="ENGLISH"
+                app:ccp_defaultNameCode="ES"
+                app:ccp_hintExampleNumber="true"
+                app:ccp_showPhoneCode="false">
+
+            </com.hbb20.CountryCodePicker>
+
+
+            <EditText
+                android:id="@+id/numIdentiFill"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/numero_d_identitat"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/dadesBancText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:text="@string/dades_banc_ries"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nomCompletText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nom_complet_del_titular_de_la_targeta"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/nomCompletFill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/nom_complet"
+            android:inputType="textPersonName"
+            android:textColorHint="@color/colorWelcomeName" />
+
+        <TextView
+            android:id="@+id/numeroTargetaText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/numero_de_la_targeta"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/numeroTargetaFill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/numero_de_la_targeta"
+            android:inputType="number"
+            android:textColorHint="@color/colorWelcomeName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/dataCaducitatFill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/caducitat"
+                android:inputType="date"
+                android:textColorHint="@color/colorWelcomeName" />
+
+            <EditText
+                android:id="@+id/cvvFill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/cvv"
+                android:inputType="number"
+                android:textColorHint="@color/colorWelcomeName" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/signInBtn"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:background="@android:color/transparent"
+        android:text="@string/registrar"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWelcomeName"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+</LinearLayout>

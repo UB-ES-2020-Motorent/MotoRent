@@ -16,25 +16,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".app.view.WelcomeActivity"
+        <activity android:name=".app.view.ComplementaryFormActivity"></activity>
+        <activity
+            android:name=".app.view.WelcomeActivity"
             android:screenOrientation="portrait">
-
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <activity android:name=".app.view.ResetPswdActivity" />
-
         <activity android:name=".app.view.SignUpActivity" />
-
         <activity
             android:name=".app.view.LoginActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
