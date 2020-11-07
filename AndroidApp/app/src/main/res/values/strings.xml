@@ -38,4 +38,6 @@
     <string name="email">Email:</string>
     <string name="email_example">motorent@exemple.com</string>
     <string name="registrar">Registrar-me</string>
+    <string name="benvingut_a_motorent">Benvingut a Motorent</string>
+    <string name="logomotorent">logoMotorent</string>
 </resources>
