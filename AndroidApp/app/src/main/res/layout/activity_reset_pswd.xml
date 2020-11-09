@@ -9,7 +9,7 @@
     android:gravity="center|top"
     android:orientation="vertical"
     android:padding="40dp"
-    tools:context=".app.view.RecuperarContraActivity">
+    tools:context=".app.view.ResetPswdActivity">
 
     <ImageView
         android:id="@+id/motorent_logo"
@@ -20,7 +20,7 @@
         android:layout_marginBottom="70dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/moto_toast"/>
+        app:srcCompat="@drawable/moto_toast" />
 
     <LinearLayout
         android:id="@+id/fragment_login"
@@ -70,4 +70,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

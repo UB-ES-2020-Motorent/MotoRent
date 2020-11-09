@@ -38,4 +38,18 @@
     <string name="email">Email:</string>
     <string name="email_example">motorent@exemple.com</string>
     <string name="registrar">Registrar-me</string>
+    <string name="benvingut_a_motorent">Benvingut a Motorent</string>
+    <string name="logomotorent">logoMotorent</string>
+    <string name="dades_personals">Dades personals:</string>
+    <string name="introdueix_el_pa_s_i_num_document_identitat">Introdueix el país i num. document identitat:</string>
+    <string name="nom_i_cognoms">Nom i cognoms</string>
+    <string name="numero_d_identitat">Numero d\'identitat</string>
+    <string name="nomcognoms">Nom i Cognoms:</string>
+    <string name="nom_complet">Nom complet</string>
+    <string name="numero_de_la_targeta">Numero de la targeta</string>
+    <string name="caducitat">Caducitat</string>
+    <string name="cvv">CVV</string>
+    <string name="nom_complet_del_titular_de_la_targeta">Nom complet del titular de la targeta:</string>
+    <string name="dades_banc_ries">Dades Bancàries</string>
+    <string name="dades_personal">Dades personals</string>
 </resources>

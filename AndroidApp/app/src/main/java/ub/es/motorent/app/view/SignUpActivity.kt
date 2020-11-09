@@ -37,8 +37,10 @@ class SignUpActivity : FullScreenActivity() {
         btnRegister.setOnClickListener(View.OnClickListener() {
             if(txtPassword.text.toString() == txtPassword2.text.toString()){
                 if((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")){  //afegir tots els filtres de certificació de dades
+
                     presenter.createAccount(txtUserName.text.toString(), txtEmail.text.toString(), txtPassword.text.toString())
-                    val intentI = Intent(this, MapsActivity::class.java)
+
+                    val intentI = Intent(this, ComplementaryFormActivity::class.java)
                     startActivity(intentI)
                 }
             }else{

@@ -8,6 +8,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -42,6 +45,7 @@ class LoginActivity : FullScreenActivity(){
             .requestIdToken(getString(R.string.web_client_id))
             .requestEmail()
             .build()
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
 
@@ -52,7 +56,7 @@ class LoginActivity : FullScreenActivity(){
 
         val btnResetPsw: Button= findViewById(R.id.recu_psw)
         btnResetPsw.setOnClickListener {
-            val intentI = Intent(this, RecuperarContraActivity::class.java)
+            val intentI = Intent(this, ResetPswdActivity::class.java)
             startActivity(intentI)
         }
 
@@ -88,7 +92,7 @@ class LoginActivity : FullScreenActivity(){
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-    
+
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
