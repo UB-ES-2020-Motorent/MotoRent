@@ -20,6 +20,7 @@ import ub.es.motorent.app.model.User
 
 class WelcomeActivity : FullScreenActivity() {
 
+    /*
     private val TAG = "WelcomeActivity"
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -111,5 +112,5 @@ class WelcomeActivity : FullScreenActivity() {
     override fun onStart() {
         super.onStart()
         setnameButton.isClickable = true
-    }
+    }*/
 }

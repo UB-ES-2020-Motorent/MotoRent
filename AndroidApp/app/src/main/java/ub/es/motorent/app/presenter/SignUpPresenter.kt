@@ -9,7 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.view.SignUpActivity
 
-class SignUpPresenter (var activity: SignUpActivity) {
+class SignUpPresenter (private val activity: SignUpActivity) {
 
     // Initialize Firebase Auth
     private var auth: FirebaseAuth = Firebase.auth
