@@ -49,7 +49,7 @@ class MotosModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         """
-        Finds an user by username
+        Finds an user by id
         Param: number id
         Return: MotosModel
         """
