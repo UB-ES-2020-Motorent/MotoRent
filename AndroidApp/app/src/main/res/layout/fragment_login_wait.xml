@@ -8,7 +8,7 @@
         style="@style/cts_motorent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:id="@+id/loading_tv" tools:text="@string/loading_content"
-        android:layout_gravity="center_horizontal" android:text="@string/loading_content" android:textSize="50dp"
+        android:layout_gravity="center_horizontal" android:text="@string/loading_content" android:textSize="50sp"
         android:layout_marginBottom="25dp" android:textAlignment="center"
         android:textColor="@color/colorWelcomeText" android:layout_marginTop="40dp"/>
     <ProgressBar

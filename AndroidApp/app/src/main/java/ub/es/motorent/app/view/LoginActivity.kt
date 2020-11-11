@@ -39,13 +39,11 @@ class LoginActivity : FullScreenActivity(){
 
         presenter = LoginPresenter(this)
 
-
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.web_client_id))
             .requestEmail()
             .build()
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
 
@@ -83,6 +81,7 @@ class LoginActivity : FullScreenActivity(){
     }
 
     fun authenticationSuccessful(){
+        sendAuthToDatabase()
         toast(getString(R.string.ok_auth))
         val intentI = Intent(this, MapsActivity::class.java)
         startActivity(intentI)
@@ -112,7 +111,11 @@ class LoginActivity : FullScreenActivity(){
         }
     }
 
-
+    private fun sendAuthToDatabase() {
+        // show loading to the user while waiting for the database
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
+        // TO DO connect to db : - Judit: I'll do it
+    }
 
     /*
     private fun loginFacebook() {
