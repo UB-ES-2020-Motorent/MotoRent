@@ -12,7 +12,7 @@
         android:layout_marginBottom="25dp" android:textAlignment="center"
         android:textColor="@color/colorWelcomeText" android:layout_marginTop="40dp"/>
     <ProgressBar
-        style="@style/Widget.AppCompat.ProgressBar"
+        style="@style/ProgressBar"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/login_progress" android:indeterminate="true"

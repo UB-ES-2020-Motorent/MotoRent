@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import ub.es.motorent.R
 
