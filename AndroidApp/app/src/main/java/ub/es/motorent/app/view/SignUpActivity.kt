@@ -35,19 +35,25 @@ class SignUpActivity : FullScreenActivity() {
 
 
         btnRegister.setOnClickListener(View.OnClickListener() {
-            if(txtPassword.text.toString() == txtPassword2.text.toString()){
-                if((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")){  //afegir tots els filtres de certificació de dades
+            if(presenter.checkPassword(txtPassword.text.toString(), txtPassword2.text.toString())) {
+                if ((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")) {  //afegir tots els filtres de certificació de dades
 
-                    presenter.createAccount(txtUserName.text.toString(), txtEmail.text.toString(), txtPassword.text.toString())
-
-                    val intentI = Intent(this, ComplementaryFormActivity::class.java)
-                    startActivity(intentI)
+                    presenter.createAccount(
+                        txtUserName.text.toString(),
+                        txtEmail.text.toString(),
+                        txtPassword.text.toString()
+                    )
+                    goToMapAfterRegister()
                 }
-            }else{
-               customToast("No coincideixen la contrasenya en el camp de text", Toast.LENGTH_LONG).show()
             }
         });
     }
+    fun goToMapAfterRegister() {
+        val intentI = Intent(this, MapsActivity::class.java)
+        startActivity(intentI)
+        finish()
+    }
+}
 
     /*
     public override fun onStart() {
@@ -58,4 +64,3 @@ class SignUpActivity : FullScreenActivity() {
     }
      */
 
-}
