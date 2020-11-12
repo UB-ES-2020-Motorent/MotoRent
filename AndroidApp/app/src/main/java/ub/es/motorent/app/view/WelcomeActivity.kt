@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
+import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.presenter.WelcomePresenter
 import java.util.*
 import kotlin.concurrent.schedule
@@ -27,6 +28,8 @@ class WelcomeActivity : FullScreenActivity() {
             startActivity(presenter.navigationPath())
             finish()
         }
+
+        UserDB.getUsersFromDataBase()
     }
 
     override fun onPause() {
