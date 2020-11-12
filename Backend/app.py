@@ -28,7 +28,7 @@ def hello_world():
     return 'MotoRent Database'
 
 
-api.add_resource(Users, '/user/<string:name>', '/user')
+api.add_resource(Users, '/user/<string:user_id>', '/user')
 api.add_resource(UsersList, '/users')
 
 api.add_resource(MotosList, '/motos')
