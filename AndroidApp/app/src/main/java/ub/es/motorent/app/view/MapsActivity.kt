@@ -12,9 +12,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
+import ub.es.motorent.app.model.UserDB
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : FullScreenActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
@@ -26,6 +29,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+
+        val auth = Firebase.auth
+        val email = "primerPOST@test.com"
+        //val token = auth.getAccessToken(true).result?.token.toString()
+        val role = 0
+        //toast(token)
+        //UserDB.registerUserToDataBase(email, token, role)
+
+        //toast(UserDB.currentUserInfo.toString())
 
     }
     override fun onBackPressed() {

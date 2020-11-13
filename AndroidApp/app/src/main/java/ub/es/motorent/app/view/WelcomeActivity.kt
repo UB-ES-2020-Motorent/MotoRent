@@ -29,7 +29,6 @@ class WelcomeActivity : FullScreenActivity() {
             finish()
         }
 
-        UserDB.getUsersFromDataBase()
     }
 
     override fun onPause() {
