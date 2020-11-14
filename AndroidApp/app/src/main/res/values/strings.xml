@@ -34,7 +34,8 @@
     <string name="recuperar_contrasenya">Recuperar contrasenya</string>
     <string name="facebook_app_id">1088984701532674</string>
     <string name="fb_login_protocol_scheme">fb1088984701532674</string>
-
+    <string name="twitter_consumer_key" translatable="false">uRMpz6t62GD33HLylStt71kyl</string>
+    <string name="twitter_consumer_secret" translatable="false">7E3YLGOkLx7rFCQjaorBA8uBRT5cdC1IwStT9oDhicY2dNbyYU</string>
     <string name="email">Email:</string>
     <string name="email_example">motorent@exemple.com</string>
     <string name="registrar">Registrar-me</string>
