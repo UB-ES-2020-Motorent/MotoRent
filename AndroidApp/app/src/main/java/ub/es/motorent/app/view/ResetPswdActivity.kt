@@ -12,10 +12,6 @@ class ResetPswdActivity : FullScreenActivity() {
 
     private lateinit var presenter: ResetPswdPresenter
 
-    private lateinit var username : EditText
-    private lateinit var enviarMail : Button
-    private lateinit var cancelar : Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_pswd)

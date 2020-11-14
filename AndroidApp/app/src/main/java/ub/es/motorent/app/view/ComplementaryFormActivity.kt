@@ -37,7 +37,6 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         //en cas que no que surtis de nou aquest formulari
 
         btnRegister.setOnClickListener(View.OnClickListener() {
-
             val intentI = Intent(this, MapsActivity::class.java)
             startActivity(intentI)
         });

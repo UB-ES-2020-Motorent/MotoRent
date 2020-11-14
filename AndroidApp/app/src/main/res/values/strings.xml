@@ -3,8 +3,8 @@
     <string name="title_activity_maps">Map</string>
     <string name="web_client_id">657403564853-b9ptfip8htece81dpttceh1slf9hp9di.apps.googleusercontent.com</string>
     <string name="fail_google_auth">Google sign in failed</string>
-    <string name="fail_auth">Authentication Failed</string>
-    <string name="ok_auth">Authenticated</string>
+    <string name="fail_auth">Authentication failed.</string>
+    <string name="ok_auth">Authentication success.</string>
     <string name="welcome">Welcome</string>
     <string name="ask_name">Enter your name</string>
     <string name="example_user">Nickname here</string>

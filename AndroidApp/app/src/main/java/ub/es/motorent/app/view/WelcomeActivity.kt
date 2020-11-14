@@ -15,7 +15,6 @@ class WelcomeActivity : FullScreenActivity() {
 
     private lateinit var presenter: WelcomePresenter
 
-    private var auth: FirebaseAuth = Firebase.auth
     var timer = Timer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +34,4 @@ class WelcomeActivity : FullScreenActivity() {
         super.onPause()
     }
 
-/*
-
-
- */
 }
