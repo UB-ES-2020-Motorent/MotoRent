@@ -38,8 +38,8 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
 
         btnRegister.setOnClickListener(View.OnClickListener() {
 
-            val intentI = Intent(this, MapsActivity::class.java)
-            startActivity(intentI)
+            finish()
+
         });
 
     }
