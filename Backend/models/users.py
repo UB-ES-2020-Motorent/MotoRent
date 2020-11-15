@@ -1,4 +1,5 @@
 from db import db
+from sqlalchemy import ForeignKey
 
 
 class UsersModel(db.Model):
@@ -7,19 +8,25 @@ class UsersModel(db.Model):
     """
 
     __tablename__ = 'users'
-    id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False,autoincrement=True)
-    name = db.Column(db.String(), nullable=False)
+    id = db.Column(db.Integer(), ForeignKey('bank_data.user_id'), primary_key=True, unique=True, nullable=False, autoincrement=True)
+    id_bank_data = db.Column(db.Integer(), nullable=True, unique=True)
+    national_id_document = db.Column(db.String(), nullable=True)
+    country = db.Column(db.String(), nullable=True)
+    name = db.Column(db.String(), nullable=True)
     surname = db.Column(db.String(), nullable=True)
-    mail = db.Column(db.String(), nullable=False)
-    google_token = db.Column(db.String(), nullable=False)
+    mail = db.Column(db.String(), nullable=False, unique=True)
+    google_token = db.Column(db.String(), nullable=False, unique=True)
     role = db.Column(db.Integer(), nullable=False)
 
-    def __init__(self, name, surname, mail, google_token, role=0):
-        self.name = name
-        self.surname = surname
+    def __init__(self, mail, google_token, role):
+        self.national_id_document = None
+        self.country = None
+        self.name = None
+        self.surname = None
         self.mail = mail
         self.google_token = google_token
         self.role = role
+        self.id_bank_data = None
 
     def json(self, role):
         """
@@ -29,6 +36,9 @@ class UsersModel(db.Model):
         if role == 1:
             return {
                 'id': self.id,
+                'id_bank_data': self.id_bank_data,
+                'national_id_document': self.national_id_document,
+                'country': self.country,
                 'name': self.name,
                 'surname': self.surname,
                 'mail': self.mail,
@@ -38,7 +48,8 @@ class UsersModel(db.Model):
         else:
             return {
                 'name': self.name,
-                'surname': self.surname
+                'surname': self.surname,
+                'country': self.country
             }
 
     def save_to_db(self):
@@ -56,22 +67,40 @@ class UsersModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_username(cls, name):
-        """
-        Finds an user by username
-        Param: number id
-        Return: UsertModel
-        """
-        return UsersModel.query.filter_by(name=name).first()
-
-    @classmethod
     def find_by_id(cls, user_id):
         """
         Finds an Artist by ID
         Param: number id
-        Return: ArtistModel
+        Return: UsersModel
         """
         return UsersModel.query.filter_by(id=user_id).first()
+
+    @classmethod
+    def find_by_mail(cls, mail):
+        """
+        Finds an Artist by ID
+        Param: number id
+        Return: UsersModel
+        """
+        return UsersModel.query.filter_by(mail=mail).first()
+
+    @classmethod
+    def find_by_id_bank_data(cls, id_bank_data):
+        """
+        Finds an Artist by ID
+        Param: number id
+        Return: UsersModel
+        """
+        return UsersModel.query.filter_by(id_bank_data=id_bank_data).first()
+
+    @classmethod
+    def find_by_google_token(cls, google_token):
+        """
+        Finds an Artist by Google token
+        Param: number google token
+        Return: UsersModel
+        """
+        return UsersModel.query.filter_by(google_token=google_token).first()
 
     @classmethod
     def all_users(cls):

@@ -2,14 +2,11 @@ from flask_restful import Resource, reqparse
 from models.map_coords import MapCoordsModel
 
 parser = reqparse.RequestParser()
-parser.add_argument('from_latitude', type=str, required=True, help="Origin latitude, This field cannot be left blank")
-parser.add_argument('from_longitude', type=str, required=True, help="Origin longitude, This field cannot be left blank")
+parser.add_argument('from_latitude', type=str, required=False, help="Origin latitude, This field cannot be left blank")
+parser.add_argument('from_longitude', type=str, required=False, help="Origin longitude, This field cannot be left blank")
 parser.add_argument('to_latitude', type=str, required=False, help="Destiny latitude, This field cannot be left blank")
 parser.add_argument('to_longitude', type=str, required=False, help="Destiny longitude, This field cannot be left blank")
 parser.add_argument('admin_code', type=str, required=False, help="Account code for admins for special post")
-
-admin_parser = reqparse.RequestParser()
-admin_parser.add_argument('admin_code', type=str, required=False, help="Account code for admins for special post")
 
 
 class MapCoords(Resource):
@@ -132,53 +129,28 @@ class MapCoords(Resource):
                         "from_longitude": "Origin longitude cant be empty"
                     }}, 400
 
-                if not data['to_latitude']:
-                    return {'message': {
-                        "to_latitude": "Destiny latitude cant be empty"
-                    }}, 400
-
-                if not data['to_longitude']:
-                    return {'message': {
-                        "longitude": "Destiny longitude cant be empty"
-                    }}, 400
-
                 coords = MapCoordsModel.find_by_origin(from_latitude=data['from_latitude'],
                                                        from_longitude=data['from_longitude'])
-
-                if not coords:
-                    coords = MapCoordsModel(from_latitude=data['from_latitude'], from_longitude=data['from_longitude'],
-                                            to_latitude=data['to_latitude'], to_longitude=data['to_longitude'])
-
-                    coords_to_change = MapCoordsModel.find_by_destiny(to_latitude=data['to_latitude'],
-                                                                      to_longitude=data['to_longitude'])
-                    if coords_to_change:
-                        coords_to_change.to_latitude = data['from_latitude']
-                        coords_to_change.to_longitude = data['from_longitude']
-
-                    try:
-                        coords.save_to_db()
-                        if coords_to_change:
-                            coords_to_change.save_to_db()
-                        return {'coords': MapCoordsModel.find_by_origin(from_latitude=coords.from_latitude,
-                                                                        from_longitude=coords.from_longitude).json()}, 201
-                    except:
-                        return {"message": "Error Description"}, 500
 
                 coords_to_change_put = MapCoordsModel.find_by_origin(from_latitude=coords.to_latitude,
                                                                      from_longitude=coords.to_longitude)
                 if coords_to_change_put:
-                    coords_to_change_put.from_latitude=data['to_latitude']
-                    coords_to_change_put.from_longitude=data['to_longitude']
+                    if data['to_latitude']:
+                        coords_to_change_put.from_latitude = data['to_latitude']
+                    if data['to_longitude']:
+                        coords_to_change_put.from_longitude = data['to_longitude']
 
-                coords.to_latitude = data["to_latitude"]
-                coords.to_longitude = data["to_longitude"]
+                if data['to_latitude']:
+                    coords.to_latitude = data["to_latitude"]
+                if data['to_longitude']:
+                    coords.to_longitude = data["to_longitude"]
 
                 try:
                     coords.save_to_db()
                     if coords_to_change_put:
                         coords_to_change_put.save_to_db()
                     return {'coords': MapCoordsModel.find_by_origin(from_latitude=coords.from_latitude,
-                                                                    from_longitude=coords.from_longitude).json()}, 201
+                                                                    from_longitude=coords.from_longitude).json()}, 200
                 except:
                     return {"message": "Error Description"}, 500
 
@@ -238,7 +210,7 @@ class MapCoordsList(Resource):
         GET method
         Return: dict (moto coords)
         """
-        data = admin_parser.parse_args()
+        data = parser.parse_args()
 
         map_coords = MapCoordsModel.all_map_coords()
 

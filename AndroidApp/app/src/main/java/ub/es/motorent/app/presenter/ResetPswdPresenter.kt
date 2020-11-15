@@ -7,7 +7,7 @@ import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.view.FullScreenActivity
 import ub.es.motorent.app.view.ResetPswdActivity
 
-class ResetPswdPresenter (var activity: ResetPswdActivity) : FullScreenActivity(){
+class ResetPswdPresenter (var activity: ResetPswdActivity){
 
     private var auth: FirebaseAuth = Firebase.auth
 
@@ -17,12 +17,12 @@ class ResetPswdPresenter (var activity: ResetPswdActivity) : FullScreenActivity(
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        customToast("El mail s'ha enviat correctament", Toast.LENGTH_LONG).show()
+                        activity.customToast("El mail s'ha enviat correctament", Toast.LENGTH_LONG).show()
                     }
                 }
-                .addOnCanceledListener { customToast("No tenim registrat el mail", Toast.LENGTH_LONG).show() }
+                .addOnCanceledListener { activity.customToast("No tenim registrat el mail", Toast.LENGTH_LONG).show() }
         }else{
-            customToast("Ompla el camp amb l'email", Toast.LENGTH_LONG).show()
+            activity.customToast("Ompla el camp amb l'email", Toast.LENGTH_LONG).show()
         }
     }
 

@@ -21,5 +21,8 @@
         <item name="android:textColorHint">@color/colorDarkWhite</item>
         <item name="android:padding">10dp</item>
     </style>
+    <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:color">@color/colorPrimaryDark</item>
+    </style>
 
 </resources>
