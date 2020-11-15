@@ -34,7 +34,6 @@ class Rentals(Resource):
         Return: dict (rental created / message)
         """
         data = parser.parse_args()
-
         if not data['moto_id']:
             return {'message': {
                 "moto_id": "Moto_id cant be empty"

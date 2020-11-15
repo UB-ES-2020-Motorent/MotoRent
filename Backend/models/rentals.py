@@ -10,7 +10,7 @@ class RentalsModel(db.Model):
     __tablename__ = 'rentals'
 
     id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False, autoincrement=True)
-    moto_id = db.Column(db.Integer(), ForeignKey('moto.id'), nullable=False)
+    moto_id = db.Column(db.Integer(), ForeignKey('motos.id'), nullable=False)
     user_id = db.Column(db.Integer(), ForeignKey('users.id'), nullable=False)
     active = db.Column(db.Boolean(), nullable=False)
     book_hour = db.Column(db.String(), nullable=False)
