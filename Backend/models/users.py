@@ -1,4 +1,5 @@
 from db import db
+from sqlalchemy import ForeignKey
 
 
 class UsersModel(db.Model):
@@ -7,11 +8,7 @@ class UsersModel(db.Model):
     """
 
     __tablename__ = 'users'
-    # id = db.Column(db.Integer(), ForeignKey('renting.id'), primary_key=True, unique=True, nullable=False,
-    # autoincrement=True)
-    # id_bank_data = db.Column(db.Integer(), ForeignKey('bank_data.user_id'), ForeignKey('payments.user_id'),
-    # nullable=False, unique=True, autoincrement=True)
-    id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False, autoincrement=True)
+    id = db.Column(db.Integer(), ForeignKey('bank_data.user_id'), primary_key=True, unique=True, nullable=False, autoincrement=True)
     id_bank_data = db.Column(db.Integer(), nullable=True, unique=True)
     national_id_document = db.Column(db.String(), nullable=True)
     country = db.Column(db.String(), nullable=True)
@@ -70,20 +67,11 @@ class UsersModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_name(cls, name):
-        """
-        Finds an user by name
-        Param: number name
-        Return: UsertModel
-        """
-        return UsersModel.query.filter_by(name=name).first()
-
-    @classmethod
     def find_by_id(cls, user_id):
         """
         Finds an Artist by ID
         Param: number id
-        Return: ArtistModel
+        Return: UsersModel
         """
         return UsersModel.query.filter_by(id=user_id).first()
 
@@ -92,7 +80,7 @@ class UsersModel(db.Model):
         """
         Finds an Artist by ID
         Param: number id
-        Return: ArtistModel
+        Return: UsersModel
         """
         return UsersModel.query.filter_by(mail=mail).first()
 
@@ -101,9 +89,18 @@ class UsersModel(db.Model):
         """
         Finds an Artist by ID
         Param: number id
-        Return: ArtistModel
+        Return: UsersModel
         """
         return UsersModel.query.filter_by(id_bank_data=id_bank_data).first()
+
+    @classmethod
+    def find_by_google_token(cls, google_token):
+        """
+        Finds an Artist by Google token
+        Param: number google token
+        Return: UsersModel
+        """
+        return UsersModel.query.filter_by(google_token=google_token).first()
 
     @classmethod
     def all_users(cls):
