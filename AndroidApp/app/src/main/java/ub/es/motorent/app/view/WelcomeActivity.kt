@@ -1,6 +1,7 @@
 package ub.es.motorent.app.view
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +15,9 @@ import kotlin.concurrent.schedule
 class WelcomeActivity : FullScreenActivity() {
 
     private lateinit var presenter: WelcomePresenter
+
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "fluxControl"
 
     var timer = Timer()
 
@@ -32,6 +36,15 @@ class WelcomeActivity : FullScreenActivity() {
     override fun onPause() {
         timer.cancel()
         super.onPause()
+    }
+
+    fun autoLogin() :Boolean{
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        if(sharedPref.getBoolean("autoLog",true) == true){
+            return true
+        }else{
+            return false
+        }
     }
 
 }
