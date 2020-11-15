@@ -46,7 +46,7 @@ class Rentals(Resource):
 
         rental = RentalsModel(moto_id=data['moto_id'],
                               user_id=data['user_id'],
-                              book_hour=datetime.now())
+                              book_hour=datetime.now().isoformat())
 
 
         try:
@@ -68,7 +68,7 @@ class Rentals(Resource):
             return {'message': 'The rental is already finsished.'}, 409
 
         try:
-            rental.update_finish_hour(datetime.now())
+            rental.update_finish_rent_hour(datetime.now().isoformat())
             new_rental = RentalsModel.find_by_id(rental.id)
             return {'rental': new_rental.json()}, 200
         except:

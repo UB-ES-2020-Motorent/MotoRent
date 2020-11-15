@@ -1,5 +1,6 @@
 from db import db
 from datetime import datetime, timedelta
+from sqlalchemy import ForeignKey
 
 class RentalsModel(db.Model):
     """
@@ -9,19 +10,19 @@ class RentalsModel(db.Model):
     __tablename__ = 'rentals'
 
     id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False, autoincrement=True)
-    moto_id = db.Column(db.Integer(), nullable=False)
-    user_id = db.Column(db.Integer(), nullable=False)
+    moto_id = db.Column(db.Integer(), ForeignKey('moto.id'), nullable=False)
+    user_id = db.Column(db.Integer(), ForeignKey('users.id'), nullable=False)
     active = db.Column(db.Boolean(), nullable=False)
-    book_hour = db.Column(db.DateTime, nullable=False)
-    finish_book_hour = db.Column(db.DateTime, nullable=False)
-    finish_rental_hour = db.Column(db.DateTime, nullable=True)
+    book_hour = db.Column(db.String(), nullable=False)
+    finish_book_hour = db.Column(db.String(), nullable=False)
+    finish_rental_hour = db.Column(db.String(), nullable=True)
 
     def __init__(self, moto_id, user_id, book_hour, finish_rental_hour=None):
         self.moto_id = moto_id
         self.user_id = user_id
-        self.active = (finish_rental_hour is not None)
+        self.active = (finish_rental_hour is None)
         self.book_hour = book_hour
-        self.finish_book_hour = book_hour + timedelta(minutes=15)
+        self.finish_book_hour = self.__add_15_minutes_srting_datetime(book_hour)
         self.finish_rental_hour = finish_rental_hour
 
     def json(self):
@@ -75,10 +76,14 @@ class RentalsModel(db.Model):
         return RentalsModel.query.filter_by(id=id).first()
 
     @classmethod
-    def all_users(cls):
+    def all_rentals(cls):
         """
         Finds all RentalModels and returns them
         Return: all RentalsModels
         """
         return RentalsModel.query.all()
 
+    def __add_15_minutes_srting_datetime(self, date):
+        date_time = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
+        date_time_finish = date_time + timedelta(minutes=15)
+        return date_time_finish.isoformat()
