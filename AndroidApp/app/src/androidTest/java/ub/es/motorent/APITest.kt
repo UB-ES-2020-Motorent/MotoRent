@@ -1,12 +1,10 @@
 package ub.es.motorent
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import org.junit.Assert.*
 import ub.es.motorent.app.model.UserDB
 
 /**
@@ -19,6 +17,6 @@ class APIAndroidTest {
     @Test
     fun getUsers() {
         //Log.i("test", UserDB.getUsersFromDataBase().toString())
-        UserDB.getUsersFromDataBase()
+        UserDB.getUsers()
     }
 }

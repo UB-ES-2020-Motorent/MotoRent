@@ -1,9 +1,7 @@
 package ub.es.motorent.app.view
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -12,10 +10,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
-import ub.es.motorent.app.model.UserDB
 
 class MapsActivity : FullScreenActivity(), OnMapReadyCallback {
 
@@ -28,17 +23,6 @@ class MapsActivity : FullScreenActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-
-        val auth = Firebase.auth
-        val email = "primerPOST@test.com"
-        //val token = auth.getAccessToken(true).result?.token.toString()
-        val role = 0
-        //toast(token)
-        //UserDB.registerUserToDataBase(email, token, role)
-
-        //toast(UserDB.currentUserInfo.toString())
-
     }
     override fun onBackPressed() {
         //DO NOTHING
