@@ -1,5 +1,6 @@
 package ub.es.motorent.app.presenter
 
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -19,8 +20,7 @@ class SignUpPresenter (private val activity: SignUpActivity) {
                 if (task.isSuccessful) {
                     CommonFunctions.saveTokenToSharedPref(activity)
                     //val token = CommonFunctions.getTokenFromSharedPref(activity)
-                    val user = UserDB.registerUser(email, "EXEMPLE_A_CANVIAR", 0)
-                    UserDB.updateUserInfoInDataBase(8,email,"YOKSE",0,"nogger","black","nigeria",1234,"notengosoynigeriano")
+                    val user = UserDB.registerUser(email, "Test(cnviardespres)", 0)
                     activity.toast("user: $user")
                     activity.toast("Authentication success.")
                 } else {

@@ -1,7 +1,6 @@
 package ub.es.motorent.app.model
 
 import android.util.Log
-import ub.es.motorent.app.view.FullScreenActivity
 
 
 data class UserInfo (
