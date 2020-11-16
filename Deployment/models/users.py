@@ -1,5 +1,6 @@
 from db import db
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class UsersModel(db.Model):
@@ -17,6 +18,7 @@ class UsersModel(db.Model):
     mail = db.Column(db.String(), nullable=False, unique=True)
     google_token = db.Column(db.String(), nullable=False, unique=True)
     role = db.Column(db.Integer(), nullable=False)
+    bank_data = relationship("BankDataModel")
 
     def __init__(self, mail, google_token, role):
         self.national_id_document = None
