@@ -19,7 +19,8 @@ class SignUpPresenter (private val activity: SignUpActivity) {
                 if (task.isSuccessful) {
                     CommonFunctions.saveTokenToSharedPref(activity)
                     //val token = CommonFunctions.getTokenFromSharedPref(activity)
-                    val user = UserDB.registerUser(email, null, 0)
+                    val user = UserDB.registerUser(email, "EXEMPLE_A_CANVIAR", 0)
+                    UserDB.updateUserInfoInDataBase(8,email,"YOKSE",0,"nogger","black","nigeria",1234,"notengosoynigeriano")
                     activity.toast("user: $user")
                     activity.toast("Authentication success.")
                 } else {
