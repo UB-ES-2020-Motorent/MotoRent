@@ -1,6 +1,4 @@
 from db import db
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
 
 
 class UsersModel(db.Model):
@@ -9,7 +7,7 @@ class UsersModel(db.Model):
     """
 
     __tablename__ = 'users'
-    id = db.Column(db.Integer(), ForeignKey('bank_data.user_id'), primary_key=True, unique=True, nullable=False, autoincrement=True)
+    id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False, autoincrement=True)
     id_bank_data = db.Column(db.Integer(), nullable=True, unique=True)
     national_id_document = db.Column(db.String(), nullable=True)
     country = db.Column(db.String(), nullable=True)
@@ -18,7 +16,6 @@ class UsersModel(db.Model):
     mail = db.Column(db.String(), nullable=False, unique=True)
     google_token = db.Column(db.String(), nullable=False, unique=True)
     role = db.Column(db.Integer(), nullable=False)
-    bank_data = relationship("BankDataModel")
 
     def __init__(self, mail, google_token, role):
         self.national_id_document = None
