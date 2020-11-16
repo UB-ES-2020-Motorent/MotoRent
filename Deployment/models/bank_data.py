@@ -1,6 +1,4 @@
 from db import db
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
 
 
 class BankDataModel(db.Model):
@@ -11,12 +9,11 @@ class BankDataModel(db.Model):
     __tablename__ = 'bank_data'
 
     id_bank_data = db.Column(db.Integer(), primary_key=True, nullable=False, unique=True, autoincrement=True)
-    user_id = db.Column(db.Integer(), ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer(), nullable=False)
     card_number = db.Column(db.String(), nullable=False)
     card_owner = db.Column(db.String(), nullable=False)
     card_cvv = db.Column(db.Integer(), nullable=False)
     card_expiration = db.Column(db.String(), nullable=False)
-    users = relationship("UsersModel")
 
     def __init__(self, user_id, card_number, card_owner, card_cvv, card_expiration):
         self.user_id = user_id
