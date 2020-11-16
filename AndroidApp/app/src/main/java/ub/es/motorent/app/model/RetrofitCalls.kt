@@ -155,22 +155,15 @@ class RestApiService {
         retrofit.getUsers(ADMIN_CODE).enqueue(
             object : Callback<UserList> {
                 override fun onFailure(call: Call<UserList>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getUsers")
-                    t.printStackTrace()
+                    Log.e(TAG, "onFailure - getUsers : ", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<UserList>, response: Response<UserList>) {
-                    val res = response.body()
-                    // TODO Clean log
-                    if (response.code() == 201 && res!=null){
-                        Log.i("Retrofit", Gson().toJson(res))
-                    }else{
-                        Log.i("Retrofit non 200", Gson().toJson(res))
-                    }
+                    logResult(response, "getUsers: ")
+                    onResult(response.body())
                 }
             }
         )
-        Log.i("Retrofit", "return")
-        //return data
     }
 
     fun getUserByIdOrGoogleToken(id: Int?, google_token: String?, onResult: (UserJson?) -> Unit) {
@@ -178,20 +171,12 @@ class RestApiService {
         retrofit.getUserByIdOrGoogleToken(id, google_token, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getUserById")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getUserByIdOrGoogleToken: ", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
-                    val userInfo = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit UserById code", response.code().toString())
-                    Log.i("Retrofit getUserById", userInfo.toString())
-                    Log.i("Retrofit getUserById", Gson().toJson(userInfo))
-                    if (response.code() == 201 && userInfo!=null){
-                        Log.i("Retrofit getUserById", Gson().toJson(userInfo))
-                    }else{
-                        Log.i("Retrofit getUserById", response.message())
-                    }
+                    logResult(response, "getUserByIdOrGoogleToken: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -202,21 +187,12 @@ class RestApiService {
         retrofit.addUser(mail, google_token, role, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - addUser: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
-                    val userJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit addUser", "onResponse(), code = ${response.code()}")
-                    //UserDB.currentUserInfo = userInfo
-                    if (response.code() == 201 && userJson!=null){
-                        Log.i("Retrofit addUser", Gson().toJson(userJson))
-                    }else{
-                        Log.i("Retrofit addUser", response.message())
-                    }
-                    onResult(userJson)
+                    logResult(response, "addUser: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -230,15 +206,12 @@ class RestApiService {
                             role, id_bank_data, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - updateUser: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
-                    val userJson = response.body()
-                    Log.i("Retrofit updateUser", "onResponse(), code = ${response.code()}")
-                    Log.i("Retrofit updateUser", "onResponse(), body = ${response.message()}")
-                    onResult(userJson)
+                    logResult(response, "updateUser: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -249,21 +222,12 @@ class RestApiService {
         retrofit.deleteUser(id, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - deleteUser: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
-                    val userJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit addUser", "onResponse(), code = ${response.code()}")
-                    //UserDB.currentUserInfo = userInfo
-                    if (response.code() == 200 && userJson!=null){
-                        Log.i("Retrofit addUser", Gson().toJson(userJson))
-                    }else{
-                        Log.i("Retrofit addUser", response.message())
-                    }
-                    onResult(userJson)
+                    logResult(response, "deleteUser: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -275,22 +239,15 @@ class RestApiService {
         retrofit.getMotos().enqueue(
             object : Callback<MotoList> {
                 override fun onFailure(call: Call<MotoList>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getMotos")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getMotos", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<MotoList>, response: Response<MotoList>) {
-                    val res = response.body()
-                    // TODO Clean log
-                    if (response.code() == 201 && res!=null){
-                        Log.i("Retrofit", Gson().toJson(res))
-                    }else{
-                        Log.i("Retrofit non 200", Gson().toJson(res))
-                    }
+                    logResult(response, "getMotos: ")
+                    onResult(response.body())
                 }
             }
         )
-        Log.i("Retrofit", "return")
-        //return data
     }
 
     fun getMotoById(id: Int, onResult: (MotoJson?) -> Unit) {
@@ -298,20 +255,12 @@ class RestApiService {
         retrofit.getMotoById(id).enqueue(
             object : Callback<MotoJson> {
                 override fun onFailure(call: Call<MotoJson>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getMotoById")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getMotoById", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
-                    val motoInfo = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit MotoById code", response.code().toString())
-                    Log.i("Retrofit getMotoById", motoInfo.toString())
-                    Log.i("Retrofit getMotoById", Gson().toJson(motoInfo))
-                    if (response.code() == 201 && motoInfo!=null){
-                        Log.i("Retrofit getMotoById", Gson().toJson(motoInfo))
-                    }else{
-                        Log.i("Retrofit getMotoById", response.message())
-                    }
+                    logResult(response, "getMotoById: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -323,21 +272,12 @@ class RestApiService {
         retrofit.addMoto(license_number, battery, longitude, latitude).enqueue(
             object : Callback<MotoJson> {
                 override fun onFailure(call: Call<MotoJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - addMoto: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
-                    val motoJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit addMoto", "onResponse(), code = ${response.code()}")
-                    //MotoDB.currentMotoInfo = motoInfo
-                    if (response.code() == 201 && motoJson!=null){
-                        Log.i("Retrofit addMoto", Gson().toJson(motoJson))
-                    }else{
-                        Log.i("Retrofit addMoto", response.message())
-                    }
-                    onResult(motoJson)
+                    logResult(response, "addMoto: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -348,21 +288,12 @@ class RestApiService {
         retrofit.deleteMotoById(id).enqueue(
             object : Callback<MotoJson> {
                 override fun onFailure(call: Call<MotoJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - deleteMotoById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
-                    val motoJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit deleteMotoById", "onResponse(), code = ${response.code()}")
-                    //MotoDB.currentMotoInfo = motoInfo
-                    if (response.code() == 200 && motoJson!=null){
-                        Log.i("Retrofit deleteMotoById", Gson().toJson(motoJson))
-                    }else{
-                        Log.i("Retrofit deleteMotoById", response.message())
-                    }
-                    onResult(motoJson)
+                    logResult(response, "deleteMotoById: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -374,17 +305,12 @@ class RestApiService {
         retrofit.getAllMapCoords(ADMIN_CODE).enqueue(
             object : Callback<MapCoordList> {
                 override fun onFailure(call: Call<MapCoordList>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getAllMapCoords")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getAllMapCoords", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordList>, response: Response<MapCoordList>) {
-                    val res = response.body()
-                    // TODO Clean log
-                    if (response.code() == 201 && res!=null){
-                        Log.i("Retrofit", Gson().toJson(res))
-                    }else{
-                        Log.i("Retrofit non 200", Gson().toJson(res))
-                    }
+                    logResult(response, "getAllMapCoords: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -397,20 +323,12 @@ class RestApiService {
         retrofit.getMapCoordsByPair(from_longitude, from_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getMapCoordsByPair")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getMapCoordsByPair", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
-                    val mapCoordInfo = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit CoordPair code", response.code().toString())
-                    Log.i("Retrofit CoordPair", mapCoordInfo.toString())
-                    Log.i("Retrofit CoordPair", Gson().toJson(mapCoordInfo))
-                    if (response.code() == 201 && mapCoordInfo!=null){
-                        Log.i("Retrofit CoordPair", Gson().toJson(mapCoordInfo))
-                    }else{
-                        Log.i("Retrofit CoordPair", response.message())
-                    }
+                    logResult(response, "getMapCoordsByPair: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -421,21 +339,12 @@ class RestApiService {
         retrofit.addMapCoords(from_longitude, from_latitude, to_longitude, to_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - addMapCoords: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
-                    val mapcoordsJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit addMapCoords", "onResponse(), code = ${response.code()}")
-                    //MapCoordDB.currentMapCoordsInfo = mapCoordsInfo
-                    if (response.code() == 201 && mapcoordsJson!=null){
-                        Log.i("Retrofit addMapCoords", Gson().toJson(mapcoordsJson))
-                    }else{
-                        Log.i("Retrofit addMapCoords", response.message())
-                    }
-                    onResult(mapcoordsJson)
+                    logResult(response, "addMapCoords: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -446,15 +355,12 @@ class RestApiService {
         retrofit.updateMapCoordsByOrigin(from_longitude, from_latitude, to_longitude, to_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - updateMapCoordsByOrigin: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
-                    val mapcoordsJson = response.body()
-                    Log.i("Retrofit updateMapCoord", "onResponse(), code = ${response.code()}")
-                    Log.i("Retrofit updateMapCoord", "onResponse(), body = ${response.message()}")
-                    onResult(mapcoordsJson)
+                    logResult(response, "updateMapCoordsByOrigin: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -465,21 +371,12 @@ class RestApiService {
         retrofit.deleteMapCoordByOrigin(from_longitude, from_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - deleteMapCoordByOrigin: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
-                    val mapcoordsJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit deleteMapCoord", "onResponse(), code = ${response.code()}")
-                    //MapCoordDB.currentMapCoordInfo = mapCoordInfo
-                    if (response.code() == 200 && mapcoordsJson!=null){
-                        Log.i("Retrofit deleteMapCoord", Gson().toJson(mapcoordsJson))
-                    }else{
-                        Log.i("Retrofit deleteMapCoord", response.message())
-                    }
-                    onResult(mapcoordsJson)
+                    logResult(response, "deleteMapCoordByOrigin: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -491,22 +388,15 @@ class RestApiService {
         retrofit.getAllBankData().enqueue(
             object : Callback<BankDataList> {
                 override fun onFailure(call: Call<BankDataList>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getAllBankData")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getAllBankData", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataList>, response: Response<BankDataList>) {
-                    val res = response.body()
-                    // TODO Clean log
-                    if (response.code() == 201 && res!=null){
-                        Log.i("Retrofit", Gson().toJson(res))
-                    }else{
-                        Log.i("Retrofit non 200", Gson().toJson(res))
-                    }
+                    logResult(response, "getAllBankData: ")
+                    onResult(response.body())
                 }
             }
         )
-        Log.i("Retrofit", "return")
-        //return data
     }
 
     fun getBankDataByUIdBIdOrCardNumber(user_id: Int?, id_bank_data : Int?, card_number: BigInteger?, onResult: (BankDataJson?) -> Unit) {
@@ -514,20 +404,12 @@ class RestApiService {
         retrofit.getBankDataByUIdBIdOrCardNumber(user_id, id_bank_data, card_number).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i("Retrofit", "onFailure - getBankData")
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - getBankData", t)
+                    onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
-                    val bankdataInfo = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit getBData code", response.code().toString())
-                    Log.i("Retrofit getBankData", bankdataInfo.toString())
-                    Log.i("Retrofit getBankData", Gson().toJson(bankdataInfo))
-                    if (response.code() == 201 && bankdataInfo!=null){
-                        Log.i("Retrofit getBankData", Gson().toJson(bankdataInfo))
-                    }else{
-                        Log.i("Retrofit getBankData", response.message())
-                    }
+                    logResult(response, "getBankData: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -538,21 +420,12 @@ class RestApiService {
         retrofit.addBankData(user_id, card_number, card_owner, card_cvv, card_expiration).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - addBankData: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
-                    val bankdataJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit addBankData", "onResponse(), code = ${response.code()}")
-                    //BankDataDB.currentBankDataInfo = bankdataInfo
-                    if (response.code() == 201 && bankdataJson!=null){
-                        Log.i("Retrofit addBankData", Gson().toJson(bankdataJson))
-                    }else{
-                        Log.i("Retrofit addBankData", response.message())
-                    }
-                    onResult(bankdataJson)
+                    logResult(response, "addBankData: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -564,15 +437,12 @@ class RestApiService {
         retrofit.updateBankDataById(id, user_id, card_number, card_owner, card_cvv, card_expiration).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - updateBankDataById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
-                    val bankdataJson = response.body()
-                    Log.i("Retrofit updateBankData", "onResponse(), code = ${response.code()}")
-                    Log.i("Retrofit updateBankData", "onResponse(), body = ${response.message()}")
-                    onResult(bankdataJson)
+                    logResult(response, "updateBankDataById: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -583,21 +453,12 @@ class RestApiService {
         retrofit.deleteBankDataById(id).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i("Retrofit", t.message.toString())
-                    t.printStackTrace()
+                    Log.i(TAG, "onFailure - deleteBankDataById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
-                    val databankJson = response.body()
-                    // TODO Clean log
-                    Log.i("Retrofit deleteBankData", "onResponse(), code = ${response.code()}")
-                    //BankDataDB.currentDataBankInfo = databankInfo
-                    if (response.code() == 200 && databankJson!=null){
-                        Log.i("Retrofit deleteBankData", Gson().toJson(databankJson))
-                    }else{
-                        Log.i("Retrofit deleteBankData", response.message())
-                    }
-                    onResult(databankJson)
+                    logResult(response, "deleteBankDataById: ")
+                    onResult(response.body())
                 }
             }
         )
@@ -605,5 +466,16 @@ class RestApiService {
 
     companion object {
         private const val ADMIN_CODE = "admin_secret_code"
+        private const val TAG = "Retrofit"
+    }
+
+    fun<T> logResult(response: Response<T>, method: String?){
+        val isOK = response.code() == 200 || response.code() == 201
+        if (isOK){
+            Log.i(TAG, method + response.message())
+        }else{
+            Log.w(TAG, method + response.message())
+            Log.w(TAG, method + response.body().toString())
+        }
     }
 }

@@ -32,7 +32,7 @@ object UserDB {
         }
     }
 
-    fun getUserByIdOrGoogleToken(id: Int?, google_token: String?) {
+    fun getUserByIdOrGoogleToken(id: Int? = null, google_token: String? = null) {
         val apiService = RestApiService()
         apiService.getUserByIdOrGoogleToken(id, google_token) {
             Log.i(TAG, it.toString())
