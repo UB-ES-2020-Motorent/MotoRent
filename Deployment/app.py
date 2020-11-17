@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -38,6 +38,9 @@ api.add_resource(Motos, '/moto', '/moto/<int:id>', '/moto/<string:license_number
 
 api.add_resource(MapCoords, '/mapcoord')
 api.add_resource(MapCoordsList, '/mapcoords')
+
+api.add_resource(BankData, '/bankdata', '/bankdata/<string:id_bank_data>')
+api.add_resource(BankDataList, '/bankdatas')
 
 api.add_resource(Rentals, '/rental', '/rental/<int:id>')
 api.add_resource(RentalsList, '/rentals')
