@@ -52,7 +52,7 @@ class Motos(Resource):
 
         if not data['license_number']:
             return {'message': {
-                "license_data": "Name cant be empty"
+                "license_number": "Name cant be empty"
             }}, 400
 
         if not data['battery']:
