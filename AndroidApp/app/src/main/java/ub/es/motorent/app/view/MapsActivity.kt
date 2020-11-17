@@ -2,7 +2,6 @@ package ub.es.motorent.app.view
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -17,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
 import ub.es.motorent.R
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : FullScreenActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
