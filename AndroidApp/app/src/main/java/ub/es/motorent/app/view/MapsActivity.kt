@@ -1,7 +1,11 @@
 package ub.es.motorent.app.view
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,6 +27,16 @@ class MapsActivity : FullScreenActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        supportActionBar?.hide()
+
+        val settingBtn : ImageButton = findViewById(R.id.settingBtn)
+
+        settingBtn.setOnClickListener {
+            val intentI = Intent(this, SettingsActivity::class.java)
+            startActivity(intentI)
+        }
+
     }
     override fun onBackPressed() {
         //DO NOTHING
