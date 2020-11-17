@@ -6,11 +6,14 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.NonNull
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.internal.WebDialog
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,22 +21,23 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
+import com.twitter.sdk.android.core.identity.TwitterLoginButton
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import ub.es.motorent.R
 import ub.es.motorent.app.model.Data
 import ub.es.motorent.app.model.USER_NAME
 import ub.es.motorent.app.model.User
 import ub.es.motorent.app.view.login.LoginSignFragment
 import ub.es.motorent.app.view.login.LoginWaitFragment
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.TwitterAuthProvider;
+import ub.es.motorent.app.view.login.TwitterAuthActivity
 
 
 const val USERS = "users"
@@ -46,8 +50,6 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-
-    internal var mTwitterAuthClient: TwitterAuthClient? = null
 
     private val callbackManager = CallbackManager.Factory.create()
 
@@ -80,7 +82,9 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         loginFacebookBtn = findViewById(R.id.facebook_btn)
 
         loginFacebookBtn?.setOnClickListener { loginFacebook() }
-        loginTwitterBtn?.setOnClickListener{ getRequestToken() }
+        loginTwitterBtn?.setOnClickListener{
+            val intentI = Intent(this@LoginActivity, TwitterAuthActivity::class.java)
+            startActivity(intentI)}
 
 
         recu_psw_btn.setOnClickListener {
@@ -238,24 +242,7 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
             })
     }
 
-    private fun getRequestToken() {
-        val mTwitterAuthConfig = TwitterAuthConfig(
-            getString(R.string.twitter_consumer_key),
-            getString(R.string.twitter_consumer_secret)
-        )
-        val twitterConfig: TwitterConfig = TwitterConfig.Builder(this)
-            .twitterAuthConfig(mTwitterAuthConfig)
-            .build()
-        Twitter.initialize(twitterConfig)
-
-        mTwitterAuthClient = TwitterAuthClient()
-
-        twitterLogin()
-    }
-
     private fun getTwitterSession(): TwitterSession? {
-
-        //NOTE : if you want to get token and secret too use uncomment the below code
         /*TwitterAuthToken authToken = session.getAuthToken();
         String token = authToken.token;
         String secret = authToken.secret;*/
@@ -263,70 +250,6 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         return TwitterCore.getInstance().sessionManager.activeSession
     }
 
-    fun twitterLogin() {
-        if (getTwitterSession() == null) {
-            mTwitterAuthClient!!.authorize(this, object : Callback<TwitterSession>() {
-                override fun success(twitterSessionResult: Result<TwitterSession>) {
-                    Toast.makeText(this@LoginActivity, "Success login with twitter", Toast.LENGTH_SHORT).show()
-                    val twitterSession = twitterSessionResult.data
-                    fetchTwitterEmail(twitterSession)
-
-                }
-
-                override fun failure(e: TwitterException) {
-                    Toast.makeText(this@LoginActivity, "Failure", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {// the user is identificated already
-            fetchTwitterEmail(getTwitterSession())
-        }
-    }
-
-    fun fetchTwitterEmail(twitterSession: TwitterSession?) {
-        mTwitterAuthClient?.requestEmail(twitterSession, object : Callback<String>() {
-            override fun success(result: Result<String>) {
-                Log.d(TAG, "twitterLogin:userId" + twitterSession!!.userId)
-                Log.d(TAG, "twitterLogin:userName" + twitterSession!!.userName)
-                Log.d(TAG, "twitterLogin: result.data" + result.data)
-
-                val i = Intent(this@LoginActivity, MapsActivity::class.java)
-//                val bundle = Bundle()
-//                bundle.putString(Utils.FIRST_NAME, "")
-//                bundle.putString(Utils.LAST_NAME, "")
-//                bundle.putString(Utils.EMAIL, result.data)
-//                bundle.putString(Utils.AUTH_TYPE, "TWITTER")
-//                bundle.putString(Utils.TPA_TOKEN, twitterSession.userId.toString())
-//                i.putExtras(bundle)
-//                startActivity(i)
-//                finish()
-
-                twitter_btn!!.visibility = View.GONE
-                // btnLogut!!.visibility = View.VISIBLE
-                var userId = twitterSession!!.userId
-                var username = twitterSession!!.userName
-                var email = result.data
-                var token = twitterSession.userId.toString()
-                var str = "Now you are successfully login with twitter \n\n"
-                var tokenStr = ""
-                var usernameStr = ""
-                var emailStr = ""
-                if (token != null || token != "") {
-                    tokenStr = "User Id : " + token + "\n\n"
-                }
-
-                if (username != null || username != "") {
-                    usernameStr = "Username : " + username + "\n\n"
-                }
-
-            }
-
-
-            override fun failure(exception: TwitterException?) {
-                Toast.makeText(this@LoginActivity, "Failed to authenticate. Please try again.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-    }
 
      override fun onLoginSign() {
             signIn()
