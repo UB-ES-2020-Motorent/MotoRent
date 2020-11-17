@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".app.view.MapsActivity" />
 
+
     <ImageButton
         android:id="@+id/settingBtn"
         android:layout_width="50dp"
@@ -35,5 +36,16 @@
         app:layout_constraintTop_toTopOf="@+id/map"
         app:layout_constraintVertical_bias="0.052"
         app:srcCompat="@android:drawable/ic_menu_preferences" />
+
+    <FrameLayout
+        android:id="@+id/fragment_moto_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".app.view.MapsActivity" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
