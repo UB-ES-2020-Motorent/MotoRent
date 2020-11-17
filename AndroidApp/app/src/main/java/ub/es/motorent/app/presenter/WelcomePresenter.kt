@@ -12,8 +12,9 @@ class WelcomePresenter (var activity: WelcomeActivity) {
 
     private var auth: FirebaseAuth = Firebase.auth
 
+
     fun navigationPath() : Intent {
-        return if(auth.currentUser != null){
+        return if((auth.currentUser != null) && (activity.autoLogin())){
             val intentI = Intent(activity, MapsActivity::class.java)
             intentI
         }else{

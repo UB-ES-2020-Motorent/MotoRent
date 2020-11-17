@@ -5,15 +5,19 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.widget.ImageButton
+import androidx.fragment.app.add
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,8 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import ub.es.motorent.R
 
-
-class MapsActivity : FullScreenActivity(), LocationListener, OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
+    MotoDetailsFragment.FromFragmentToActivity, LocationListener {
 
     private lateinit var mMap: GoogleMap
     lateinit var locationManager: LocationManager
@@ -42,9 +46,18 @@ class MapsActivity : FullScreenActivity(), LocationListener, OnMapReadyCallback 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        supportActionBar?.hide()
+
+        val settingBtn : ImageButton = findViewById(R.id.settingBtn)
+
+        settingBtn.setOnClickListener {
+            val intentI = Intent(this, SettingsActivity::class.java)
+            startActivity(intentI)
+        }
+
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
@@ -91,6 +104,8 @@ class MapsActivity : FullScreenActivity(), LocationListener, OnMapReadyCallback 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        initMotosOnMap()
+        mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
         var currentLocation = if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -166,5 +181,51 @@ class MapsActivity : FullScreenActivity(), LocationListener, OnMapReadyCallback 
                 .geodesic(true)
         )
     }
-}
 
+    private fun initMotosOnMap(){
+        val motoList = listOf(
+            LatLng(41.3818, 2.1685),
+            LatLng(41.382093, 2.131414),
+            LatLng(41.402959, 2.174802),
+            LatLng(41.413352, 2.202810),
+            LatLng(41.437218, 2.180026),
+            LatLng(41.411589, 2.152448)
+        )
+        val licenseList = listOf(
+            "moto1",
+            "moto2",
+            "moto3",
+            "moto4",
+            "moto5",
+            "moto6"
+        )
+
+        for (i in motoList.indices) {
+            mMap.addMarker(MarkerOptions().position(motoList[i]).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)).title(licenseList[i]))
+        }
+    }
+
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        startFragmentMotoDetail(p0!!.title, 80)
+        return false
+    }
+
+    private fun startFragmentMotoDetail(licence: String, battery: Int){
+        val newFragment = MotoDetailsFragment.newInstance(licence, battery)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_moto_detail, newFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+    /*private fun startFragmentMotoDetail(licence: String, battery: Int){
+        val transaction = supportFragmentManager.beginTransaction()
+        val motoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail)
+        motoDetailsFragment?.let { transaction.attach(it) }
+    }*/
+
+
+    override fun onOptionChosenFromFragment(option: Int) {
+        TODO("Not yet implemented")
+    }
+
+}

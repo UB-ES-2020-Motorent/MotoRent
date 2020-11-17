@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -33,6 +34,9 @@ class LoginActivity : FullScreenActivity(){
 
     private lateinit var presenter: LoginPresenter
 
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "fluxControl"
+
     // login google
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
@@ -45,12 +49,17 @@ class LoginActivity : FullScreenActivity(){
 
         presenter = LoginPresenter(this)
 
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.web_client_id))
             .requestEmail()
             .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        if(sharedPref.getBoolean("autoLog",true) == true){
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        }
 
 
         //val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)

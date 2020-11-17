@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -24,6 +25,9 @@ class WelcomeActivity : FullScreenActivity() {
 
     private lateinit var presenter: WelcomePresenter
     private val REQUEST_PERMISSION_FINE_LOCATION = 1
+
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "fluxControl"
 
     var timer = Timer()
 
@@ -79,6 +83,15 @@ class WelcomeActivity : FullScreenActivity() {
                 startActivity(presenter.navigationPath())
                 finish()
             }
+        }
+    }
+
+    fun autoLogin() :Boolean{
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        if(sharedPref.getBoolean("autoLog",true) == true){
+            return true
+        }else{
+            return false
         }
     }
 

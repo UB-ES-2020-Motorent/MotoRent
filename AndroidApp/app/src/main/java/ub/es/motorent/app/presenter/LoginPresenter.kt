@@ -50,7 +50,9 @@ class LoginPresenter (private val activity: LoginActivity) {
             }
     }
 
-
+    fun logOutAccount(){
+        auth.signOut()
+    }
     companion object {
         private const val TAG = "LoginPresenter"
     }
