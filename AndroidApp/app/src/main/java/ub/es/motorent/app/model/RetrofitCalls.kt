@@ -145,6 +145,30 @@ interface RestApi {
     @GET("bankdatas")
     fun getAllBankData() : Call<BankDataList>
 
+    /******************** RENTALS ********************/
+    @POST("rental")
+    fun addRental(
+        @Query("moto_id") moto_id:Int,
+        @Query("user_id") user_id:Int
+    ): Call<RentalJson>
+
+    @GET("rental")
+    fun getRentalById(
+        @Query("id") id:Int
+    ): Call<RentalJson>
+
+    @PUT("rental/{id}")
+    fun updateRentalById(
+        @Path("id") id: Int
+    ): Call<RentalJson>
+
+    @DELETE("rental/{id}")
+    fun deleteRentalById(
+        @Path("id") id: Int
+    ): Call<RentalJson>
+
+    @GET("rentals")
+    fun getAllRentals() : Call<RentalList>
 }
 
 class RestApiService {
@@ -458,6 +482,87 @@ class RestApiService {
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
                     logResult(response, "deleteBankDataById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    /******************** RENTALS ********************/
+    fun getAllRentals(onResult: (RentalList?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getAllRentals().enqueue(
+            object : Callback<RentalList> {
+                override fun onFailure(call: Call<RentalList>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getRentals : ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<RentalList>, response: Response<RentalList>) {
+                    logResult(response, "getUsers: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getRentalById(id: Int, onResult: (RentalJson?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getRentalById(id).enqueue(
+            object : Callback<RentalJson> {
+                override fun onFailure(call: Call<RentalJson>, t: Throwable) {
+                    Log.i(TAG, "onFailure - getRentalById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
+                    logResult(response, "getRentalById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun addRental(moto_id: Int, user_id: Int, onResult: (RentalJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.addRental(moto_id, user_id).enqueue(
+            object : Callback<RentalJson> {
+                override fun onFailure(call: Call<RentalJson>, t: Throwable) {
+                    Log.i(TAG, "onFailure - addRental: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
+                    logResult(response, "addRental: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun updateRentalById(id: Int, onResult: (RentalJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.updateRentalById(id).enqueue(
+            object : Callback<RentalJson> {
+                override fun onFailure(call: Call<RentalJson>, t: Throwable) {
+                    Log.i(TAG, "onFailure - updateRentalById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
+                    logResult(response, "updateRentalById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun deleteRentalById(id: Int, onResult: (RentalJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.deleteRentalById(id).enqueue(
+            object : Callback<RentalJson> {
+                override fun onFailure(call: Call<RentalJson>, t: Throwable) {
+                    Log.i(TAG, "onFailure - deleteRentalById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
+                    logResult(response, "deleteRentalById: ")
                     onResult(response.body())
                 }
             }
