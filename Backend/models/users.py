@@ -1,5 +1,4 @@
 from db import db
-from sqlalchemy import ForeignKey
 
 
 class UsersModel(db.Model):
@@ -8,7 +7,7 @@ class UsersModel(db.Model):
     """
 
     __tablename__ = 'users'
-    id = db.Column(db.Integer(), ForeignKey('bank_data.user_id'), primary_key=True, unique=True, nullable=False, autoincrement=True)
+    id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False, autoincrement=True)
     id_bank_data = db.Column(db.Integer(), nullable=True, unique=True)
     national_id_document = db.Column(db.String(), nullable=True)
     country = db.Column(db.String(), nullable=True)

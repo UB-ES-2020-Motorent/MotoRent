@@ -2,9 +2,9 @@ package ub.es.motorent.app.view
 
 import android.content.Intent
 import android.graphics.Color
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -27,12 +27,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         supportActionBar?.hide()
 
-
-        //val transaction = supportFragmentManager.beginTransaction()
-        //val motoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail)
-        //motoDetailsFragment?.let { transaction.detach(it) }
-
         val settingBtn : ImageButton = findViewById(R.id.settingBtn)
+
         settingBtn.setOnClickListener {
             val intentI = Intent(this, SettingsActivity::class.java)
             startActivity(intentI)
