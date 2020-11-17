@@ -2,24 +2,30 @@ package ub.es.motorent.app.view
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.maps.model.*
 import ub.es.motorent.R
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    var arrayList = ArrayList<LatLng>()
+
+    val coordenadas = LatLng(41.3818, 2.1685)
+    val coordMoto1 = LatLng(41.3818, 2.1685)
+    val coordMoto2 = LatLng(41.382093, 2.131414)
+    val coordMoto3 = LatLng(41.402959, 2.174802)
+    val coordMoto4 = LatLng(41.413352, 2.202810)
+    val coordMoto5 = LatLng(41.437218, 2.180026)
+    val coordMoto6 = LatLng(41.411589, 2.152448)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
 
         val settingBtn : ImageButton = findViewById(R.id.settingBtn)
+
+        arrayList.add(coordMoto1)
+        arrayList.add(coordMoto2)
+        arrayList.add(coordMoto3)
+        arrayList.add(coordMoto4)
+        arrayList.add(coordMoto5)
+        arrayList.add(coordMoto6)
 
         settingBtn.setOnClickListener {
             val intentI = Intent(this, SettingsActivity::class.java)
@@ -53,21 +66,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
+        var mMap = googleMap
 
-        val coordenadas = LatLng(41.3818, 2.1685)
-        val coordMoto1 = LatLng(41.3818, 2.1685)
-        val coordMoto2 = LatLng(41.382093, 2.131414)
-        val coordMoto3 = LatLng(41.402959, 2.174802)
-        val coordMoto4 = LatLng(41.413352, 2.202810)
-        val coordMoto5 = LatLng(41.437218, 2.180026)
-        val coordMoto6 = LatLng(41.411589, 2.152448)
-        mMap.addMarker(MarkerOptions().position(coordMoto1).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto2).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto3).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto4).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto5).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto6).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
+        for (i in 0 until arrayList.size) {
+            mMap.addMarker(MarkerOptions().position(arrayList.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
+        }
+
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
         val hole = listOf(
             LatLng(41.346835, 2.139348),
