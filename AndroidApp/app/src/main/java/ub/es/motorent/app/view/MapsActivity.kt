@@ -165,12 +165,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             LatLng(41.411589, 2.152448)
         )
         val licenseList = listOf(
-            "moto1",
-            "moto2",
-            "moto3",
-            "moto4",
-            "moto5",
-            "moto6"
+            "9980 BKB",
+            "7528 CDT",
+            "5369 PLN",
+            "2491 LKC",
+            "6317 PPB",
+            "7018 KKB"
         )
 
         for (i in motoList.indices) {
@@ -179,7 +179,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        startFragmentMotoDetail(p0!!.title, 80)
+        when (p0!!.title) {
+            "9980 BKB" -> {
+                startFragmentMotoDetail(p0!!.title, 94)
+            }
+            "7528 CDT" -> {
+                startFragmentMotoDetail(p0!!.title, 81)
+            }
+            "5369 PLN" -> {
+                startFragmentMotoDetail(p0!!.title, 76)
+            }
+            "2491 LKC" -> {
+                startFragmentMotoDetail(p0!!.title, 89)
+            }
+            "6317 PPB" -> {
+                startFragmentMotoDetail(p0!!.title, 87)
+            }
+            else -> {
+                startFragmentMotoDetail(p0!!.title, 97)
+            }
+        }
         return false
     }
 
