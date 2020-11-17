@@ -1,11 +1,18 @@
 package ub.es.motorent.app.view
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.widget.ImageButton
-import androidx.fragment.app.add
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,9 +21,13 @@ import com.google.android.gms.maps.model.*
 import ub.es.motorent.R
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
-    MotoDetailsFragment.FromFragmentToActivity {
+    MotoDetailsFragment.FromFragmentToActivity, LocationListener {
 
     private lateinit var mMap: GoogleMap
+    lateinit var locationManager: LocationManager
+    lateinit var coordenadas: LatLng
+    lateinit var marker_user : Marker
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +45,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             startActivity(intentI)
         }
 
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {}
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1.toFloat(), this)
     }
+
     override fun onBackPressed() {
         //DO NOTHING
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        coordenadas = LatLng(location?.latitude as Double, location?.longitude)
+        marker_user.position = coordenadas
+    }
+
+    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderEnabled(p0: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderDisabled(p0: String?) {
+        TODO("Not yet implemented")
     }
 
     /**
@@ -54,7 +94,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         initMotosOnMap()
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
-        val coordenadas = LatLng(41.3818, 2.1685)
+        var currentLocation = if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        } else {
+            // Permission to access the location is missing. Show rationale and request permission
+            val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            ActivityCompat.requestPermissions(this, permissions,0)
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        }
+
+        coordenadas = LatLng(currentLocation?.latitude as Double, currentLocation?.longitude)
+
+        marker_user = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
         val hole = listOf(
             LatLng(41.346835, 2.139348),
@@ -85,19 +138,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             LatLng(41.374874, 2.188226),
             LatLng(41.381653, 2.184492),
             LatLng(41.352369, 2.162530),
-            LatLng(41.346546, 2.139268))
+            LatLng(41.346546, 2.139268)
+        )
 
         val hollowPolygon = mMap.addPolygon(
             PolygonOptions().add(
-            LatLng(58.950017, -16.157126),
-            LatLng(58.950017, 26.123910),
-            LatLng(25.943059, 26.123910),
-            LatLng(25.943059, -16.157126)
-        ).addHole(hole)
-            .fillColor(Color.GRAY)
-            .strokeWidth(5.0f)
-            .fillColor(0x55686868)
-            .geodesic(true)
+                LatLng(58.950017, -16.157126),
+                LatLng(58.950017, 26.123910),
+                LatLng(25.943059, 26.123910),
+                LatLng(25.943059, -16.157126)
+            ).addHole(hole)
+                .fillColor(Color.GRAY)
+                .strokeWidth(5.0f)
+                .fillColor(0x55686868)
+                .geodesic(true)
         )
     }
 

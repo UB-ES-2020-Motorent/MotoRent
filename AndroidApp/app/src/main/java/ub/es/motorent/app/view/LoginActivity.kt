@@ -1,6 +1,10 @@
 package ub.es.motorent.app.view
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +13,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
