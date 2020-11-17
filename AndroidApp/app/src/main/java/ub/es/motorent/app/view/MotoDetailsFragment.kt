@@ -5,12 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import ub.es.motorent.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,15 +15,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MotoDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var license: String? = null
+    private var battery: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            license = it.getString(ARG_LICENSE)
+            battery = it.getInt(ARG_BATTERY)
         }
     }
 
@@ -38,23 +34,38 @@ class MotoDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_moto_details, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val licenseText = view.findViewById<TextView>(R.id.moto_txt_matricula_value)
+        val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
+        licenseText.text = license
+        batteryText.text = battery.toString()
+    }
+
     companion object {
+        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+        private const val ARG_LICENSE = "license"
+        private const val ARG_BATTERY = "battery"
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param license Parameter 1.
+         * @param battery Parameter 2.
          * @return A new instance of fragment MotoDetailsFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(license: String, battery: Int) =
             MotoDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_LICENSE, license)
+                    putInt(ARG_BATTERY, battery)
                 }
             }
     }
+
+    interface FromFragmentToActivity {
+        fun onOptionChosenFromFragment(option: Int)
+    }
+
 }

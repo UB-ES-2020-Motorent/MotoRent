@@ -3,23 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".app.view.MotoDetailsFragment"
-    >
+    android:layout_height="wrap_content"
+    tools:context=".app.view.MotoDetailsFragment">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="#FFFFFF"
-        android:paddingTop="10dp" >
+        android:padding="20dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/img_moto"
                 android:layout_width="match_parent"
                 android:layout_height="104dp"
                 android:layout_marginBottom="10sp"
@@ -31,14 +32,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/moto_txt_matricula"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Matricula:" />
+                    android:text="@string/matricula" />
 
                 <TextView
-                    android:id="@+id/matriculatext"
+                    android:id="@+id/moto_txt_matricula_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -50,14 +51,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/moto_txt_battery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Bateria: " />
 
                 <TextView
-                    android:id="@+id/percentBateriatext"
+                    android:id="@+id/moto_txt_battery_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -69,14 +70,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/moto_txt_direccio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lloc aparcat:" />
 
                 <TextView
-                    android:id="@+id/direcciotext"
+                    android:id="@+id/moto_txt_direccio_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
