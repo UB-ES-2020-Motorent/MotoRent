@@ -1,23 +1,18 @@
 package ub.es.motorent.app.view
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.content.pm.PackageManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.widget.ImageButton
-import androidx.fragment.app.add
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -32,14 +27,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var locationManager: LocationManager
     lateinit var coordenadas: LatLng
     lateinit var marker_user : Marker
-    lateinit var marker1: Marker
-    lateinit var marker2: Marker
-    lateinit var marker3: Marker
-    lateinit var marker4: Marker
-    lateinit var marker5: Marker
-    lateinit var marker6: Marker
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,21 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         coordenadas = LatLng(currentLocation?.latitude as Double, currentLocation?.longitude)
 
-        val coordMoto1 = LatLng(41.3818, 2.1685)
-        val coordMoto2 = LatLng(41.382093, 2.131414)
-        val coordMoto3 = LatLng(41.402959, 2.174802)
-        val coordMoto4 = LatLng(41.413352, 2.202810)
-        val coordMoto5 = LatLng(41.437218, 2.180026)
-        val coordMoto6 = LatLng(41.411589, 2.152448)
-
         marker_user = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
-
-        marker1 = mMap.addMarker(MarkerOptions().position(coordMoto1).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        marker2 = mMap.addMarker(MarkerOptions().position(coordMoto2).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        marker3 = mMap.addMarker(MarkerOptions().position(coordMoto3).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        marker4 = mMap.addMarker(MarkerOptions().position(coordMoto4).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        marker5 = mMap.addMarker(MarkerOptions().position(coordMoto5).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        marker6 = mMap.addMarker(MarkerOptions().position(coordMoto6).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
         val hole = listOf(

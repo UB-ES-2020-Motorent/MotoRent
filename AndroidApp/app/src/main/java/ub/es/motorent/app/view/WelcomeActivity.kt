@@ -3,20 +3,12 @@ package ub.es.motorent.app.view
 import android.Manifest
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
-import ub.es.motorent.app.model.UserDB
-import ub.es.motorent.app.model.UserJson
 import ub.es.motorent.app.presenter.WelcomePresenter
 import java.util.*
 import kotlin.concurrent.schedule
@@ -57,7 +49,7 @@ class WelcomeActivity : FullScreenActivity() {
                 requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION)
             }
         } else {
-            timer.schedule(3000) {
+            timer.schedule(2000) {
                 startActivity(presenter.navigationPath())
                 finish()
             }
