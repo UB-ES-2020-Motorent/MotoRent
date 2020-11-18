@@ -5,8 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import ub.es.motorent.R
+import ub.es.motorent.app.model.MotoDB
+import ub.es.motorent.app.model.RentalDB
+import ub.es.motorent.app.model.UserDB
 
 
 /**
@@ -16,12 +20,14 @@ import ub.es.motorent.R
  */
 class MotoDetailsFragment : Fragment() {
     private var license: String? = null
+    private var id : Int? = null
     private var battery: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             license = it.getString(ARG_LICENSE)
+            id = it.getInt(ARG_ID)
             battery = it.getInt(ARG_BATTERY)
         }
     }
@@ -37,6 +43,8 @@ class MotoDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val licenseText = view.findViewById<TextView>(R.id.moto_txt_matricula_value)
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
+        val rentbtn = view.findViewById<Button>(R.id.reservarBtn)
+        rentbtn.setOnClickListener({updateRentButton(rentbtn)})
         licenseText.text = license
         batteryText.text = battery.toString()
     }
@@ -44,6 +52,7 @@ class MotoDetailsFragment : Fragment() {
     companion object {
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private const val ARG_LICENSE = "license"
+        private const val ARG_ID = "id"
         private const val ARG_BATTERY = "battery"
 
         /**
@@ -55,13 +64,30 @@ class MotoDetailsFragment : Fragment() {
          * @return A new instance of fragment MotoDetailsFragment.
          */
         @JvmStatic
-        fun newInstance(license: String, battery: Int) =
+        fun newInstance(license: String, id: Int, battery: Int) =
             MotoDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_LICENSE, license)
+                    putInt(ARG_ID, id)
                     putInt(ARG_BATTERY, battery)
                 }
             }
+    }
+
+    fun updateRentButton(rentbtn:Button){
+        if(rentbtn.text.equals("Reservar")){
+            rentbtn.setText("Iniciar viatge")
+            rentbtn.setBackgroundColor(getResources().getColor(R.color.rentedMoto))
+            //TODO POST PER INICIAR RESERVA
+        } else if(rentbtn.text.equals("Iniciar viatge")){
+            rentbtn.setText("Finalitzar viatge")
+            rentbtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary))
+            //TODO PUT PER INICIAR VIATGE
+        } else {
+            rentbtn.setText("Reservar")
+            rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
+            //TODO PUT PER ACABAR VIATGE
+        }
     }
 
     interface FromFragmentToActivity {

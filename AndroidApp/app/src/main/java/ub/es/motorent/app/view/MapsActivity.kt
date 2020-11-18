@@ -191,30 +191,30 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMarkerClick(p0: Marker?): Boolean {
         when (p0!!.title) {
             "9980 BKB" -> {
-                startFragmentMotoDetail(p0!!.title, 94)
+                startFragmentMotoDetail(p0!!.title, 1, 94)
             }
             "7528 CDT" -> {
-                startFragmentMotoDetail(p0!!.title, 81)
+                startFragmentMotoDetail(p0!!.title, 1, 81)
             }
             "5369 PLN" -> {
-                startFragmentMotoDetail(p0!!.title, 76)
+                startFragmentMotoDetail(p0!!.title, 1, 76)
             }
             "2491 LKC" -> {
-                startFragmentMotoDetail(p0!!.title, 89)
+                startFragmentMotoDetail(p0!!.title, 1, 89)
             }
             "6317 PPB" -> {
-                startFragmentMotoDetail(p0!!.title, 87)
+                startFragmentMotoDetail(p0!!.title, 1, 87)
             }
             else -> {
-                startFragmentMotoDetail(p0!!.title, 97)
+                startFragmentMotoDetail(p0!!.title, 1, 97)
             }
         }
         return false
     }
 
-    private fun startFragmentMotoDetail(licence: String, battery: Int){
+    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int){
         supportFragmentManager.popBackStack()
-        val newFragment = MotoDetailsFragment.newInstance(licence, battery)
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
@@ -225,4 +225,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         TODO("Not yet implemented")
     }
 
+
 }
+

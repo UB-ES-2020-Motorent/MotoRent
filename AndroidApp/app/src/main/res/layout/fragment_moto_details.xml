@@ -36,7 +36,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/matricula" />
+                    android:text="@string/matricula"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/moto_txt_matricula_value"
@@ -55,7 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bateria: " />
+                    android:text="Bateria: "
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/moto_txt_battery_value"
@@ -67,21 +70,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/moto_txt_direccio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Lloc aparcat:" />
-
-                <TextView
-                    android:id="@+id/moto_txt_direccio_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
+                android:orientation="horizontal"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,21 +82,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reportar incidencia" />
+                    android:text="@string/repIncidencia" />
 
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/cancel_lar" />
             </LinearLayout>
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/reservarBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reservar" />
+                android:text="@string/reservar"
+                android:background="@color/rentMoto"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

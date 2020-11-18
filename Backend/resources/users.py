@@ -101,7 +101,7 @@ class Users(Resource):
         else:
             try:
                 user.save_to_db()
-                return {'user': UsersModel.find_by_mail(user.mail).json(0)}, 201
+                return {'user': UsersModel.find_by_mail(user.mail).json(1)}, 201
             except:
                 return {"message": "Error Description"}, 500
 
