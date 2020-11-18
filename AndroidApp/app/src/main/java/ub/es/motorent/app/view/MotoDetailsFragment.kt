@@ -92,6 +92,7 @@ class MotoDetailsFragment : Fragment() {
 
     interface FromFragmentToActivity {
         fun onOptionChosenFromFragment(option: Int)
+        fun hideLoginFragment()
     }
 
 }
