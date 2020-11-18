@@ -16,4 +16,4 @@ app:
 master: motorent-deploy
 develop: motorent-apitest
 install:
-  - pip install -r Deployment/requirements.txt
+  - pip install -r Flask2/requirements.txt
