@@ -1,12 +1,11 @@
 package ub.es.motorent.app.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import ub.es.motorent.R
-import com.hbb20.CCPCountry
 import android.widget.Toast
 import com.hbb20.CountryCodePicker
 import ub.es.motorent.app.presenter.ComplementaryFormPresenter
@@ -23,8 +22,6 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
 
         presenter = ComplementaryFormPresenter(this)
 
-        val btnRegister : Button = findViewById(R.id.signInBtn)
-
         ccp = findViewById(R.id.country_code_picker)
         ccp!!.setOnCountryChangeListener(this)
         ccp!!.setDefaultCountryUsingNameCode("ES")
@@ -36,10 +33,25 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         //es comprovés que tota la informació d'aquesta pagina estigui dins de la DB
         //en cas que no que surtis de nou aquest formulari
 
+
+        val txtName : EditText = findViewById(R.id.nomCognomFill)
+        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
+        val txtCreditCardName : EditText = findViewById(R.id.nomCompletFill)
+        val txtCreditCardNumber : EditText = findViewById(R.id.numeroTargetaFill)
+        val txtCreditCardExpirationDate : EditText = findViewById(R.id.dataCaducitatFill)
+        val txtCreditCardCVV : EditText = findViewById(R.id.cvvFill)
+
+        val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
-            finish()
-
-
+            presenter.updateUserInfo(
+                txtName.text.toString(),
+                ccp!!.selectedCountryName,
+                txtIDCard.text.toString(),
+                txtCreditCardName.text.toString(),
+                txtCreditCardNumber.text.toString(),
+                txtCreditCardExpirationDate.text.toString(),
+                txtCreditCardCVV.text.toString()
+            )
         });
 
     }
@@ -49,8 +61,14 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
     }
 
     override fun onCountrySelected() {
-        countryName=ccp!!.selectedCountryName
+        countryName = ccp!!.selectedCountryName
 
         customToast("Has seleccionat: "+countryName,Toast.LENGTH_SHORT).show()
+    }
+
+    fun goToMap(){
+        val intentI = Intent(this, MapsActivity::class.java)
+        startActivity(intentI)
+        finish()
     }
 }

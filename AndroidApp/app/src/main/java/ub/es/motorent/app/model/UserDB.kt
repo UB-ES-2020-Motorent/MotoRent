@@ -12,10 +12,8 @@ data class UserInfo (
     var role: Int?,
     var country: String? = null,
     var name: String? = null,
-    var surname: String? = null,
-    var admin_code: String? = null
+    var surname: String? = null
 )
-
 data class UserJson (
     var user: UserInfo
 )
@@ -32,22 +30,31 @@ object UserDB {
         }
     }
 
-    fun getUserByIdOrGoogleToken(id: Int? = null, google_token: String? = null) {
+    fun getUserByIdOrGoogleToken(id: Int? = null, google_token: String? = null, onResult: (UserInfo?) -> Unit) {
         val apiService = RestApiService()
         apiService.getUserByIdOrGoogleToken(id, google_token) {
             Log.i(TAG, it.toString())
+            onResult(it?.user)
         }
     }
 
-    fun registerUser(email: String, gToken: String, role: Int = 0){//}: UserInfo? {
+    fun registerUser(email: String, gToken: String, role: Int = 0, onRegistered: (UserInfo?) -> Unit) {
         val apiService = RestApiService()
         apiService.addUser(email, gToken, role) {
             Log.i(TAG, it.toString())
+            if (it?.user?.id == null){
+                getUserByIdOrGoogleToken(google_token = gToken){user ->
+                    onRegistered(user)
+                }
+            } else {
+                onRegistered(it.user)
+            }
         }
     }
 
-    fun updateUserInfoInDataBase(id: Int, email: String? = null, google_token: String? = null, role: Int? = null, name: String?, surname: String?, country: String?,
-    id_bank_data: Int?, national_id_document: String?){
+    fun updateUserInfoInDataBase(id: Int, email: String? = null, google_token: String? = null,
+                                 role: Int? = null, name: String?, surname: String?, country: String?,
+                                 id_bank_data: Int? = null, national_id_document: String? = null){
         val apiService = RestApiService()
         apiService.updateUser(id, name, surname, national_id_document, country, email, google_token,
                               role, id_bank_data ) {

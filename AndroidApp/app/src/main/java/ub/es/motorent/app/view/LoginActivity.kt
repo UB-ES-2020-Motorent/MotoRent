@@ -57,9 +57,9 @@ class LoginActivity : FullScreenActivity(){
             .requestEmail()
             .build()
 
-        if(sharedPref.getBoolean("autoLog",true) == true){
-            mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        }
+        //if(sharedPref.getBoolean("autoLog",true) == true){
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        //}
 
 
         //val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)

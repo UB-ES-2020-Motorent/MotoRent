@@ -80,11 +80,7 @@ class WelcomeActivity : FullScreenActivity() {
 
     fun autoLogin() :Boolean{
         val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
-        if(sharedPref.getBoolean("autoLog",true) == true){
-            return true
-        }else{
-            return false
-        }
+        return sharedPref.getBoolean("autoLog",true)
     }
 
 }

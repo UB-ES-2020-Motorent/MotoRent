@@ -10,6 +10,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.view.LoginActivity
 
 
@@ -23,7 +24,7 @@ class LoginPresenter (private val activity: LoginActivity) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
-                        CommonFunctions.saveTokenToSharedPref(activity)
+                        CommonFunctions.saveUIDToSharedPerf()
                         activity.authenticationSuccessful()
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -53,6 +54,7 @@ class LoginPresenter (private val activity: LoginActivity) {
     fun logOutAccount(){
         auth.signOut()
     }
+
     companion object {
         private const val TAG = "LoginPresenter"
     }

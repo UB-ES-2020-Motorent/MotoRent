@@ -39,21 +39,20 @@ class SignUpActivity : FullScreenActivity() {
 
 
         btnRegister.setOnClickListener(View.OnClickListener() {
-            if(presenter.checkPassword(txtPassword.text.toString(), txtPassword2.text.toString())) {
-                if ((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")) {  //afegir tots els filtres de certificació de dades
-
+            if ((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")) {
+                if(presenter.checkPassword(txtPassword.text.toString(), txtPassword2.text.toString())) {
                     presenter.createAccount(
                         txtUserName.text.toString(),
                         txtEmail.text.toString(),
                         txtPassword.text.toString()
                     )
-                    goToMapAfterRegister()
                 }
             }
-        });
+        })
     }
-    fun goToMapAfterRegister() {
-        val intentI = Intent(this, MapsActivity::class.java)
+
+    fun goToFormAfterRegister() {
+        val intentI = Intent(this, ComplementaryFormActivity::class.java)
         startActivity(intentI)
         finish()
     }

@@ -7,6 +7,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.UserDB
+import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.view.SignUpActivity
 
 class SignUpPresenter (private val activity: SignUpActivity) {
@@ -18,13 +19,10 @@ class SignUpPresenter (private val activity: SignUpActivity) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
-                    CommonFunctions.saveTokenToSharedPref(activity)
-                    //val token = CommonFunctions.getTokenFromSharedPref(activity)
-                    val user = UserDB.registerUser(email, "Test(cnviardespres)", 0)
-                    activity.toast("user: $user")
+                    registerUser(email)
                     activity.toast("Authentication success.")
                 } else {
-                    activity.toast(task.exception?.message.toString())
+                    Log.e(TAG, task.exception?.toString() ?: "error login google")
                 }
             }
     }
@@ -56,6 +54,30 @@ class SignUpPresenter (private val activity: SignUpActivity) {
         return false
     }
 
+    private fun registerUser(email: String) {
+        /*CommonFunctions.saveTokenToSharedPref(activity){token ->
+            val t = token ?: ""
+            UserDB.registerUser(email, t, 0) {
+                if (email != it?.mail ?: true){
+                    Log.w(TAG, "user not registered correctly")
+                } else {
+                    Log.i(TAG, "user: $it")
+                    CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                    activity.goToFormAfterRegister()
+                }
+            }
+        }*/
+        val token = CommonFunctions.saveUIDToSharedPerf()
+        UserDB.registerUser(email, token, 0) {
+            if (email != it?.mail ?: true){
+                Log.w(TAG, "user not registered correctly")
+            } else {
+                Log.i(TAG, "user: $it")
+                CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                activity.goToFormAfterRegister()
+            }
+        }
+    }
 
     companion object {
         private const val TAG = "SignUpPresenter"

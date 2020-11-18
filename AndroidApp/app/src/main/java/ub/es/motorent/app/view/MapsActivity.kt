@@ -26,7 +26,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var mMap: GoogleMap
     lateinit var locationManager: LocationManager
     lateinit var coordenadas: LatLng
-    lateinit var marker_user : Marker
+    lateinit var markerUser : Marker
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,12 +59,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onBackPressed() {
-        //DO NOTHING
+        supportFragmentManager.popBackStack()
     }
 
     override fun onLocationChanged(location: Location?) {
         coordenadas = LatLng(location?.latitude as Double, location?.longitude)
-        marker_user.position = coordenadas
+        markerUser.position = coordenadas
     }
 
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
@@ -94,9 +94,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         initMotosOnMap()
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
-        var currentLocation = if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        val currentLocation = if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val providers: List<String> = locationManager.getProviders(true)
+            var bestLocation : Location? = null
+            for (provider in providers){
+                val l = locationManager.getLastKnownLocation(provider)
+                if (l == null) continue
+                if (bestLocation == null || l.accuracy < bestLocation.accuracy) {
+                    bestLocation = l
+                }
+            }
+            bestLocation
         } else {
             // Permission to access the location is missing. Show rationale and request permission
             val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -106,7 +115,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         coordenadas = LatLng(currentLocation?.latitude as Double, currentLocation?.longitude)
 
-        marker_user = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
+        markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
         val hole = listOf(
@@ -178,6 +187,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
+
     override fun onMarkerClick(p0: Marker?): Boolean {
         when (p0!!.title) {
             "9980 BKB" -> {
@@ -203,18 +213,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun startFragmentMotoDetail(licence: String, battery: Int){
+        supportFragmentManager.popBackStack()
         val newFragment = MotoDetailsFragment.newInstance(licence, battery)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
-    /*private fun startFragmentMotoDetail(licence: String, battery: Int){
-        val transaction = supportFragmentManager.beginTransaction()
-        val motoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail)
-        motoDetailsFragment?.let { transaction.attach(it) }
-    }*/
-
 
     override fun onOptionChosenFromFragment(option: Int) {
         TODO("Not yet implemented")
