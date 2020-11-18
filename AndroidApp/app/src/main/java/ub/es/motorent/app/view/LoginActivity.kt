@@ -1,5 +1,6 @@
 package ub.es.motorent.app.view
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
+import androidx.lifecycle.MutableLiveData
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -37,7 +39,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.TwitterAuthProvider;
-import ub.es.motorent.app.view.login.TwitterAuthActivity
 
 
 const val USERS = "users"
@@ -82,9 +83,9 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
         loginFacebookBtn = findViewById(R.id.facebook_btn)
 
         loginFacebookBtn?.setOnClickListener { loginFacebook() }
-        loginTwitterBtn?.setOnClickListener{
-            val intentI = Intent(this@LoginActivity, TwitterAuthActivity::class.java)
-            startActivity(intentI)}
+        loginTwitterBtn?.setOnClickListener {
+            this.signInWithTwitter(this, mAuth)
+        }
 
 
         recu_psw_btn.setOnClickListener {
@@ -121,6 +122,21 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
     override fun onStart() {
         super.onStart()
         setAuth(mAuth.currentUser)
+    }
+
+    private fun signInWithTwitter(activity: Activity, firebaseAuth: FirebaseAuth) {
+        mAuth.startActivityForSignInWithProvider(activity, OAuthProvider.newBuilder("twitter.com").build())
+            .addOnSuccessListener {
+                val user = firebaseAuth.currentUser
+                setAuth(user)
+
+                val intentI = Intent(this@LoginActivity, MapsActivity::class.java)
+                startActivity(intentI)
+            }
+            .addOnFailureListener {
+                Log.e("twitter", "Fail AUTH")
+
+            }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
