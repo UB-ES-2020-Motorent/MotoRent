@@ -39,18 +39,12 @@ class SettingsActivity : AppCompatActivity() {
 
 
         if(sharedPref.contains("autoLog")){
-            if(sharedPref.getBoolean("autoLog",true) == false){
-                autoLog.setChecked(false)
-            }else{
-                autoLog.setChecked(true)
-            }
+            autoLog.isChecked = sharedPref.getBoolean("autoLog",true)
         }else {
-            autoLog.setChecked(true)
+            autoLog.isChecked = true
             editor.putBoolean("autoLog", true)
             editor.apply()
         }
-
-
 
         autoLog.setOnCheckedChangeListener { button, isChecked ->
             if(isChecked){
@@ -85,9 +79,6 @@ class SettingsActivity : AppCompatActivity() {
             val intentI = Intent(this, ComplementaryFormActivity::class.java)
             startActivity(intentI)
         }
-
-
-
 
     }
 

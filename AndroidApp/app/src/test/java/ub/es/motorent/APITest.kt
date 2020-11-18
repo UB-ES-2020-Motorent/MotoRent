@@ -16,8 +16,8 @@ class APITest {
         val email = "primerPOST@test.com"
         val token = "aqui0va0el0token"
         val role = 0
-        val userInfo = UserDB.registerUser(email, token, role)
-        Log.println(1, "POST_USER", userInfo.toString())
+        //val userInfo = UserDB.registerUser(email, token, role)
+        //Log.println(1, "POST_USER", userInfo.toString())
         //Assert.assertEquals(email, userInfo?.mail)
         //Assert.assertEquals(token, userInfo?.google_token)
         //Assert.assertEquals(role, userInfo?.role)
