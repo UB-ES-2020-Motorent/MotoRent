@@ -42,9 +42,9 @@ object RentalDB {
         }
     }
 
-    fun updateRentalById(id: Int){
+    fun updateRentalById(id: Int, end_rental:Boolean, latitude:Float?, longitude:Float?){
         val apiService = RestApiService()
-        apiService.updateRentalById(id) {
+        apiService.updateRentalById(id, end_rental, latitude, longitude) {
             Log.i(TAG, it.toString())
         }
     }
