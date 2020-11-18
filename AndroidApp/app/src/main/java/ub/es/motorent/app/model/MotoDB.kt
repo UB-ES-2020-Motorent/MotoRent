@@ -1,6 +1,8 @@
 package ub.es.motorent.app.model
 
 import android.util.Log
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 data class MotoInfo (
@@ -21,10 +23,11 @@ data class MotoList (
 
 object MotoDB {
 
-    fun getMotos() {
+    fun getMotos(onResult: (MotoList?) -> Unit) {
         val apiService = RestApiService()
         apiService.getMotos() {
             Log.i(TAG, it.toString())
+            onResult(it)
         }
     }
 

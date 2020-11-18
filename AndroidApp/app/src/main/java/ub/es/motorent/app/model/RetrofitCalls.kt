@@ -159,7 +159,10 @@ interface RestApi {
 
     @PUT("rental/{id}")
     fun updateRentalById(
-        @Path("id") id: Int
+        @Path("id") id: Int,
+        @Query("end_rental") end_rental:Boolean,
+        @Query("latitude") latitude:Float?,
+        @Query("longitude") longitude:Float?
     ): Call<RentalJson>
 
     @DELETE("rental/{id}")
@@ -537,9 +540,9 @@ class RestApiService {
         )
     }
 
-    fun updateRentalById(id: Int, onResult: (RentalJson?) -> Unit){
+    fun updateRentalById(id: Int, end_rental:Boolean, latitude:Float?, longitude:Float?, onResult: (RentalJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.updateRentalById(id).enqueue(
+        retrofit.updateRentalById(id, end_rental, latitude, longitude).enqueue(
             object : Callback<RentalJson> {
                 override fun onFailure(call: Call<RentalJson>, t: Throwable) {
                     Log.i(TAG, "onFailure - updateRentalById: ", t)

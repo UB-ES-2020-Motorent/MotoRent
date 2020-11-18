@@ -10,5 +10,7 @@
     <color name="colorWelcomeName">#e91922</color>
     <color name="colorETGrayWelcome">#545454</color>
     <color name="colorDarkWhite">#ACACAC</color>
+    <color name="rentedMoto">#e28527</color>
+    <color name="rentMoto">#18af2c</color>
 
 </resources>

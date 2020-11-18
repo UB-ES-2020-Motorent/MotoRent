@@ -3,27 +3,31 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
 
+from decouple import config as config_decouple
+from config import config
+
 from resources.users import Users, UsersList
 from resources.motos import Motos, MotosList
 from resources.map_coords import MapCoords, MapCoordsList
 from resources.rentals import Rentals, RentalsList
 from resources.bank_data import BankData, BankDataList
 
-from db import db, secret_key
+from db import db, init_db
 
 app = Flask(__name__)
-app.config.from_object(__name__)
+environment = config['development']
+if config_decouple('PRODUCTION', cast=bool, default=False):
+    environment = config['production']
+app.config.from_object(environment)
+
+init_db(app)
+
 api = Api(app)
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = secret_key
-
 migrate = Migrate(app, db)
 db.init_app(app)
-
 
 @app.route('/')
 def hello_world():

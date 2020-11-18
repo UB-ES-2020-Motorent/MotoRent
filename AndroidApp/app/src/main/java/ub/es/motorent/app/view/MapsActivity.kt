@@ -9,6 +9,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.activity_maps.*
 import ub.es.motorent.R
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
@@ -93,6 +95,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         initMotosOnMap()
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
+
+        mMap.setOnMapClickListener {
+            hideLoginFragment()
+        }
 
         val currentLocation = if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -191,30 +197,30 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMarkerClick(p0: Marker?): Boolean {
         when (p0!!.title) {
             "9980 BKB" -> {
-                startFragmentMotoDetail(p0!!.title, 94)
+                startFragmentMotoDetail(p0!!.title, 1, 94)
             }
             "7528 CDT" -> {
-                startFragmentMotoDetail(p0!!.title, 81)
+                startFragmentMotoDetail(p0!!.title, 1, 81)
             }
             "5369 PLN" -> {
-                startFragmentMotoDetail(p0!!.title, 76)
+                startFragmentMotoDetail(p0!!.title, 1, 76)
             }
             "2491 LKC" -> {
-                startFragmentMotoDetail(p0!!.title, 89)
+                startFragmentMotoDetail(p0!!.title, 1, 89)
             }
             "6317 PPB" -> {
-                startFragmentMotoDetail(p0!!.title, 87)
+                startFragmentMotoDetail(p0!!.title, 1, 87)
             }
             else -> {
-                startFragmentMotoDetail(p0!!.title, 97)
+                startFragmentMotoDetail(p0!!.title, 1, 97)
             }
         }
         return false
     }
 
-    private fun startFragmentMotoDetail(licence: String, battery: Int){
+    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int){
         supportFragmentManager.popBackStack()
-        val newFragment = MotoDetailsFragment.newInstance(licence, battery)
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
@@ -225,4 +231,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         TODO("Not yet implemented")
     }
 
+    override fun hideLoginFragment() {
+        this.fragment_moto_detail.removeAllViews()
+    }
+
+
 }
+
