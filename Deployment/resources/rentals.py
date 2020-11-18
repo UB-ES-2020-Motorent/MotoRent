@@ -10,6 +10,8 @@ parser.add_argument('moto_id', type=int, required=False, help='Moto id of rented
 parser.add_argument('user_id', type=int, required=False, help='User id of rented moto.')
 parser.add_argument('end_rental', type=str, required=False, help='end_rental=True to end rental,'
                                                                   'end_rental=False to start counting time of rental')
+parser.add_argument('latitude', type=float, required=False, help='Moto latitude of rented moto.')
+parser.add_argument('longitude', type=float, required=False, help='Moto longitude of rented moto.')
 
 
 class Rentals(Resource):
@@ -79,9 +81,12 @@ class Rentals(Resource):
             if str_to_bool(data['end_rental']):
                 if rental.finish_rental_hour is not None:
                     return {'message': 'The rental is already finsished.'}, 409
+                if not data['latitude'] or not data['longitude']:
+                    return {'message': 'latitude and longitude parameters needed for updating moto coordinates'}, 409
                 try:
                     rental.update_finish_rent_hour(datetime.now().isoformat())
                     moto.set_available(True)
+                    moto.update_coords(data['latitude'], data['longitude'])
                     new_rental = RentalsModel.find_by_id(rental.id)
                     return {'rental': new_rental.json()}, 200
                 except:
