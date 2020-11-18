@@ -1,2 +1,0 @@
-ub/es/motorent/BuildConfig.java
- ub.es.motorent.BuildConfig

@@ -1,14 +1,20 @@
 package ub.es.motorent.app.view
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.widget.Button
-import android.widget.ImageButton
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -17,101 +23,88 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.*
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_login.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
-import ub.es.motorent.app.model.Data
-import ub.es.motorent.app.model.USER_NAME
-import ub.es.motorent.app.model.User
-import ub.es.motorent.app.view.login.LoginSignFragment
-import ub.es.motorent.app.view.login.LoginWaitFragment
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
+import ub.es.motorent.app.presenter.LoginPresenter
 
+class LoginActivity : FullScreenActivity(){
 
-const val USERS = "users"
+    private lateinit var presenter: LoginPresenter
 
-class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListener {
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "fluxControl"
 
-    private val TAG = "LoginActivity"
-    private val RC_SIGN_IN: Int = 1000
-
+    // login google
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var mAuth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
 
-    private val callbackManager = CallbackManager.Factory.create()
-
-    private var loginTwitterBtn : Button ? = null
-    private var loginFacebookBtn : Button ? = null
+    // Facebook
+    //private val callbackManager = CallbackManager.Factory.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val recu_psw_btn: Button= findViewById(R.id.recu_psw)
-        val register_mail_link_btn: Button = findViewById(R.id.register_mail_link)
-        ViewAdjuster.adjustViewLayoutPadding(findViewById(R.id.root))
+        presenter = LoginPresenter(this)
 
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+
+        // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.web_client_id))
             .requestEmail()
             .build()
 
+        //if(sharedPref.getBoolean("autoLog",true) == true){
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        mAuth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-
-        ViewAdjuster.adjustView(findViewById(R.id.motorent_logo))
-
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
-
-        loginTwitterBtn = findViewById(R.id.twitter_btn)
-        loginFacebookBtn = findViewById(R.id.facebook_btn)
-
-        loginFacebookBtn?.setOnClickListener { loginFacebook() }
+        //}
 
 
-        recu_psw_btn.setOnClickListener {
-            val intentI = Intent(this, RecuperarContraActivity::class.java)
+        //val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
+        //val loginFacebookBtn : Button = findViewById(R.id.facebook_btn)
+
+        //loginFacebookBtn?.setOnClickListener { loginFacebook() }
+
+        val btnResetPsw: Button= findViewById(R.id.recu_psw)
+        btnResetPsw.setOnClickListener {
+            val intentI = Intent(this, ResetPswdActivity::class.java)
             startActivity(intentI)
         }
 
-        register_mail_link_btn.setOnClickListener {
+        val lnkRegisterMail: Button = findViewById(R.id.register_mail_link)
+        lnkRegisterMail.setOnClickListener {
             val intentI = Intent(this, SignUpActivity::class.java)
             startActivity(intentI)
         }
 
-
-        // set login btn
-        val txtEmail : TextView =findViewById(R.id.login_txt_email)
-        val txtPassword : TextView =findViewById(R.id.login_txt_password)
+        // login email
+        val txtEmail : TextView = findViewById(R.id.login_txt_email)
+        val txtPassword : TextView = findViewById(R.id.login_txt_password)
         val btnRegister : Button = findViewById(R.id.login_btn)
         btnRegister.setOnClickListener(View.OnClickListener() {
-            mAuth.signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        toast("Authentication success.")
-                        val intentI = Intent(this, MapsActivity::class.java)
-                        startActivity(intentI)
-
-                    } else {
-                        toast(task.exception?.message.toString())
-                    }
-                }
+            presenter.signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString())
         })
+
+        // login Google
+        val btnGoogle : Button = findViewById(R.id.google_btn)
+        btnGoogle.setOnClickListener{
+            signInWithGoogle()
+        }
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        setAuth(mAuth.currentUser)
+    fun authenticationSuccessful(){
+        sendAuthToDatabase()
+        toast(getString(R.string.ok_auth))
+        val intentI = Intent(this, MapsActivity::class.java)
+        startActivity(intentI)
+    }
+
+    private fun signInWithGoogle() {
+        val signInIntent = mGoogleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -121,74 +114,25 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account)
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                presenter.firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
                 // Google Sign In failed
+                Log.w(TAG, "Google sign in failed", e)
                 customToast(
                     getString(R.string.fail_google_auth),
                     Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
-                setAuth(null)
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    val user = mAuth.currentUser
-                    setAuth(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    customToast(
-                        getString(R.string.fail_auth),
-                        Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
-                    mGoogleSignInClient.revokeAccess().addOnCompleteListener {
-                        setAuth(null)
-                    }
-                }
-            }
+    private fun sendAuthToDatabase() {
+        // show loading to the user while waiting for the database
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
+        // TO DO connect to db : - Judit: I'll do it
     }
 
-    private fun signIn() {
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    private fun setAuth(user: FirebaseUser?) {
-        if (user != null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
-
-            var intent = Intent(this, MapsActivity::class.java)
-            val userDb = db.collection(USERS).document(user.uid)
-
-            userDb.get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val doc = task.result!!
-                    if (doc.exists()) {
-                        customImageToast(
-                            R.drawable.moto_toast, getString(R.string.ok_auth) + "\n" + doc.data!![USER_NAME],
-                            Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
-                        val myUser = doc.toObject(User::class.java)!!
-                        Data.user = myUser
-                    } else {
-                        intent = Intent(this, WelcomeActivity::class.java)
-                    }
-                    startActivity(intent)
-                    finish()
-                } else {
-                    customImageToast(
-                        R.drawable.moto_toast, getString(R.string.imp_create_user),
-                        Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
-                }
-            }
-        }
-    }
-
+    /*
     private fun loginFacebook() {
 
         LoginManager.getInstance().logInWithReadPermissions(this, listOf("email"))
@@ -204,7 +148,7 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
                         mAuth.signInWithCredential(credential).addOnCompleteListener {
                             if(it.isSuccessful){
                                 val user = mAuth.currentUser
-                                setAuth(user)
+                                //setAuth(user)
 
                                 val intentI = Intent(this@LoginActivity, MapsActivity::class.java)
                                 startActivity(intentI)
@@ -232,10 +176,11 @@ class LoginActivity : FullScreenActivity(), LoginSignFragment.OnLoginSignListene
                 }
             })
     }
+     */
 
-    override fun onLoginSign() {
-        signIn()
+    companion object {
+        private const val TAG = "LoginActivity"
+        private const val RC_SIGN_IN = 9001
     }
-
 
 }

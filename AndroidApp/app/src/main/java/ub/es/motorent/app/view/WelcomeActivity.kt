@@ -1,115 +1,86 @@
 package ub.es.motorent.app.view
 
-import android.content.Intent
+import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import ub.es.motorent.R
-import ub.es.motorent.app.model.Data
-import ub.es.motorent.app.model.USER_NAME
-import ub.es.motorent.app.model.User
-
+import ub.es.motorent.app.presenter.WelcomePresenter
+import java.util.*
+import kotlin.concurrent.schedule
 
 class WelcomeActivity : FullScreenActivity() {
 
-    private val TAG = "WelcomeActivity"
+    private lateinit var presenter: WelcomePresenter
+    private val REQUEST_PERMISSION_FINE_LOCATION = 1
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var mAuth: FirebaseAuth
-    private lateinit var db : FirebaseFirestore
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "fluxControl"
 
-    private lateinit var setnameButton: ImageButton
+    var timer = Timer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_welcome)
 
-        ViewAdjuster.adjustViewLayoutPadding(findViewById(R.id.root))
+        presenter = WelcomePresenter(this)
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
-        mAuth = FirebaseAuth.getInstance()
+        showPhoneStatePermission()
 
-        db = FirebaseFirestore.getInstance()
-
-        val uid = mAuth.currentUser!!.uid
-
-        val emailNameTv : TextView = findViewById(R.id.usermail_tv)
-
-        emailNameTv.text = mAuth.currentUser!!.email!!.split('@')[0]
-
-        ViewAdjuster.adjustView(emailNameTv)
-
-        ViewAdjuster.adjustView(findViewById(R.id.logo_img))
-
-        val nameField: EditText = findViewById(R.id.input_name_et)
-        ViewAdjuster.adjustView(nameField)
-
-        ViewAdjuster.adjustView(findViewById(R.id.welcome_tv))
-        ViewAdjuster.adjustView(findViewById(R.id.ask_name_tv))
-
-        setnameButton = findViewById(R.id.setname_btn)
-        setnameButton.setOnClickListener {
-            if (nameField.text.isNotBlank()) {
-                db.collection(USERS).whereEqualTo(USER_NAME, nameField.text.toString()).get().addOnCompleteListener { task ->
-                    if(task.isSuccessful) {
-                        if (task.result!!.documents.isEmpty()) {
-                            createUser(uid, nameField.text.toString())
-                        } else {
-                            customToast(getString(R.string.user_name_exist),
-                                Toast.LENGTH_SHORT,Gravity.TOP or
-                                        Gravity.FILL_HORIZONTAL,0,200).show()
-                        }
-                    }
-                }
-            } else {
-                customToast(getString(R.string.bad_user_name),
-                    Toast.LENGTH_SHORT,Gravity.TOP or
-                            Gravity.FILL_HORIZONTAL,0,200).show()
-            }
-        }
-        ViewAdjuster.adjustView(setnameButton)
     }
 
-    private fun createUser(uid: String, userName: String) {
-        val user = User(userName)
-        db.collection(USERS).document(uid).set(user).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val intent = Intent(this, MapsActivity::class.java)
-                customImageToast(
-                    R.drawable.moto_toast, getString(R.string.user_created),
-                    Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
-                Data.user = user
-                startActivity(intent)
+    override fun onPause() {
+        timer.cancel()
+        super.onPause()
+    }
+
+    private fun showPhoneStatePermission() {
+        val permissionCheck = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                showExplanation("Permission Needed", "Rationale", Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
+            } else {
+                requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION)
+            }
+        } else {
+            timer.schedule(2000) {
+                startActivity(presenter.navigationPath())
                 finish()
-                setnameButton.isClickable = false
-            } else {
-                customToast(getString(R.string.fail_create_user),
-                    Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
             }
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, LoginActivity::class.java)
-        // LOGOUT
-        mAuth.signOut()
-        mGoogleSignInClient.signOut()
-        startActivity(intent)
-        finish()
+    private fun showExplanation(title: String, message: String, permission: String, permissionRequestCode: Int) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(title).setMessage(message).setPositiveButton(android.R.string.ok,DialogInterface.OnClickListener {
+                dialog, id -> requestPermission(permission, permissionRequestCode)
+                })
+        builder.create().show()
     }
 
-    override fun onStart() {
-        super.onStart()
-        setnameButton.isClickable = true
+    private fun requestPermission(permissionName: String, permissionRequestCode: Int) {
+        ActivityCompat.requestPermissions(this, arrayOf(permissionName), permissionRequestCode)
     }
+
+    @Override
+    override fun onRequestPermissionsResult(requestCode : Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == 1) {
+            if (!grantResults.contains(PackageManager.PERMISSION_DENIED)) {
+                startActivity(presenter.navigationPath())
+                finish()
+            }
+        }
+    }
+
+    fun autoLogin() :Boolean{
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        return sharedPref.getBoolean("autoLog",true)
+    }
+
 }
