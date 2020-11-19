@@ -21,6 +21,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import ub.es.motorent.R
+import ub.es.motorent.app.model.MotoDB
+import ub.es.motorent.app.model.MotoInfo
+import ub.es.motorent.app.model.MotoList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
     MotoDetailsFragment.FromFragmentToActivity, LocationListener {
@@ -93,7 +96,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        initMotosOnMap()
+        MotoDB.getMotos {
+            initMotosOnMap(it)
+        }
+
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
         mMap.setOnMapClickListener {
@@ -170,50 +176,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         )
     }
 
-    private fun initMotosOnMap(){
-        val motoList = listOf(
-            LatLng(41.3818, 2.1685),
-            LatLng(41.382093, 2.131414),
-            LatLng(41.402959, 2.174802),
-            LatLng(41.413352, 2.202810),
-            LatLng(41.437218, 2.180026),
-            LatLng(41.411589, 2.152448)
-        )
-        val licenseList = listOf(
-            "9980 BKB",
-            "7528 CDT",
-            "5369 PLN",
-            "2491 LKC",
-            "6317 PPB",
-            "7018 KKB"
-        )
+    private fun initMotosOnMap(motoList: MotoList?){
 
-        for (i in motoList.indices) {
-            mMap.addMarker(MarkerOptions().position(motoList[i]).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)).title(licenseList[i]))
+        if (motoList != null) {
+            for (moto in motoList.motos) {
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val marker = mMap.addMarker(MarkerOptions().position(location).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
+                marker.tag = moto
+            }
         }
+
+
     }
 
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        when (p0!!.title) {
-            "9980 BKB" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 94)
-            }
-            "7528 CDT" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 81)
-            }
-            "5369 PLN" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 76)
-            }
-            "2491 LKC" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 89)
-            }
-            "6317 PPB" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 87)
-            }
-            else -> {
-                startFragmentMotoDetail(p0!!.title, 1, 97)
-            }
+        if (p0 != markerUser && p0 != null){
+            val moto: MotoInfo = p0.tag as MotoInfo
+            startFragmentMotoDetail(moto.license_number, moto.id!!.toInt(), moto.battery)
         }
         return false
     }
