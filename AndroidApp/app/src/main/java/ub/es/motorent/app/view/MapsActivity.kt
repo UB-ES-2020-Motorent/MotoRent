@@ -227,6 +227,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         transaction.commit()
     }
 
+
     override fun onOptionChosenFromFragment(option: Int) {
         TODO("Not yet implemented")
     }
@@ -235,6 +236,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         this.fragment_moto_detail.removeAllViews()
     }
 
-
+    override fun launchReport(id: Int) {
+        supportFragmentManager.popBackStack()
+        val newFragment = ReportFragment.newInstance(id)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_moto_detail, newFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 }
 

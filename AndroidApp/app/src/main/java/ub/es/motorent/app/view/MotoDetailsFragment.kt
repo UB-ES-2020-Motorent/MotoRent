@@ -1,5 +1,6 @@
 package ub.es.motorent.app.view
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.MotoDB
 import ub.es.motorent.app.model.RentalDB
@@ -22,6 +24,7 @@ class MotoDetailsFragment : Fragment() {
     private var license: String? = null
     private var id : Int? = null
     private var battery: Int? = null
+    private var fromFragmentToActivity: FromFragmentToActivity ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +32,17 @@ class MotoDetailsFragment : Fragment() {
             license = it.getString(ARG_LICENSE)
             id = it.getInt(ARG_ID)
             battery = it.getInt(ARG_BATTERY)
+
         }
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_moto_details, container, false)
     }
@@ -44,10 +51,27 @@ class MotoDetailsFragment : Fragment() {
         val licenseText = view.findViewById<TextView>(R.id.moto_txt_matricula_value)
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
         val rentbtn = view.findViewById<Button>(R.id.reservarBtn)
+        val reportBtn= view.findViewById<Button>(R.id.reportBtn)
+
+        reportBtn.setOnClickListener{
+            startFragmentReport(this.id!!)
+        }
+
         rentbtn.setOnClickListener({updateRentButton(rentbtn)})
         licenseText.text = license
         batteryText.text = battery.toString()
+
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FromFragmentToActivity){
+            fromFragmentToActivity = context
+        }else{
+            throw RuntimeException(context!!.toString() + " debe implementar FromFragmentToActivity")
+        }
+    }
+
 
     companion object {
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,6 +117,12 @@ class MotoDetailsFragment : Fragment() {
     interface FromFragmentToActivity {
         fun onOptionChosenFromFragment(option: Int)
         fun hideLoginFragment()
+        fun launchReport(id: Int)
+
+    }
+
+    private fun startFragmentReport(id:Int){
+        fromFragmentToActivity?.launchReport(id)
     }
 
 }
