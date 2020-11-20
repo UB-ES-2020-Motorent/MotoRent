@@ -33,5 +33,7 @@ jobs:
         apt:
           packages:
             ant
+                  before_script:
+        - cd android/AppName
       script:
-      - echo Android is running
+        - ./gradlew build connectedCheck
