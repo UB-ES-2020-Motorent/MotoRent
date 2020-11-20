@@ -20,7 +20,7 @@ jobs:
       install:
         - pip install -r Deployment/requirements.txt
       script:
-        - python -c "print (Python is running in Travis.)"
+        - python -c "print ("Python is running in Travis.")"
 
     - language: android
       dist: trusty
