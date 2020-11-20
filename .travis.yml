@@ -27,8 +27,8 @@ jobs:
       android:
         components:
           - tools
-          - android-25
-          - build-tools-25.0.3
+          - android-29
+          - build-tools-29.0.3
       addons:
         apt:
           packages:
