@@ -177,16 +177,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun initMotosOnMap(motoList: MotoList?){
-
         if (motoList != null) {
             for (moto in motoList.motos) {
-                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
-                val marker = mMap.addMarker(MarkerOptions().position(location).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-                marker.tag = moto
+                if (moto.available?.toBoolean() == true){
+                    val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                    val marker = mMap.addMarker(
+                        MarkerOptions().position(location)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon))
+                    )
+                    marker.tag = moto
+                }
             }
         }
-
-
     }
 
 
