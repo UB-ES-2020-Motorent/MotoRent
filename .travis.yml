@@ -34,6 +34,6 @@ jobs:
           packages:
             ant
       before_script:
-        - cd android/AppName
+        - cd AndroidApp
       script:
         - ./gradlew build connectedCheck
