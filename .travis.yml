@@ -35,5 +35,6 @@ jobs:
             ant
       before_script:
         - cd AndroidApp
+        - chmod +x gradlew
       script:
         - ./gradlew build connectedCheck
