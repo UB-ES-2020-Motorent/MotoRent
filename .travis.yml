@@ -33,6 +33,5 @@ jobs:
         apt:
           packages:
             ant
-      install: ant deps
       script:
       - echo Android is running
