@@ -19,7 +19,6 @@
         <activity
             android:name=".app.view.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
-        <activity android:name=".app.view.SettingActivity" />
         <activity android:name=".app.view.ComplementaryFormActivity" />
         <activity
             android:name=".app.view.WelcomeActivity"
