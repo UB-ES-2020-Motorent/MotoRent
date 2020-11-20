@@ -27,7 +27,7 @@ db.init_app(app)
 
 @app.route('/')
 def hello_world():
-    return 'MotoRent DataBase.\n Testing Travis'
+    return 'MotoRent DataBase.\n Testing Travis...'
 
 
 api.add_resource(Users, '/user/<string:user_id>', '/user')
