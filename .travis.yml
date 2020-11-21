@@ -15,8 +15,9 @@ jobs:
         - cd Deployment
       deploy:
         - provider: heroku
+          skip_cleanup: true
           api_key:
-            secure: f9f5ad86-8770-4210-a978-3b2b726736b9
+            secure: 
           app:
             master: motorent-deploy
             develop: motorent-apitest
