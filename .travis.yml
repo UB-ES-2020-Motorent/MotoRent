@@ -1,19 +1,37 @@
-language: python
-python:
-  - "3.6"      # current default Python on Travis CI
-  - "3.7"
-  - "3.8"
-# command to install dependencies
-branches:
-only:
-- master
-- develop
-deploy:
-provider: heroku
-api_key:
-secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
-app:
-master: motorent-deploy
-develop: motorent-apitest
-install:
-  - pip install -r Flask2/requirements.txt
+jobs:
+  include:
+    - language: python
+      python:
+        - "3.6"      # current default Python on Travis CI
+        - "3.7"
+        - "3.8"
+        # command to install dependencies
+      branches:
+      only:
+      - master
+      - develop
+      deploy:
+      provider: heroku
+      api_key:
+      secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
+      app:
+      master: motorent-deploy
+      develop: motorent-apitest
+      install:
+        - pip install -r Deployment/requirements.txt
+      script:
+        - python -c "print ('Python is running in Travis.')"
+
+    - language: android
+      dist: trusty
+      android:
+        components:
+          - tools
+          - android-25
+          - build-tools-25.0.3
+      addons:
+        apt:
+          packages:
+            ant
+      script:
+      - echo Android is running
