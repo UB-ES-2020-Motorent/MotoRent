@@ -51,7 +51,9 @@ jobs:
           packages:
             ant
       before_install:
-        - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
+          - touch $HOME/.android/repositories.cfg
+          - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
+          - yes | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
       before_script:
         - cd AndroidApp
         - chmod +x gradlew
