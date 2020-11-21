@@ -1,6 +1,8 @@
 package ub.es.motorent.app.model
 
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import ub.es.motorent.app.view.MapsActivity
 
 data class RentalInfo (
     var id: Int,
@@ -35,21 +37,22 @@ object RentalDB {
         }
     }
 
-    fun addRental(moto_id: Int, user_id: Int){
+    fun addRental(moto_id: Int?, user_id: Int?,  onResult: (RentalInfo?) -> Unit){
         val apiService = RestApiService()
         apiService.addRental(moto_id, user_id) {
             Log.i(TAG, it.toString())
+            onResult(it!!.rental)
         }
     }
 
-    fun updateRentalById(id: Int, end_rental:Boolean, latitude:Float?, longitude:Float?){
+    fun updateRentalById(id: Int?, end_rental:String, latitude:Float?, longitude:Float?){
         val apiService = RestApiService()
         apiService.updateRentalById(id, end_rental, latitude, longitude) {
             Log.i(TAG, it.toString())
         }
     }
 
-    fun deleteRentalById(id: Int) {
+    fun deleteRentalById(id: Int?) {
         val apiService = RestApiService()
         apiService.deleteRentalById(id) {
             Log.i(TAG, it.toString())

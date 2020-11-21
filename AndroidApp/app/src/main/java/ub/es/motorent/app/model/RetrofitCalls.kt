@@ -148,8 +148,8 @@ interface RestApi {
     /******************** RENTALS ********************/
     @POST("rental")
     fun addRental(
-        @Query("moto_id") moto_id:Int,
-        @Query("user_id") user_id:Int
+        @Query("moto_id") moto_id:Int?,
+        @Query("user_id") user_id:Int?
     ): Call<RentalJson>
 
     @GET("rental")
@@ -159,15 +159,15 @@ interface RestApi {
 
     @PUT("rental/{id}")
     fun updateRentalById(
-        @Path("id") id: Int,
-        @Query("end_rental") end_rental:Boolean,
+        @Path("id") id: Int?,
+        @Query("end_rental") end_rental:String,
         @Query("latitude") latitude:Float?,
         @Query("longitude") longitude:Float?
     ): Call<RentalJson>
 
     @DELETE("rental/{id}")
     fun deleteRentalById(
-        @Path("id") id: Int
+        @Path("id") id: Int?
     ): Call<RentalJson>
 
     @GET("rentals")
@@ -524,7 +524,7 @@ class RestApiService {
         )
     }
 
-    fun addRental(moto_id: Int, user_id: Int, onResult: (RentalJson?) -> Unit){
+    fun addRental(moto_id: Int?, user_id: Int?, onResult: (RentalJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
         retrofit.addRental(moto_id, user_id).enqueue(
             object : Callback<RentalJson> {
@@ -540,7 +540,7 @@ class RestApiService {
         )
     }
 
-    fun updateRentalById(id: Int, end_rental:Boolean, latitude:Float?, longitude:Float?, onResult: (RentalJson?) -> Unit){
+    fun updateRentalById(id: Int?, end_rental:String, latitude:Float?, longitude:Float?, onResult: (RentalJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
         retrofit.updateRentalById(id, end_rental, latitude, longitude).enqueue(
             object : Callback<RentalJson> {
@@ -556,7 +556,7 @@ class RestApiService {
         )
     }
 
-    fun deleteRentalById(id: Int, onResult: (RentalJson?) -> Unit){
+    fun deleteRentalById(id: Int?, onResult: (RentalJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
         retrofit.deleteRentalById(id).enqueue(
             object : Callback<RentalJson> {
