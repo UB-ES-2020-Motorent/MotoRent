@@ -50,9 +50,10 @@ jobs:
         apt:
           packages:
             ant
+      before_install:
+        - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
       before_script:
         - cd AndroidApp
         - chmod +x gradlew
-        - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
       script:
         - ./gradlew build check
