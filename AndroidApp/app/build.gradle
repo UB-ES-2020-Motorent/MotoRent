@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.facebook.android:facebook-login:[8.1)'
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
-
+    implementation 'com.google.maps.android:android-maps-utils:0.4+'
     implementation 'com.hbb20:ccp:2.2.2'
 
     // Import the BoM for the Firebase platform

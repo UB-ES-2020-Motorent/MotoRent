@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
+import com.google.maps.android.PolyUtil
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 
