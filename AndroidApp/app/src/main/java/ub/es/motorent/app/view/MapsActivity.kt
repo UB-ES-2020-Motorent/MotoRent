@@ -9,6 +9,9 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import ub.es.motorent.R
+import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.MotoDB
 import ub.es.motorent.app.model.MotoInfo
 import ub.es.motorent.app.model.MotoList
@@ -32,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var locationManager: LocationManager
     lateinit var coordenadas: LatLng
     lateinit var markerUser : Marker
-
+    var markers_in_display: ArrayList<Marker> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +65,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             ) != PackageManager.PERMISSION_GRANTED
         ) {}
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1.toFloat(), this)
+
+        val mainHandler = Handler(Looper.getMainLooper())
+
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                getMotosFromMap()
+                mainHandler.postDelayed(this, 5000)
+            }
+        })
+
     }
 
     override fun onBackPressed() {
@@ -96,9 +110,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        MotoDB.getMotos {
-            initMotosOnMap(it)
-        }
+        getMotosFromMap()
 
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
@@ -126,6 +138,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
 
         coordenadas = LatLng(currentLocation?.latitude as Double, currentLocation?.longitude)
+
+        CommonFunctions.saveCurrentUserCoordsToSharedPref(coordenadas, this)
 
         markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
 
@@ -176,16 +190,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         )
     }
 
-    private fun initMotosOnMap(motoList: MotoList?){
+    private fun loadMotosOnMap(motoList: MotoList?){
+
+        val markers_to_update: ArrayList<MarkerOptions?> = ArrayList()
+        val motos_to_update: ArrayList<MotoInfo> = ArrayList()
+
+        for ( i in 0 until markers_in_display.size){
+            if(motoList?.motos!!.contains(markers_in_display.get(i).tag)){
+                motoList.motos.drop(i)
+            }
+        }
+
         if (motoList != null) {
             for (moto in motoList.motos) {
                 if (moto.available?.toBoolean() == true){
                     val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
-                    val marker = mMap.addMarker(
-                        MarkerOptions().position(location)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon))
-                    )
-                    marker.tag = moto
+                    val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                                                fromResource(R.drawable.motoicon))
+                    markers_to_update.add(marker)
+                    motos_to_update.add(moto)
+                }
+            }
+            for (i in 0 until markers_to_update.size){
+                val tmp_marker = mMap.addMarker(markers_to_update.get(i))
+                tmp_marker.tag = motos_to_update.get(i)
+                markers_in_display.add(tmp_marker)
+            }
+            for (i in 0 until markers_in_display.size){
+                if (!motos_to_update.contains(markers_in_display.get(i).tag)){
+                    markers_in_display.get(i).remove()
                 }
             }
         }
@@ -195,14 +228,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMarkerClick(p0: Marker?): Boolean {
         if (p0 != markerUser && p0 != null){
             val moto: MotoInfo = p0.tag as MotoInfo
-            startFragmentMotoDetail(moto.license_number, moto.id!!.toInt(), moto.battery)
+            startFragmentMotoDetail(moto.license_number, moto.id!!.toInt(), moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
         }
         return false
     }
 
-    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int){
+    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int, coords: LatLng){
         supportFragmentManager.popBackStack()
-        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery)
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
@@ -217,6 +250,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         this.fragment_moto_detail.removeAllViews()
     }
 
+    fun getMotosFromMap(){
+        MotoDB.getMotos {
+            loadMotosOnMap(it)
+        }
+    }
 
 }
 

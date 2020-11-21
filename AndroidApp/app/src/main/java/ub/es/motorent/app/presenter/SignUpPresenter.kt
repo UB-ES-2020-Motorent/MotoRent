@@ -73,6 +73,15 @@ class SignUpPresenter (private val activity: SignUpActivity) {
                 Log.w(TAG, "user not registered correctly")
             } else {
                 Log.i(TAG, "user: $it")
+                val token = CommonFunctions.saveUIDToSharedPerf()
+                UserDB.getUserByIdOrGoogleToken (null, token) {
+                    if (token != it?.google_token ?: true){
+                        Log.w(SignUpPresenter.TAG, "user not registered correctly")
+                    } else {
+                        Log.i(SignUpPresenter.TAG, "user: $it")
+                        CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                    }
+                }
                 CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
                 activity.goToFormAfterRegister()
             }
