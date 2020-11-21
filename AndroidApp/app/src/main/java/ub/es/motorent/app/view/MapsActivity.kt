@@ -247,18 +247,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         transaction.commit()
     }
 
+    fun getMotosFromMap(){
+        MotoDB.getMotos {
+            loadMotosOnMap(it)
+        }
+    }
+
     override fun onOptionChosenFromFragment(option: Int) {
         TODO("Not yet implemented")
     }
 
     override fun hideLoginFragment() {
         this.fragment_moto_detail.removeAllViews()
-    }
-
-    fun getMotosFromMap(){
-        MotoDB.getMotos {
-            loadMotosOnMap(it)
-        }
     }
 
     override fun launchReport(id: Int) {

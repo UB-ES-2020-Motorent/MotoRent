@@ -3,6 +3,7 @@ package ub.es.motorent.app.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -69,10 +70,14 @@ class MotoDetailsFragment : Fragment() {
         if (context is FromFragmentToActivity){
             fromFragmentToActivity = context
         }else{
-            throw RuntimeException(context!!.toString() + " debe implementar FromFragmentToActivity")
+            throw RuntimeException(requireContext().toString() + " debe implementar FromFragmentToActivity")
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        fromFragmentToActivity = null
+    }
 
     companion object {
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -130,7 +135,6 @@ class MotoDetailsFragment : Fragment() {
         fun onOptionChosenFromFragment(option: Int)
         fun hideLoginFragment()
         fun launchReport(id: Int)
-
     }
 
     private fun startFragmentReport(id:Int){
