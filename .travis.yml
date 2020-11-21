@@ -6,21 +6,22 @@ jobs:
         - "3.7"
         - "3.8"
         # command to install dependencies
+
+      install:
+        - pip install -r Deployment/requirements.txt
+      script:
+        - python -c "print ('Python is running in Travis.')"
       branches:
       only:
       - master
       - develop
       deploy:
-      provider: heroku
-      api_key:
-      secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
-      app:
-      master: motorent-deploy
-      develop: motorent-apitest
-      install:
-        - pip install -r Deployment/requirements.txt
-      script:
-        - python -c "print ('Python is running in Travis.')"
+        - provider: heroku
+          api_key:
+            secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
+          app:
+            master: motorent-deploy
+            develop: motorent-apitest
 
     - language: android
       dist: trusty
