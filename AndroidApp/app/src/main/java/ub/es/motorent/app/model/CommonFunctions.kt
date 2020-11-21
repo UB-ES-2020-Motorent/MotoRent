@@ -3,6 +3,9 @@ package ub.es.motorent.app.model
 import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -39,9 +42,44 @@ object CommonFunctions {
         return uid
     }
 
-    fun getTokenFromSharedPref(activity: AppCompatActivity) : String?{
+    fun getTokenFromSharedPref(activity: FragmentActivity) : String?{
         val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         return sharedPref.getString("token", null)
+    }
+
+    fun saveCurrentUserCoordsToSharedPref(coords: LatLng, activity: FragmentActivity ){
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = gson.toJson(coords)
+        sharedPref?.edit()?.putString("coords", jsonString)?.apply()
+    }
+
+    fun loadCurrentUserCoordsToSharedPref(activity: FragmentActivity): LatLng? {
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val coordsString = sharedPref?.getString("coords", null)
+        return gson.fromJson(coordsString, LatLng::class.java)
+    }
+
+    fun saveCurrentRentalInfoToSharedPref(rentalInfo: RentalInfo, activity: FragmentActivity?){
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = gson.toJson(rentalInfo)
+        sharedPref?.edit()?.putString("rentalInfo", jsonString)?.apply()
+    }
+
+    fun loadCurrentRentalInfoToSharedPref(activity: FragmentActivity?): RentalInfo? {
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val rentalString = sharedPref?.getString("rentalInfo", null)
+        return gson.fromJson(rentalString, RentalInfo::class.java)
+    }
+
+    fun loadUserInfoFromSharedPrefFragment(activity: FragmentActivity?): UserInfo? {
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val userString = sharedPref?.getString("userInfo", null)
+        return gson.fromJson(userString, UserInfo::class.java)
     }
 
     fun saveUserInfoToSharedPref(userInfo: UserInfo, activity: AppCompatActivity){

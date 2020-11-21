@@ -7,6 +7,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions
@@ -25,6 +26,15 @@ class LoginPresenter (private val activity: LoginActivity) {
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
                         CommonFunctions.saveUIDToSharedPerf()
+                        val token = CommonFunctions.saveUIDToSharedPerf()
+                        UserDB.getUserByIdOrGoogleToken (null, token) {
+                            if (token != it?.google_token ?: true){
+                                Log.w(LoginPresenter.TAG, "user not registered correctly")
+                            } else {
+                                Log.i(LoginPresenter.TAG, "user: $it")
+                                CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                            }
+                        }
                         activity.authenticationSuccessful()
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -40,6 +50,15 @@ class LoginPresenter (private val activity: LoginActivity) {
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
+                    val token = CommonFunctions.saveUIDToSharedPerf()
+                    UserDB.getUserByIdOrGoogleToken (null, token) {
+                        if (token != it?.google_token ?: true){
+                            Log.w(LoginPresenter.TAG, "user not registered correctly")
+                        } else {
+                            Log.i(LoginPresenter.TAG, "user: $it")
+                            CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                        }
+                    }
                     activity.authenticationSuccessful()
                 } else {
                     // If sign in fails, display a message to the user.
