@@ -137,7 +137,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         }
 
-        coordenadas = LatLng(currentLocation?.latitude as Double, currentLocation?.longitude)
+
+        coordenadas = if (currentLocation == null) {
+            LatLng(41.387185, 2.163077)
+        } else{
+            LatLng(currentLocation.latitude, currentLocation.longitude)
+        }
 
         CommonFunctions.saveCurrentUserCoordsToSharedPref(coordenadas, this)
 
