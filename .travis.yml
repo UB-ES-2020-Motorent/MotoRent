@@ -53,5 +53,6 @@ jobs:
       before_script:
         - cd AndroidApp
         - chmod +x gradlew
+        - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
       script:
         - ./gradlew build check
