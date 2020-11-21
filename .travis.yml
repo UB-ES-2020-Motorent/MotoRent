@@ -53,8 +53,5 @@ jobs:
       before_script:
         - cd AndroidApp
         - chmod +x gradlew
-        - echo $ANDROID_HOME
-        - mkdir -p "$ANDROID_HOME/licenses"
-        - cp ./google-licenses/* "$ANDROID_HOME/licenses/"
       script:
         - ./gradlew build check
