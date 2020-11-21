@@ -250,6 +250,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         transaction.commit()
     }
 
+    fun getMotosFromMap(){
+        MotoDB.getMotos {
+            loadMotosOnMap(it)
+        }
+    }
+
     override fun onOptionChosenFromFragment(option: Int) {
         TODO("Not yet implemented")
     }
@@ -258,10 +264,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         this.fragment_moto_detail.removeAllViews()
     }
 
-    fun getMotosFromMap(){
-        MotoDB.getMotos {
-            loadMotosOnMap(it)
-        }
+    override fun launchReport(id: Int) {
+        supportFragmentManager.popBackStack()
+        val newFragment = ReportFragment.newInstance(id)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_moto_detail, newFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
 

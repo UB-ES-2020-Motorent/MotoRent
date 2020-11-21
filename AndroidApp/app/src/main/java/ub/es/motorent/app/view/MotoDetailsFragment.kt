@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.google.maps.android.PolyUtil
+import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 
@@ -27,6 +27,7 @@ class MotoDetailsFragment : Fragment() {
     private var license: String? = null
     private var id : Int? = null
     private var battery: Int? = null
+    private var fromFragmentToActivity: FromFragmentToActivity ?= null
     private var moto_lat: Double? = null
     private var moto_long: Double? = null
 
@@ -53,9 +54,29 @@ class MotoDetailsFragment : Fragment() {
         val licenseText = view.findViewById<TextView>(R.id.moto_txt_matricula_value)
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
         val rentbtn = view.findViewById<Button>(R.id.reservarBtn)
+        val reportBtn= view.findViewById<Button>(R.id.reportBtn)
+
+        reportBtn.setOnClickListener{
+            startFragmentReport(this.id!!)
+        }
+
         rentbtn.setOnClickListener({updateRentButton(rentbtn)})
         licenseText.text = license
         batteryText.text = battery.toString()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FromFragmentToActivity){
+            fromFragmentToActivity = context
+        }else{
+            throw RuntimeException(requireContext().toString() + " debe implementar FromFragmentToActivity")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        fromFragmentToActivity = null
     }
 
     companion object {
@@ -113,6 +134,11 @@ class MotoDetailsFragment : Fragment() {
     interface FromFragmentToActivity {
         fun onOptionChosenFromFragment(option: Int)
         fun hideLoginFragment()
+        fun launchReport(id: Int)
+    }
+
+    private fun startFragmentReport(id:Int){
+        fromFragmentToActivity?.launchReport(id)
     }
 
 }
