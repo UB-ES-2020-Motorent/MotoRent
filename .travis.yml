@@ -17,7 +17,7 @@ jobs:
         - provider: heroku
           skip_cleanup: true
           api_key:
-            secure: 
+            secure: b3AVdCtJ2e/+Gu1zf5cgr5vAw/mf0ruB4WSPlZBzvq9FNt+bMTE1nA45KJluXoUIGmbYGo4BGU2K3v9ZD3vTPLrDqy3Fpd44ZHBeeBQgfdePf6iOc7bXSJjfRDx5yGxFKM+xdbCD0D9aYd3vjHhRdf7fWROn5Q/jQ/FtqTBuMAOZNRT/6drUPULXj1pWrwbEYq+KJ2KZezNOH0JEKtGZkKkZY11AGx6k/pwfhKzLvfRnzXFUyY9AspfNxYFm2g/kDN/sJ1boCAqRQ5z/sKQilumsaL5uBVb53epPmJC0Gfq27xDs+do43YL2nHuNd2Ax4DEKdZyMbHcB97G/nonNGGNdXfRZaQ2C6ZUW2CBWDvDHDQIf9YpD+Y0457JyOOt0P9TeFKn68Cr1iSPO9Zyzb4AqclJBb8fXG+qh+OCc7vRcWfHGWEfJ/wpH34QucMpIKIx9Fsmlr0jXmY+IcnL85OcP14Gs2ULtwq7hxdlr7Kbsab1+kz0AlG6cr36nqdQBF4OvLNoU+0aotT7Akhcm0czpFEix0vU280uolMo2VFowiLzBuH8k8zIGLS172H5nKpMigDIQp7XK1IVyFr4OslfgYJQTZBbrOm7X9g+/rR5l427Ao1bQ6yGUMXoNVZMB+pdoVyG471A56tu9PDJoPxEIdabrngptYsJrjSw3Z+M=
           app:
             master: motorent-deploy
             develop: motorent-apitest
