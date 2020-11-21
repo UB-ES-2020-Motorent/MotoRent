@@ -52,7 +52,7 @@ jobs:
             ant
       before_install:
           - touch $HOME/.android/repositories.cfg
-          - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
+          - yes | sdkmanager "platforms;android-29"
           - yes | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
       before_script:
         - cd AndroidApp
