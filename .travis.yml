@@ -3,10 +3,6 @@ jobs:
     - language: python
       python:
         - "3.6"      # current default Python on Travis CI
-        - "3.7"
-        - "3.8"
-        # command to install dependencies
-
       install:
         - pip install -r Deployment/requirements.txt
       script:
@@ -15,6 +11,8 @@ jobs:
       only:
       - master
       - develop
+      before_deploy:
+        - cd Deployment
       deploy:
         - provider: heroku
           api_key:
