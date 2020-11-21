@@ -16,7 +16,7 @@ jobs:
       deploy:
         - provider: heroku
           api_key:
-            secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
+            secure: ZkdrVqh3XcR+LYFtQPgiffJE/hKi6IT91Roih6HnPTLm71xRDRAd8X4qns7o9hRnaXzsZhz4RpFmeD+kOo3EMVm/WD1CSAoUznBSZUagD2VDs5pbf2qcasbEfQzcdvWgXsC++IZA3wJF3ZY3BXL825EsUvdooElhl+2zZPY/6PzNDVtaQARz1sboqFo19t+693g0086KOKLRp/jdTSf0xx57qIVz6OCSn/R05Sx1I0vI8jeXr5uTxsMwbXhacKwCL06u6Q3ySc59mgSC/X3eviXfEqNcUov+n0L3EekpbQT/LP+s4dvwtixg8TuVrsn4+ZkN5fTlx3Z9MskRWNuAKza1QQvoQPqqDRYnP1CefiHxPnsMdH6H0wFW97v6KdJqR/uPo6tTK8M5w3XdS3c9HhkHFOTedXL/RuqVfxybrBjVjwAYIoMUuEmu8d6MlbD6IUOd3D6GySz5hY9g0DbE0TC401BcKqQNvAAUyXDddtdnS9EIR0ZtApXGz6TnwkpN6OXs91phTr07pvMvPyHgCYdPBumnIklQpB/hpzKLeOss1MpDBYIRqDggjcdsxsQ44z7xaMbqB9J/jP9nxN6XgCmVSV363+a8CDtOyDG07V5xnTmW7i/NzLP4AUDBurUIkxjPLhYRiXR9zf2Oy59eIxnU4Xiv0J3bcQJoDz3IGBc=
           app:
             master: motorent-deploy
             develop: motorent-apitest
