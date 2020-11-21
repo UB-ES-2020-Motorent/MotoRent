@@ -77,4 +77,13 @@
     <string name="initViatge">Iniciat viatge</string>
     <string name="finViatge">Finalitzar viatge</string>
     <string name="repIncidencia">Reportar incidencia</string>
+    <string name="opcions_de_la_queixa">Opcions de la queixa:</string>
+    <string name="la_motocicleta_no_funciona">La motocicleta no funciona</string>
+    <string name="la_motocicleta_no_est_a_la_direcci">La motocicleta no està a la direcció</string>
+    <string name="he_notat_un_comportament_extrany_a_la_moto">He notat un comportament extrany a la moto</string>
+    <string name="motocicleta_en_mal_estat">Motocicleta en mal estat</string>
+    <string name="introdueix_un_breu_resum">Introdueix un breu resum:</string>
+    <string name="breu_resum">Breu resum</string>
+    <string name="enviar_queixa">Enviar queixa</string>
+    <string name="todo">TODO</string>
 </resources>
