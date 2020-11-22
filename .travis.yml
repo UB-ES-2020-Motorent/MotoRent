@@ -1,19 +1,61 @@
-language: python
-python:
-  - "3.6"      # current default Python on Travis CI
-  - "3.7"
-  - "3.8"
-# command to install dependencies
-branches:
-only:
-- master
-- develop
-deploy:
-provider: heroku
-api_key:
-secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
-app:
-master: motorent-deploy
-develop: motorent-apitest
-install:
-  - pip install -r Flask2/requirements.txt
+jobs:
+  include:
+    - language: python
+      python:
+        - "3.6"      # current default Python on Travis CI
+      install:
+        - pip install -r Deployment/requirements.txt
+      script:
+        - python -c "print ('Python is running in Travis.')"
+      branches:
+      only:
+      - master
+      - develop
+      before_deploy:
+        - cd Deployment
+      deploy:
+        - provider: heroku
+          skip_cleanup: true
+          api_key:
+            secure: U/QMo4tbLSjpNq9sE9Pnl+552DcALpkSdV7Ocyb0zejVkacJS2p2LbwfUIjZMtRILdAqLkJ9NZSUoz83zsojtMEwLdub6yOaIMhNjWxd2dvC5wyeMjqolJdfQjO+mB1aO+BUAlpjbFR9zx0VACt09t5wBO1jsvyU7dWXknp9Fyc1NyyM7jSZUnd5kkUarTfW+ynQLO2x2tguqal/sbQokGwCkj6n6muimnyptS9aInYxHVumO3Yo7a/eFZIylhRFzch+cTgZP7zVaOif/TLAuqq9zmuWWGJnqX40aXp6Y3rclWg+Kbnze+NAQjSKgG6pSOSuvJDiou3YsztvC4+4cOTfXnVfbQUucMhasP0+vpceFz3W5glpcpKzfVwEfzFO1IEIne5LW/rAusBChhF1mCHpobHgVXlYiaN04YcxlkoaQ5GpER0kKR9ks1SU8W8Duxu/QEVgFHfys3OSQ3UwBzax0c85qo/Jze72/bg958UvWH4tGsFoMLKuMQdeIF7DsPMcO8kId6jP2VWeqC0jn1nLnmV119IU05m46rBeqcsv+0rXOFjG2USdNZF96y3xffRsqjpB/xa6BLGq2MDNs2yPHHqSuUE30k6VOcxwv8GZMMBq72LUurhsXcjuZEuOIk2d08MviIBgfTIopO/ZGoAbGhzMbNRAgMtxtjdRMa8=
+          app:
+            master: motorent-deploy
+            develop: motorent-apitest
+
+    - language: android
+      dist: trusty
+      env:
+        global:
+          - ANDROID_API_LEVEL=29
+          - ANDROID_BUILD_TOOLS_VERSION=29.0.3
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - addon-google_apis-google-$ANDROID_API_LEVEL
+      android:
+        licenses:
+          - 'android-sdk-preview-license-.+'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'
+        components:
+          - tools
+          - platform-tools
+          - android-$ANDROID_API_LEVEL
+          - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - addon-google_apis-google-$ANDROID_API_LEVEL
+      addons:
+        apt:
+          packages:
+            ant
+      before_install:
+          - touch $HOME/.android/repositories.cfg
+          - yes | sdkmanager "platforms;android-29"
+          - yes | sdkmanager "build-tools;29.0.3"
+      before_script:
+        - cd AndroidApp
+        - chmod +x gradlew
+      script:
+        - ./gradlew build check
