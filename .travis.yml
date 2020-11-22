@@ -9,7 +9,7 @@ jobs:
         - python -c "print ('Python is running in Travis.')"
       branches:
       only:
-      - master
+      - main
       - develop
       before_deploy:
         - cd Deployment
@@ -19,7 +19,7 @@ jobs:
           api_key:
             secure: U/QMo4tbLSjpNq9sE9Pnl+552DcALpkSdV7Ocyb0zejVkacJS2p2LbwfUIjZMtRILdAqLkJ9NZSUoz83zsojtMEwLdub6yOaIMhNjWxd2dvC5wyeMjqolJdfQjO+mB1aO+BUAlpjbFR9zx0VACt09t5wBO1jsvyU7dWXknp9Fyc1NyyM7jSZUnd5kkUarTfW+ynQLO2x2tguqal/sbQokGwCkj6n6muimnyptS9aInYxHVumO3Yo7a/eFZIylhRFzch+cTgZP7zVaOif/TLAuqq9zmuWWGJnqX40aXp6Y3rclWg+Kbnze+NAQjSKgG6pSOSuvJDiou3YsztvC4+4cOTfXnVfbQUucMhasP0+vpceFz3W5glpcpKzfVwEfzFO1IEIne5LW/rAusBChhF1mCHpobHgVXlYiaN04YcxlkoaQ5GpER0kKR9ks1SU8W8Duxu/QEVgFHfys3OSQ3UwBzax0c85qo/Jze72/bg958UvWH4tGsFoMLKuMQdeIF7DsPMcO8kId6jP2VWeqC0jn1nLnmV119IU05m46rBeqcsv+0rXOFjG2USdNZF96y3xffRsqjpB/xa6BLGq2MDNs2yPHHqSuUE30k6VOcxwv8GZMMBq72LUurhsXcjuZEuOIk2d08MviIBgfTIopO/ZGoAbGhzMbNRAgMtxtjdRMa8=
           app:
-            master: motorent-deploy
+            main: motorent-deploy
             develop: motorent-apitest
 
     - language: android
