@@ -33,7 +33,7 @@ object CommonFunctions {
         //return token
     }
 
-    fun saveUIDToSharedPerf(): String {
+    fun getUIDFromFirebase(): String {
         val user = Firebase.auth.currentUser
         var uid : String
         user?.uid.let {
@@ -54,7 +54,7 @@ object CommonFunctions {
         sharedPref?.edit()?.putString("coords", jsonString)?.apply()
     }
 
-    fun loadCurrentUserCoordsToSharedPref(activity: FragmentActivity): LatLng? {
+    fun loadCurrentUserCoordsFromSharedPref(activity: FragmentActivity): LatLng? {
         val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
         val coordsString = sharedPref?.getString("coords", null)
@@ -68,7 +68,7 @@ object CommonFunctions {
         sharedPref?.edit()?.putString("rentalInfo", jsonString)?.apply()
     }
 
-    fun loadCurrentRentalInfoToSharedPref(activity: FragmentActivity?): RentalInfo? {
+    fun loadCurrentRentalInfoFromSharedPref(activity: FragmentActivity?): RentalInfo? {
         val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
         val rentalString = sharedPref?.getString("rentalInfo", null)
@@ -93,9 +93,9 @@ object CommonFunctions {
         val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
         val userString = sharedPref.getString("userInfo", null)
-        return gson.fromJson(userString, UserInfo::class.java)
+        return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
     }
 
-    private const val TAG = "Firebase"
+    private const val TAG = "CommonFunctions"
 
 }

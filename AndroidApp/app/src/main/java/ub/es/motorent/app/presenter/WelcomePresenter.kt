@@ -18,7 +18,7 @@ class WelcomePresenter (var activity: WelcomeActivity) {
 
     fun navigationPath() : Intent {
         return if((auth.currentUser != null) && (activity.autoLogin())){
-            val token = CommonFunctions.saveUIDToSharedPerf()
+            val token = CommonFunctions.getUIDFromFirebase()
             UserDB.getUserByIdOrGoogleToken (null, token) {
                 if (token != it?.google_token ?: true){
                     Log.w(WelcomePresenter.TAG, "user not registered correctly")

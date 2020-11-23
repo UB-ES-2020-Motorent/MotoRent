@@ -1,7 +1,6 @@
 package ub.es.motorent.app.view
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,10 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
-import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 
@@ -117,13 +113,13 @@ class MotoDetailsFragment : Fragment() {
                 CommonFunctions.saveCurrentRentalInfoToSharedPref(it!!,this.activity)
             }
         } else if(rentbtn.text.equals("Iniciar viatge")){
-            val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
+            val rental_id = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this.activity)?.id
             Log.i("MOMENTOLOLAZO",rental_id.toString())
             rentbtn.setText("Finalitzar viatge")
             rentbtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary))
             RentalDB.updateRentalById(rental_id,"False", null, null)
         } else {
-            val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
+            val rental_id = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this.activity)?.id
             Log.i("XXXXXXXXXXXXXXDDDD",rental_id.toString())
             rentbtn.setText("Reservar")
             rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))

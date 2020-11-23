@@ -16,7 +16,7 @@ interface RestApi {
     /******************** USERS ********************/
     @POST("user")
     fun addUser(
-                @Query("mail") mail:String,
+                @Query("mail") mail:String?,
                 @Query("google_token") google_token:String,
                 @Query("role") role:Int,
                 @Query("admin_code") admin_code:String?
@@ -209,7 +209,7 @@ class RestApiService {
         )
     }
 
-    fun addUser(mail:String, google_token:String, role:Int, onResult: (UserJson?) -> Unit){
+    fun addUser(mail:String?, google_token:String, role:Int, onResult: (UserJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
         retrofit.addUser(mail, google_token, role, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
