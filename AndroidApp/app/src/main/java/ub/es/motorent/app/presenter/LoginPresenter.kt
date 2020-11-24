@@ -26,7 +26,7 @@ class LoginPresenter (private val activity: LoginActivity) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
-                        getUserFromDBAndSaveItToSP()
+                        getUserFromDBAndSaveItToSP(null)
                     } else {
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
                         activity.toast(task.exception?.message.toString())
@@ -40,7 +40,7 @@ class LoginPresenter (private val activity: LoginActivity) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
-                    getUserFromDBAndSaveItToSP()
+                    getUserFromDBAndSaveItToSP(acct.email)
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     activity.customToast(
@@ -50,7 +50,7 @@ class LoginPresenter (private val activity: LoginActivity) {
             }
     }
 
-    private fun getUserFromDBAndSaveItToSP(){
+    private fun getUserFromDBAndSaveItToSP(email: String?){
         // show loading to the user while waiting for the database
         activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
         val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
@@ -61,7 +61,7 @@ class LoginPresenter (private val activity: LoginActivity) {
                 if (token != it?.google_token ?: true || it == null){ // DB no
                     Log.w(TAG, "user not in DataBase")
 
-                    UserDB.registerUser(null,"token", 0) {registered: UserInfo? ->
+                    UserDB.registerUser(email,token, 0) {registered: UserInfo? ->
                         if (registered != null) {
                             CommonFunctions.saveUserInfoToSharedPref(registered, activity)
                             activity.userRegistered()
