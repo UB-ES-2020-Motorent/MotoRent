@@ -53,6 +53,9 @@ class SignUpPresenter (private val activity: SignUpActivity) {
         }
         return false
     }
+    fun userAndMailNotEmpty(userName : String, email :String) : Boolean{
+        return (!userName.isEmpty()) && (!email.isEmpty())
+    }
 
     private fun registerUser(email: String) {
         /*CommonFunctions.saveTokenToSharedPref(activity){token ->

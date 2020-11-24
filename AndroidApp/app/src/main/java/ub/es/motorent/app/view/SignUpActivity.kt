@@ -39,7 +39,7 @@ class SignUpActivity : FullScreenActivity() {
 
 
         btnRegister.setOnClickListener(View.OnClickListener() {
-            if ((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")) {
+            if (presenter.userAndMailNotEmpty(txtUserName.text.toString(), txtEmail.text.toString()) ){
                 if(presenter.checkPassword(txtPassword.text.toString(), txtPassword2.text.toString())) {
                     presenter.createAccount(
                         txtUserName.text.toString(),
