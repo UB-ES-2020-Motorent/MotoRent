@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
@@ -32,7 +33,7 @@ class MotoDetailsFragment : Fragment() {
     private var moto_lat: Double? = null
     private var moto_long: Double? = null
     lateinit var rentbtn: Button
-    lateinit var textV:TextView
+    var inZone: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -46,7 +47,7 @@ class MotoDetailsFragment : Fragment() {
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
             override fun run() {
-                blockEndTrip()
+                inZone = blockEndTrip()
                 mainHandler.postDelayed(this, 50)
             }
         })
@@ -65,7 +66,6 @@ class MotoDetailsFragment : Fragment() {
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
         rentbtn = view.findViewById<Button>(R.id.reservarBtn)
         val reportBtn= view.findViewById<Button>(R.id.reportBtn)
-        textV = view.findViewById(R.id.textView2)
         reportBtn.setOnClickListener{
             startFragmentReport(this.id!!)
         }
@@ -133,11 +133,16 @@ class MotoDetailsFragment : Fragment() {
             rentbtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary))
             RentalDB.updateRentalById(rental_id,"False", null, null)
         } else {
-            val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
-            Log.i("XXXXXXXXXXXXXXDDDD",rental_id.toString())
-            rentbtn.setText("Reservar")
-            rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
-            RentalDB.updateRentalById(rental_id,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+            if (inZone){
+                val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
+                Log.i("XXXXXXXXXXXXXXDDDD",rental_id.toString())
+                rentbtn.setText("Reservar")
+                rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
+                RentalDB.updateRentalById(rental_id,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+            } else {
+                Toast.makeText(activity, "No pots deixar la moto fora de Barcelona.", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -151,9 +156,7 @@ class MotoDetailsFragment : Fragment() {
     private fun startFragmentReport(id:Int){
         fromFragmentToActivity?.launchReport(id)
     }
-    fun blockEndTrip() {
-        if(fromFragmentToActivity?.inZone() == true){
-            rentbtn.isEnabled = true
-        }
+    fun blockEndTrip(): Boolean {
+        return fromFragmentToActivity?.inZone()!!
     }
 }
