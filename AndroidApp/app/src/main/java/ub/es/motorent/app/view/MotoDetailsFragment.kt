@@ -3,6 +3,8 @@ package ub.es.motorent.app.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +19,6 @@ import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 
-
 /**
  * A simple [Fragment] subclass.
  * Use the [MotoDetailsFragment.newInstance] factory method to
@@ -30,7 +31,8 @@ class MotoDetailsFragment : Fragment() {
     private var fromFragmentToActivity: FromFragmentToActivity ?= null
     private var moto_lat: Double? = null
     private var moto_long: Double? = null
-
+    lateinit var rentbtn: Button
+    lateinit var textV:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,6 +42,14 @@ class MotoDetailsFragment : Fragment() {
             moto_lat = it.getDouble(ARG_LAT)
             moto_long = it.getDouble(ARG_LONG)
         }
+
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                blockEndTrip()
+                mainHandler.postDelayed(this, 50)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -53,9 +63,9 @@ class MotoDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val licenseText = view.findViewById<TextView>(R.id.moto_txt_matricula_value)
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
-        val rentbtn = view.findViewById<Button>(R.id.reservarBtn)
+        rentbtn = view.findViewById<Button>(R.id.reservarBtn)
         val reportBtn= view.findViewById<Button>(R.id.reportBtn)
-
+        textV = view.findViewById(R.id.textView2)
         reportBtn.setOnClickListener{
             startFragmentReport(this.id!!)
         }
@@ -135,10 +145,15 @@ class MotoDetailsFragment : Fragment() {
         fun onOptionChosenFromFragment(option: Int)
         fun hideLoginFragment()
         fun launchReport(id: Int)
+        fun inZone(): Boolean
     }
 
     private fun startFragmentReport(id:Int){
         fromFragmentToActivity?.launchReport(id)
     }
-
+    fun blockEndTrip() {
+        if(fromFragmentToActivity?.inZone() == true){
+            rentbtn.isEnabled = true
+        }
+    }
 }

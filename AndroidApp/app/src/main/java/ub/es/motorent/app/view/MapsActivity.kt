@@ -273,6 +273,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         transaction.commit()
     }
 
+    override fun inZone(): Boolean {
+        return PolyUtil.containsLocation(coordenadas, hole, true)
+    }
+
 
 }
 
