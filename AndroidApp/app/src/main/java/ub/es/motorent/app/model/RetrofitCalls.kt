@@ -121,11 +121,18 @@ interface RestApi {
     ): Call<BankDataJson>
 
     @GET("bankdata")
-    fun getBankDataByUIdBIdOrCardNumber(
+    fun getDefaultBankDataByUidOrBid(
         @Query("user_id ") user_id:Int?,
         @Query("id_bank_data ") id_bank_data:Int?,
-        @Query("card_number") card_number:BigInteger?
+        @Query("view_all") view_all: Boolean?
     ): Call<BankDataJson>
+
+    @GET("bankdata")
+    fun getBankDataByCardNumberOrAllCardsByUserId(
+        @Query("user_id ") user_id:Int?,
+        @Query("card_number") card_number:BigInteger?,
+        @Query("view_all") view_all: Boolean?
+    ): Call<BankDataList>
 
     @PUT("bankdata/{id_bank_data}")
     fun updateBankDataById(
@@ -426,15 +433,31 @@ class RestApiService {
         )
     }
 
-    fun getBankDataByUIdBIdOrCardNumber(user_id: Int?, id_bank_data : Int?, card_number: BigInteger?, onResult: (BankDataJson?) -> Unit) {
+    fun getDefaultBankDataByUidOrBid(user_id: Int?, id_bank_data : Int?, onResult: (BankDataJson?) -> Unit) {
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.getBankDataByUIdBIdOrCardNumber(user_id, id_bank_data, card_number).enqueue(
+        retrofit.getDefaultBankDataByUidOrBid(user_id, id_bank_data, false).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
                     Log.i(TAG, "onFailure - getBankData", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
+                    logResult(response, "getBankData: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getBankDataByCardNumberOrAllCardsByUserId(user_id: Int?, card_number: BigInteger?, onResult: (BankDataList?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number, true).enqueue(
+            object : Callback<BankDataList> {
+                override fun onFailure(call: Call<BankDataList>, t: Throwable) {
+                    Log.i(TAG, "onFailure - getBankData", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<BankDataList>, response: Response<BankDataList>) {
                     logResult(response, "getBankData: ")
                     onResult(response.body())
                 }
