@@ -37,6 +37,12 @@ class ComplementaryFormPresenter (var activity: ComplementaryFormActivity): Full
         }
     }
 
+    fun getNameAndSurname () : String{//List<String?>?{
+        val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
+        //return if (user != null) listOf(user.name, user.surname) else null
+        return if (user != null) user.name + " " + user.surname else ""
+    }
+
     companion object{
         private const val TAG = "ComplFormPres"
     }

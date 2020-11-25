@@ -94,13 +94,13 @@ class LoginActivity : FullScreenActivity(){
 
     }
 
-    fun authenticationSuccessful(){
+    fun goToMaps(){
         toast(getString(R.string.ok_auth))
         val intentI = Intent(this, MapsActivity::class.java)
         startActivity(intentI)
     }
 
-    fun userRegistered() {
+    fun goToForm() {
         toast("Welcome to MotoRent")
         val intentI = Intent(this, ComplementaryFormActivity::class.java)
         startActivity(intentI)

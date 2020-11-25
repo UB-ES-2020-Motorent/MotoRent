@@ -40,7 +40,7 @@ class LoginPresenter (private val activity: LoginActivity) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
-                    getUserFromDBAndSaveItToSP(acct.email)
+                    getUserFromDBAndSaveItToSP(acct.email, acct.givenName, acct.familyName)
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     activity.customToast(
@@ -50,21 +50,25 @@ class LoginPresenter (private val activity: LoginActivity) {
             }
     }
 
-    private fun getUserFromDBAndSaveItToSP(email: String?){
+    private fun getUserFromDBAndSaveItToSP(email: String?, name: String? = null, surname: String? = null){
         // show loading to the user while waiting for the database
         activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
         val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
         val token = CommonFunctions.getUIDFromFirebase()
         if (user == null || user.google_token != token) { // SP no
-
-            UserDB.getUserByIdOrGoogleToken (null, token) {
+            UserDB.getUserByIdOrGoogleToken (google_token = token) {
                 if (token != it?.google_token ?: true || it == null){ // DB no
                     Log.w(TAG, "user not in DataBase")
 
-                    UserDB.registerUser(email,token, 0) {registered: UserInfo? ->
+                    UserDB.registerUser(email, token, 0) {registered: UserInfo? ->
                         if (registered != null) {
+                            if (name != null || surname != null){
+                                registered.name = name
+                                registered.surname = surname
+                            }
                             CommonFunctions.saveUserInfoToSharedPref(registered, activity)
-                            activity.userRegistered()
+                            Log.i(TAG, "POST USER added")
+                            activity.goToForm()
                         } else {
                             Log.e(TAG, "POST USER return null")
                         }
@@ -73,11 +77,22 @@ class LoginPresenter (private val activity: LoginActivity) {
                 } else { // DB si
                     Log.i(TAG, "user: $it")
                     CommonFunctions.saveUserInfoToSharedPref(it, activity)
-                    activity.authenticationSuccessful()
+                    goToNextActivity()
                 }
             }
         } else { // SP si && SP == login
-            activity.authenticationSuccessful()
+            goToNextActivity()
+        }
+    }
+
+    private fun goToNextActivity () {
+        val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
+        if (user == null) {
+            Log.w(TAG, "user in SP is null and it should not be")
+        } else if (user.country == null) {
+            activity.goToForm()
+        } else {
+            activity.goToMaps()
         }
     }
 

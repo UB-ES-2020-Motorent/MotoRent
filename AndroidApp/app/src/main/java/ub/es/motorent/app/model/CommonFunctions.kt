@@ -79,7 +79,7 @@ object CommonFunctions {
         val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
         val userString = sharedPref?.getString("userInfo", null)
-        return gson.fromJson(userString, UserInfo::class.java)
+        return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
     }
 
     fun saveUserInfoToSharedPref(userInfo: UserInfo, activity: AppCompatActivity){
@@ -94,6 +94,11 @@ object CommonFunctions {
         val gson = Gson()
         val userString = sharedPref.getString("userInfo", null)
         return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
+    }
+
+    fun deleteUserInfoFromSharedPref(activity: FragmentActivity) {
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        sharedPref.edit().putString("userInfo", null).apply()
     }
 
     private const val TAG = "CommonFunctions"
