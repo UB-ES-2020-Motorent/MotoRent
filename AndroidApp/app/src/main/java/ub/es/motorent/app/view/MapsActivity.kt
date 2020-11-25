@@ -23,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
+import com.google.maps.android.PolyUtil
 import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.MotoDB
@@ -37,6 +38,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var coordenadas: LatLng
     lateinit var markerUser : Marker
     var markers_in_display: ArrayList<Marker> = ArrayList()
+    val hole : ArrayList<LatLng> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +151,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
-        val hole = listOf(
+        val holePolyg = listOf(
             LatLng(41.346835, 2.139348),
             LatLng(41.355486, 2.131968),
             LatLng(41.362218, 2.135069),
@@ -180,6 +182,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             LatLng(41.352369, 2.162530),
             LatLng(41.346546, 2.139268)
         )
+        hole.addAll(holePolyg)
 
         val hollowPolygon = mMap.addPolygon(
             PolygonOptions().add(
@@ -187,7 +190,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 LatLng(58.950017, 26.123910),
                 LatLng(25.943059, 26.123910),
                 LatLng(25.943059, -16.157126)
-            ).addHole(hole)
+            ).addHole(holePolyg)
                 .fillColor(Color.GRAY)
                 .strokeWidth(5.0f)
                 .fillColor(0x55686868)
@@ -269,5 +272,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+    override fun inZone(): Boolean {
+        return PolyUtil.containsLocation(coordenadas, hole, true)
+    }
+
+
 }
 
