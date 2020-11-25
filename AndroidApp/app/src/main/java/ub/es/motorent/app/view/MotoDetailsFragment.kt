@@ -164,5 +164,3 @@ class MotoDetailsFragment : Fragment() {
         return fromFragmentToActivity?.inZone()!!
     }
 }
-
-}
