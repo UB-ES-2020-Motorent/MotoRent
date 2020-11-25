@@ -59,3 +59,4 @@ class IncidentsModel(db.Model):
         :return: List of IncidentsModel
         """
         return IncidentsModel.query.all()
+    
