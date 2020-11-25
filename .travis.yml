@@ -3,42 +3,59 @@ jobs:
     - language: python
       python:
         - "3.6"      # current default Python on Travis CI
-        - "3.7"
-        - "3.8"
-        # command to install dependencies
-      branches:
-      only:
-      - master
-      - develop
-      deploy:
-      provider: heroku
-      api_key:
-      secure: yfxncvq5bdcmjxl608o5jt0nnff3nwgfqs9hkm
-      app:
-      master: motorent-deploy
-      develop: motorent-apitest
       install:
         - pip install -r Deployment/requirements.txt
       script:
         - python -c "print ('Python is running in Travis.')"
+      branches:
+      only:
+      - main
+      - develop
+      before_deploy:
+        - cd Deployment
+      deploy:
+        - provider: heroku
+          skip_cleanup: true
+          api_key:
+            secure: jkGxxiERVLdItazOzfdOxNPAfqxHIg3N98PB24aZ6MEO8sHvWDhCqi1S1a2TtDuoTl5SPrWRUyaS7KLe61Vuo8Z8h2TNBxCV8XJpIjRRND9H9qHLWLEvWHMM5BQOjRUlh0/RLYPolVnfjBiFgEwfSqsGdmcXsj+6j6wgQJmJPLEGeSCufbEkVCpN4XSak+h9tN8AzE0Sl5790SmaBEb8BkcGYG4YwPJVyJ2rF1mhtTetu3hdwmzSXFBmdzMLnkhQDw5ffGO9cLV3WIrUrsMaQRBsdl0jeJOM8KM0jvuEYgRpHOOEFo7MWIRO+ezhhuN2O3iMVz7TC3rhb51oVDqukLLmsG9UDVFVtaaygSSiIX9OsbprDkhQr3BHSEGnrFKtLMyijaTGY4x+UNCfc1wI62Kyfd3AgTPnZrc7CKaS9GnVuX2HiTGzas+psCHDHfJRPSh6mVcKNm2ywB0U0fnFz5VqabhM7Zh5/GAIzxgASdPrhwvqvEFUTYm5EbZT9exxVjuhP9j52YMQJTtm1Kdmk8VDNisjVqVV6YiCNFg+f6tU3Jrt/uwInHN77/y0G5dZoePRHf/k6rZbZtuE4Gio8lxGItnBKx3SS2rjz/I9FbeoxgWwiqT3nmJliC09shTBGcRMeagDqdkqkYTbkxhDRuoKFDRodMH30gg0jfes+Ck=
+          app:
+            main: motorent-deploy
+            develop: motorent-apitest
 
     - language: android
       dist: trusty
+      env:
+        global:
+          - ANDROID_API_LEVEL=29
+          - ANDROID_BUILD_TOOLS_VERSION=29.0.3
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - addon-google_apis-google-$ANDROID_API_LEVEL
       android:
+        licenses:
+          - 'android-sdk-preview-license-.+'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'
         components:
           - tools
-          - android-29
-          - build-tools-29.0.3
+          - platform-tools
+          - android-$ANDROID_API_LEVEL
+          - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - addon-google_apis-google-$ANDROID_API_LEVEL
       addons:
         apt:
           packages:
             ant
+      before_install:
+          - touch $HOME/.android/repositories.cfg
+          - yes | sdkmanager "platforms;android-29"
+          - yes | sdkmanager "build-tools;29.0.3"
       before_script:
         - cd AndroidApp
         - chmod +x gradlew
-        - echo no | android create avd --force -n test -t android-29  --abi "default/armeabi-v7a"
-        - emulator -avd test -no-audio -no-window &
-        - android-wait-for-emulator
-        - adb shell input keyevent 82 &
       script:
-        - ./gradlew build connectedCheck
+        - ./gradlew build check

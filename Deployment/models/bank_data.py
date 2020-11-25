@@ -1,4 +1,5 @@
 from db import db
+from models.users import UsersModel
 
 
 class BankDataModel(db.Model):
@@ -50,13 +51,20 @@ class BankDataModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_user_id(cls, user_id):
+    def find_by_user_id(cls, user_id, view_all):
         """
         Finds bank data by user id
         Param: number user id
         Return: BankDataModel
         """
-        return BankDataModel.query.filter_by(user_id=user_id).all()
+        if (view_all):
+            return BankDataModel.query.filter_by(user_id=user_id).all()
+        else:
+            user = UsersModel.find_by_id(user_id)
+            if user:
+                return BankDataModel.query.filter_by(id_bank_data=user.id_bank_data).all()
+            else:
+                return None
 
     @classmethod
     def find_by_id_bank_data(cls, id_bank_data):

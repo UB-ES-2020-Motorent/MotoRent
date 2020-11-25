@@ -29,9 +29,16 @@ object BankDataDB {
         }
     }
 
-    fun getBankDataByUIdBIdOrCardNumber(user_id: Int?, id_bank_data : Int?, card_number: BigInteger?) {
+    fun getDefaultBankDataByUidOrBid(user_id: Int?, id_bank_data : Int?) {
         val apiService = RestApiService()
-        apiService.getBankDataByUIdBIdOrCardNumber(user_id, id_bank_data, card_number) {
+        apiService.getDefaultBankDataByUidOrBid(user_id, id_bank_data) {
+            Log.i(TAG, it.toString())
+        }
+    }
+
+    fun getBankDataByCardNumberOrAllCardsByUserId(user_id: Int?, card_number: BigInteger?) {
+        val apiService = RestApiService()
+        apiService.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number) {
             Log.i(TAG, it.toString())
         }
     }
