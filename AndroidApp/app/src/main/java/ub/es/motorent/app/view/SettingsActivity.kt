@@ -1,16 +1,13 @@
 package ub.es.motorent.app.view
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.media.audiofx.Virtualizer
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceFragmentCompat
+import kotlinx.android.synthetic.main.settings_activity.*
 import ub.es.motorent.R
 import ub.es.motorent.app.presenter.SettingsPresenter
 
@@ -39,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
 
 
         if(sharedPref.contains("autoLog")){
-            autoLog.isChecked = sharedPref.getBoolean("autoLog",true)
+            autoLog.isChecked = sharedPref.getBoolean("autoLog", true)
         }else {
             autoLog.isChecked = true
             editor.putBoolean("autoLog", true)
@@ -50,13 +47,13 @@ class SettingsActivity : AppCompatActivity() {
             if(isChecked){
                //marcar que l'user vol guardar la contrasenya
                 //marcar a prefferense i posar el autologin a login activity comprovant preference
-                editor.putBoolean( "autoLog", true )
+                editor.putBoolean("autoLog", true)
                 editor.apply()
 
             }else{
                 //marcar a preference que no la vol guardar i posar la contra i el mail sempre per
                 //iniciar la sessió
-                editor.putBoolean( "autoLog", false )
+                editor.putBoolean("autoLog", false)
                 editor.apply()
             }
 
@@ -73,6 +70,12 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(i)
             finish()
 
+        }
+
+        callNumberButton.setOnClickListener() {
+            val callIntent = Intent(Intent.ACTION_DIAL)
+            callIntent.data = Uri.parse("tel:123456789")
+            startActivity(callIntent)
         }
 
         changePersInf.setOnClickListener(){
