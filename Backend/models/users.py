@@ -108,3 +108,4 @@ class UsersModel(db.Model):
         Return: all AccountsModels
         """
         return UsersModel.query.all()
+    
