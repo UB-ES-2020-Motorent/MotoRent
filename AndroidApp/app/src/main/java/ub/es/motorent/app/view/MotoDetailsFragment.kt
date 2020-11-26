@@ -3,6 +3,8 @@ package ub.es.motorent.app.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,13 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
-
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +32,8 @@ class MotoDetailsFragment : Fragment() {
     private var fromFragmentToActivity: FromFragmentToActivity ?= null
     private var moto_lat: Double? = null
     private var moto_long: Double? = null
-
+    lateinit var rentbtn: Button
+    var inZone: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,6 +43,14 @@ class MotoDetailsFragment : Fragment() {
             moto_lat = it.getDouble(ARG_LAT)
             moto_long = it.getDouble(ARG_LONG)
         }
+
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                inZone = blockEndTrip()
+                mainHandler.postDelayed(this, 50)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -53,9 +64,8 @@ class MotoDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val licenseText = view.findViewById<TextView>(R.id.moto_txt_matricula_value)
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
-        val rentbtn = view.findViewById<Button>(R.id.reservarBtn)
+        rentbtn = view.findViewById<Button>(R.id.reservarBtn)
         val reportBtn= view.findViewById<Button>(R.id.reportBtn)
-
         reportBtn.setOnClickListener{
             startFragmentReport(this.id!!)
         }
@@ -123,11 +133,16 @@ class MotoDetailsFragment : Fragment() {
             rentbtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary))
             RentalDB.updateRentalById(rental_id,"False", null, null)
         } else {
-            val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
-            Log.i("XXXXXXXXXXXXXXDDDD",rental_id.toString())
-            rentbtn.setText("Reservar")
-            rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
-            RentalDB.updateRentalById(rental_id,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+            if (inZone){
+                val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
+                Log.i("XXXXXXXXXXXXXXDDDD",rental_id.toString())
+                rentbtn.setText("Reservar")
+                rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
+                RentalDB.updateRentalById(rental_id,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+            } else {
+                Toast.makeText(activity, "No pots deixar la moto fora de Barcelona.", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -135,10 +150,13 @@ class MotoDetailsFragment : Fragment() {
         fun onOptionChosenFromFragment(option: Int)
         fun hideLoginFragment()
         fun launchReport(id: Int)
+        fun inZone(): Boolean
     }
 
     private fun startFragmentReport(id:Int){
         fromFragmentToActivity?.launchReport(id)
     }
-
+    fun blockEndTrip(): Boolean {
+        return fromFragmentToActivity?.inZone()!!
+    }
 }
