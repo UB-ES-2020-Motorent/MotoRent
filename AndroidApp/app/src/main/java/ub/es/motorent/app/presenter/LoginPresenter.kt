@@ -7,7 +7,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions

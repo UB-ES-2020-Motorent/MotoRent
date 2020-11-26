@@ -7,7 +7,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.UserDB
-import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.view.SignUpActivity
 
 class SignUpPresenter (private val activity: SignUpActivity) {
