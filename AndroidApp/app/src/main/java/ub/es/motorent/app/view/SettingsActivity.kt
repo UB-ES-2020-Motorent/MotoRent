@@ -30,6 +30,8 @@ class SettingsActivity : AppCompatActivity() {
         presenter = SettingsPresenter(this);
 
         val changePersInf : Button = findViewById(R.id.changePersonalInfBtn)
+        val changeBankInf : Button = findViewById(R.id.changeBankInfBtn)
+
         val logOutButton : Button = findViewById(R.id.logoutBtn)
         val autoLog : CheckBox = findViewById(R.id.automaticLoginCheck)
 
@@ -80,6 +82,10 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intentI)
         }
 
+        changeBankInf.setOnClickListener(){
+            val intentI = Intent(this, BankFormActivity::class.java)
+            startActivity(intentI)
+        }
     }
 
 }

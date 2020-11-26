@@ -8,6 +8,7 @@ import android.widget.EditText
 import ub.es.motorent.R
 import android.widget.Toast
 import com.hbb20.CountryCodePicker
+import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.presenter.ComplementaryFormPresenter
 
 class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCountryChangeListener {
@@ -22,6 +23,17 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
 
         presenter = ComplementaryFormPresenter(this)
 
+        val userInfo = presenter.getUserInfo()
+        val txtName : EditText = findViewById(R.id.nomFill)
+        val txtSurname : EditText = findViewById(R.id.cognomFill)
+        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
+
+        if(userInfo != null) {
+            txtName.setText(userInfo.name)
+            txtSurname.setText(userInfo.surname)
+            txtIDCard.setText(userInfo.national_id_document)
+        }
+
         ccp = findViewById(R.id.country_code_picker)
         ccp!!.setOnCountryChangeListener(this)
         ccp!!.setDefaultCountryUsingNameCode("ES")
@@ -33,24 +45,13 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         //es comprovés que tota la informació d'aquesta pagina estigui dins de la DB
         //en cas que no que surtis de nou aquest formulari
 
-
-        val txtName : EditText = findViewById(R.id.nomCognomFill)
-        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
-        val txtCreditCardName : EditText = findViewById(R.id.nomCompletFill)
-        val txtCreditCardNumber : EditText = findViewById(R.id.numeroTargetaFill)
-        val txtCreditCardExpirationDate : EditText = findViewById(R.id.dataCaducitatFill)
-        val txtCreditCardCVV : EditText = findViewById(R.id.cvvFill)
-
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
             presenter.updateUserInfo(
                 txtName.text.toString(),
                 ccp!!.selectedCountryName,
                 txtIDCard.text.toString(),
-                txtCreditCardName.text.toString(),
-                txtCreditCardNumber.text.toString(),
-                txtCreditCardExpirationDate.text.toString(),
-                txtCreditCardCVV.text.toString()
+                txtSurname.text.toString()
             )
         });
 
