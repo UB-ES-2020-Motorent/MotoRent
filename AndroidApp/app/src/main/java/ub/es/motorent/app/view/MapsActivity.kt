@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,10 +24,7 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import com.google.maps.android.PolyUtil
 import ub.es.motorent.R
-import ub.es.motorent.app.model.CommonFunctions
-import ub.es.motorent.app.model.MotoDB
-import ub.es.motorent.app.model.MotoInfo
-import ub.es.motorent.app.model.MotoList
+import ub.es.motorent.app.model.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
     MotoDetailsFragment.FromFragmentToActivity, LocationListener {
@@ -37,8 +33,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var locationManager: LocationManager
     lateinit var coordenadas: LatLng
     lateinit var markerUser : Marker
-    var markers_in_display: ArrayList<Marker> = ArrayList()
-    val hole : ArrayList<LatLng> = ArrayList()
+    var markersInDisplay: ArrayList<Marker> = ArrayList()
+    private val hole : ArrayList<LatLng> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +80,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onLocationChanged(location: Location?) {
-        coordenadas = LatLng(location?.latitude as Double, location?.longitude)
+        coordenadas = LatLng(location?.latitude as Double, location.longitude)
         markerUser.position = coordenadas
     }
 
@@ -198,40 +194,49 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         )
     }
 
-    private fun loadMotosOnMap(motoList: MotoList?){
+    private fun loadMotosOnMap(motoList: MotoList){
 
-        val markers_to_update: ArrayList<MarkerOptions?> = ArrayList()
-        val motos_to_update: ArrayList<MotoInfo> = ArrayList()
+        val markersToUpdate: ArrayList<MarkerOptions?> = ArrayList()
+        val motosToUpdate: ArrayList<MotoInfo> = ArrayList()
 
-        for ( i in 0 until markers_in_display.size){
-            if(motoList?.motos!!.contains(markers_in_display.get(i).tag)){
+        for ( i in 0 until markersInDisplay.size){ // drop motos
+            if(motoList.motos.contains(markersInDisplay[i].tag)){
                 motoList.motos.drop(i)
             }
         }
-
-        if (motoList != null) {
-            for (moto in motoList.motos) {
-                if (moto.available?.toBoolean() == true){
-                    val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
-                    val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
-                                                fromResource(R.drawable.motoicon))
-                    markers_to_update.add(marker)
-                    motos_to_update.add(moto)
-                }
+        for (moto in motoList.motos) { // add new motos ( only available )
+            if (moto.available?.toBoolean() == true){
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                fromResource(R.drawable.motoicon))
+                markersToUpdate.add(marker)
+                motosToUpdate.add(moto)
             }
-            for (i in 0 until markers_to_update.size){
-                val tmp_marker = mMap.addMarker(markers_to_update.get(i))
-                tmp_marker.tag = motos_to_update.get(i)
-                markers_in_display.add(tmp_marker)
-            }
-            for (i in 0 until markers_in_display.size){
-                if (!motos_to_update.contains(markers_in_display.get(i).tag)){
-                    markers_in_display.get(i).remove()
-                }
+        }
+        for (i in 0 until markersToUpdate.size){  // show new motos
+            val tmpMarker = mMap.addMarker(markersToUpdate[i])
+            tmpMarker.tag = motosToUpdate[i]
+            markersInDisplay.add(tmpMarker)
+        }
+        for (i in 0 until markersInDisplay.size){ // update markers in display
+            if (!motosToUpdate.contains(markersInDisplay[i].tag)){
+                markersInDisplay[i].remove()
             }
         }
     }
 
+    private fun loadMotoRentalOnMap(motoId: Int){
+        markersInDisplay.forEach { moto ->
+            if (moto.id.toInt() == motoId){
+                val markerOp = MarkerOptions().position(moto.position).icon(BitmapDescriptorFactory.
+                fromResource(R.drawable.motoicon))
+                val marker = mMap.addMarker(markerOp)
+                marker.tag = moto.tag
+            } else {
+                moto.remove()
+            }
+        }
+    }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
         if (p0 != markerUser && p0 != null){
@@ -251,8 +256,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     fun getMotosFromMap(){
-        MotoDB.getMotos {
-            loadMotosOnMap(it)
+        MotoDB.getMotos { motoList: MotoList? ->
+            val rental = CommonFunctions.loadCurrentRentalInfoToSharedPref(this)
+            if (motoList == null) {
+                Log.w(TAG, "db returned motoList null")
+            } else{
+                RentalDB.getRentalById(rental.id){ actualRental ->
+                    if (actualRental != null && actualRental.active){
+                        val motoId = rental.moto_id
+                        loadMotoRentalOnMap(motoId)
+                    } else {
+                        CommonFunctions.saveCurrentRentalInfoToSharedPref(null, this)
+                        loadMotosOnMap(motoList)
+                    }
+                }
+            }
         }
     }
 
@@ -277,6 +295,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         return PolyUtil.containsLocation(coordenadas, hole, true)
     }
 
+    companion object {
+        private const val TAG = "MapsActivity"
+    }
 
 }
 

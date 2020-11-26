@@ -30,10 +30,11 @@ object RentalDB {
         }
     }
 
-    fun getRentalById(id: Int) {
+    fun getRentalById(id: Int, onResult: (RentalInfo?) -> Unit) {
         val apiService = RestApiService()
         apiService.getRentalById(id) {
             Log.i(TAG, it.toString())
+            onResult(it?.rental)
         }
     }
 

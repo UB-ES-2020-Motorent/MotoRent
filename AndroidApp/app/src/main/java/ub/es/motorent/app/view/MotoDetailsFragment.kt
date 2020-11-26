@@ -123,8 +123,8 @@ class MotoDetailsFragment : Fragment() {
         if(rentbtn.text.equals("Reservar")){
             rentbtn.setText("Iniciar viatge")
             rentbtn.setBackgroundColor(getResources().getColor(R.color.rentedMoto))
-            RentalDB.addRental(this.id,user_id){
-                CommonFunctions.saveCurrentRentalInfoToSharedPref(it!!,this.activity)
+            RentalDB.addRental(this.id, user_id){
+                CommonFunctions.saveCurrentRentalInfoToSharedPref(it!!, this.activity)
             }
         } else if(rentbtn.text.equals("Iniciar viatge")){
             val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
@@ -139,6 +139,7 @@ class MotoDetailsFragment : Fragment() {
                 rentbtn.setText("Reservar")
                 rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
                 RentalDB.updateRentalById(rental_id,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+                CommonFunctions.saveCurrentRentalInfoToSharedPref(null, activity)
             } else {
                 Toast.makeText(activity, "No pots deixar la moto fora de Barcelona.", Toast.LENGTH_SHORT).show()
             }

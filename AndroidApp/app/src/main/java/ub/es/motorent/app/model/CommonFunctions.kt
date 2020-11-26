@@ -61,10 +61,10 @@ object CommonFunctions {
         return gson.fromJson(coordsString, LatLng::class.java)
     }
 
-    fun saveCurrentRentalInfoToSharedPref(rentalInfo: RentalInfo, activity: FragmentActivity?){
+    fun saveCurrentRentalInfoToSharedPref(rentalInfo: RentalInfo?, activity: FragmentActivity?){
         val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
-        val jsonString = gson.toJson(rentalInfo)
+        val jsonString = if(rentalInfo != null) gson.toJson(rentalInfo) else null
         sharedPref?.edit()?.putString("rentalInfo", jsonString)?.apply()
     }
 
