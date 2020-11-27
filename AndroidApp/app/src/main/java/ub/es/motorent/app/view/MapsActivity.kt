@@ -1,35 +1,103 @@
 package ub.es.motorent.app.view
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
-
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.MotionEvent
+import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.activity_maps.*
+import com.google.maps.android.PolyUtil
 import ub.es.motorent.R
+import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.model.MotoDB
+import ub.es.motorent.app.model.MotoInfo
+import ub.es.motorent.app.model.MotoList
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
+    MotoDetailsFragment.FromFragmentToActivity, LocationListener {
 
     private lateinit var mMap: GoogleMap
+    lateinit var locationManager: LocationManager
+    lateinit var coordenadas: LatLng
+    lateinit var markerUser : Marker
+    var markers_in_display: ArrayList<Marker> = ArrayList()
+    val hole : ArrayList<LatLng> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        supportActionBar?.hide()
+
+        val settingBtn : ImageButton = findViewById(R.id.settingBtn)
+
+        settingBtn.setOnClickListener {
+            val intentI = Intent(this, SettingsActivity::class.java)
+            startActivity(intentI)
+        }
+
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {}
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1.toFloat(), this)
+
+        val mainHandler = Handler(Looper.getMainLooper())
+
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                getMotosFromMap()
+                mainHandler.postDelayed(this, 5000)
+            }
+        })
 
     }
+
     override fun onBackPressed() {
-        //DO NOTHING
+        supportFragmentManager.popBackStack()
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        coordenadas = LatLng(location?.latitude as Double, location?.longitude)
+        markerUser.position = coordenadas
+    }
+
+    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderEnabled(p0: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderDisabled(p0: String?) {
+        TODO("Not yet implemented")
     }
 
     /**
@@ -44,21 +112,46 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        val coordenadas = LatLng(41.3818, 2.1685)
-        val coordMoto1 = LatLng(41.3818, 2.1685)
-        val coordMoto2 = LatLng(41.382093, 2.131414)
-        val coordMoto3 = LatLng(41.402959, 2.174802)
-        val coordMoto4 = LatLng(41.413352, 2.202810)
-        val coordMoto5 = LatLng(41.437218, 2.180026)
-        val coordMoto6 = LatLng(41.411589, 2.152448)
-        mMap.addMarker(MarkerOptions().position(coordMoto1).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto2).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto3).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto4).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto5).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
-        mMap.addMarker(MarkerOptions().position(coordMoto6).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)))
+        getMotosFromMap()
+
+        mMap.setOnMarkerClickListener { onMarkerClick(it) }
+
+        mMap.setOnMapClickListener {
+            hideLoginFragment()
+        }
+
+        val currentLocation = if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            val providers: List<String> = locationManager.getProviders(true)
+            var bestLocation : Location? = null
+            for (provider in providers){
+                val l = locationManager.getLastKnownLocation(provider)
+                if (l == null) continue
+                if (bestLocation == null || l.accuracy < bestLocation.accuracy) {
+                    bestLocation = l
+                }
+            }
+            bestLocation
+        } else {
+            // Permission to access the location is missing. Show rationale and request permission
+            val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            ActivityCompat.requestPermissions(this, permissions,0)
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        }
+
+
+        coordenadas = if (currentLocation == null) {
+            LatLng(41.387185, 2.163077)
+        } else{
+            LatLng(currentLocation.latitude, currentLocation.longitude)
+        }
+
+        CommonFunctions.saveCurrentUserCoordsToSharedPref(coordenadas, this)
+
+        markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
-        val hole = listOf(
+        val holePolyg = listOf(
             LatLng(41.346835, 2.139348),
             LatLng(41.355486, 2.131968),
             LatLng(41.362218, 2.135069),
@@ -87,19 +180,103 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             LatLng(41.374874, 2.188226),
             LatLng(41.381653, 2.184492),
             LatLng(41.352369, 2.162530),
-            LatLng(41.346546, 2.139268))
+            LatLng(41.346546, 2.139268)
+        )
+        hole.addAll(holePolyg)
 
         val hollowPolygon = mMap.addPolygon(
             PolygonOptions().add(
-            LatLng(58.950017, -16.157126),
-            LatLng(58.950017, 26.123910),
-            LatLng(25.943059, 26.123910),
-            LatLng(25.943059, -16.157126)
-        ).addHole(hole)
-            .fillColor(Color.GRAY)
-            .strokeWidth(5.0f)
-            .fillColor(0x55686868)
-            .geodesic(true)
+                LatLng(58.950017, -16.157126),
+                LatLng(58.950017, 26.123910),
+                LatLng(25.943059, 26.123910),
+                LatLng(25.943059, -16.157126)
+            ).addHole(holePolyg)
+                .fillColor(Color.GRAY)
+                .strokeWidth(5.0f)
+                .fillColor(0x55686868)
+                .geodesic(true)
         )
     }
+
+    private fun loadMotosOnMap(motoList: MotoList?){
+
+        val markers_to_update: ArrayList<MarkerOptions?> = ArrayList()
+        val motos_to_update: ArrayList<MotoInfo> = ArrayList()
+
+        for ( i in 0 until markers_in_display.size){
+            if(motoList?.motos!!.contains(markers_in_display.get(i).tag)){
+                motoList.motos.drop(i)
+            }
+        }
+
+        if (motoList != null) {
+            for (moto in motoList.motos) {
+                if (moto.available?.toBoolean() == true){
+                    val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                    val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                                                fromResource(R.drawable.motoicon))
+                    markers_to_update.add(marker)
+                    motos_to_update.add(moto)
+                }
+            }
+            for (i in 0 until markers_to_update.size){
+                val tmp_marker = mMap.addMarker(markers_to_update.get(i))
+                tmp_marker.tag = motos_to_update.get(i)
+                markers_in_display.add(tmp_marker)
+            }
+            for (i in 0 until markers_in_display.size){
+                if (!motos_to_update.contains(markers_in_display.get(i).tag)){
+                    markers_in_display.get(i).remove()
+                }
+            }
+        }
+    }
+
+
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        if (p0 != markerUser && p0 != null){
+            val moto: MotoInfo = p0.tag as MotoInfo
+            startFragmentMotoDetail(moto.license_number, moto.id!!.toInt(), moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
+        }
+        return false
+    }
+
+    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int, coords: LatLng){
+        supportFragmentManager.popBackStack()
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_moto_detail, newFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    fun getMotosFromMap(){
+        MotoDB.getMotos {
+            loadMotosOnMap(it)
+        }
+    }
+
+    override fun onOptionChosenFromFragment(option: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideLoginFragment() {
+        this.fragment_moto_detail.removeAllViews()
+    }
+
+    override fun launchReport(id: Int) {
+        supportFragmentManager.popBackStack()
+        val newFragment = ReportFragment.newInstance(id)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_moto_detail, newFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    override fun inZone(): Boolean {
+        return PolyUtil.containsLocation(coordenadas, hole, true)
+    }
+
+
 }
+

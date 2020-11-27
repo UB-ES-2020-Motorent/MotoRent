@@ -4,6 +4,7 @@ from models.users import UsersModel
 parser = reqparse.RequestParser()
 parser.add_argument('national_id_document', type=str, required=False, help="Associated national id document, This "
                                                                            "field cannot be left blank")
+parser.add_argument('id', type=str, required=False, help="Associated id, This field cannot be left blank")
 parser.add_argument('country', type=str, required=False, help="Associated country, This field cannot be left blank")
 parser.add_argument('name', type=str, required=False, help="Account name, This field cannot be left blank")
 parser.add_argument('surname', type=str, required=False, help="Account surname, This field cannot be left blank")
@@ -17,20 +18,34 @@ parser.add_argument('admin_code', type=str, required=False, help="Account code f
 
 class Users(Resource):
     """
-    API Restful methods for Accounts
+    API Restful methods for Users
     """
 
-    def get(self, user_id):
+    def get(self):
         """
         GET method
-        Gets an account by id
-        Param: string id
+        Gets an account by id or google token
+        Param: string id or google token
         Return: dict (account ok / message)
         """
 
         data = parser.parse_args()
 
-        user = UsersModel.find_by_id(user_id=user_id)
+        arguments = sum([1 if value else 0 for value in data.values()])
+
+        if arguments > 1 and not data['admin_code']:
+            return {'message': "Please filter by only one feature"}, 400
+        if arguments <= 0:
+            return {'message': "Please filter by at least one feature: id or google_token"}, 400
+
+        if data['id']:
+            user = UsersModel.find_by_id(user_id=data['id'])
+            search_by = ('id', data['id'])
+        elif data['google_token']:
+            user = UsersModel.find_by_google_token(google_token=data['google_token'])
+            search_by = ('Google token', data['google_token'])
+        else:
+            return {'message': "Please filter by a valid feature: id or google_token"}, 400
 
         if user:
             if not data['admin_code']:
@@ -41,7 +56,7 @@ class Users(Resource):
                 else:
                     return {'user': user.json(1)}, 200
         else:
-            return {'message': "User with id [{}] Not found".format(user_id)}, 404
+            return {'message': "User with {} [{}] Not found".format(search_by[0], search_by[1])}, 404
 
     def post(self):
         """
@@ -86,7 +101,7 @@ class Users(Resource):
         else:
             try:
                 user.save_to_db()
-                return {'user': UsersModel.find_by_mail(user.mail).json(0)}, 201
+                return {'user': UsersModel.find_by_mail(user.mail).json(1)}, 201
             except:
                 return {"message": "Error Description"}, 500
 

@@ -2,33 +2,50 @@ from flask_restful import Resource, reqparse
 from models.users import UsersModel
 
 parser = reqparse.RequestParser()
-parser.add_argument('name', type=str, required=True, help="Account username, This field cannot be left blank")
-parser.add_argument('surname', type=str, required=True, help="Account surname, This field cannot be left blank")
-parser.add_argument('mail', type=str, required=True, help="Account mail, This field cannot be left blank")
-parser.add_argument('google_token', type=str, required=True, help="Associated token, This field cannot be left blank")
-parser.add_argument('role', type=str, required=True, help="Account role, This field cannot be left blank")
+parser.add_argument('national_id_document', type=str, required=False, help="Associated national id document, This "
+                                                                           "field cannot be left blank")
+parser.add_argument('id', type=str, required=False, help="Associated id, This field cannot be left blank")
+parser.add_argument('country', type=str, required=False, help="Associated country, This field cannot be left blank")
+parser.add_argument('name', type=str, required=False, help="Account name, This field cannot be left blank")
+parser.add_argument('surname', type=str, required=False, help="Account surname, This field cannot be left blank")
+parser.add_argument('mail', type=str, required=False, help="Account mail, This field cannot be left blank")
+parser.add_argument('google_token', type=str, required=False, help="Associated token, This field cannot be left blank")
+parser.add_argument('role', type=str, required=False, help="Account role, This field cannot be left blank")
+parser.add_argument('id_bank_data', type=str, required=False, help="Account bank data id, This field cannot be left "
+                                                                   "blank")
 parser.add_argument('admin_code', type=str, required=False, help="Account code for admins for special post")
-
-admin_parser = reqparse.RequestParser()
-admin_parser.add_argument('admin_code', type=str, required=False, help="Account code for admins for special post")
 
 
 class Users(Resource):
     """
-    API Restful methods for Accounts
+    API Restful methods for Users
     """
 
-    def get(self, name):
+    def get(self):
         """
         GET method
-        Gets an account by username
-        Param: string username
+        Gets an account by id or google token
+        Param: string id or google token
         Return: dict (account ok / message)
         """
 
-        data = admin_parser.parse_args()
+        data = parser.parse_args()
 
-        user = UsersModel.find_by_username(name=name)
+        arguments = sum([1 if value else 0 for value in data.values()])
+
+        if arguments > 1 and not data['admin_code']:
+            return {'message': "Please filter by only one feature"}, 400
+        if arguments <= 0:
+            return {'message': "Please filter by at least one feature: id or google_token"}, 400
+
+        if data['id']:
+            user = UsersModel.find_by_id(user_id=data['id'])
+            search_by = ('id', data['id'])
+        elif data['google_token']:
+            user = UsersModel.find_by_google_token(google_token=data['google_token'])
+            search_by = ('Google token', data['google_token'])
+        else:
+            return {'message': "Please filter by a valid feature: id or google_token"}, 400
 
         if user:
             if not data['admin_code']:
@@ -39,7 +56,7 @@ class Users(Resource):
                 else:
                     return {'user': user.json(1)}, 200
         else:
-            return {'message': "User with username [{}] Not found".format(name)}, 404
+            return {'message': "User with {} [{}] Not found".format(search_by[0], search_by[1])}, 404
 
     def post(self):
         """
@@ -48,11 +65,6 @@ class Users(Resource):
         Return: dict (account created / message)
         """
         data = parser.parse_args()
-
-        if not data['name']:
-            return {'message': {
-                "name": "Name cant be empty"
-            }}, 400
 
         if not data['mail']:
             return {'message': {
@@ -64,11 +76,15 @@ class Users(Resource):
                 "google_token": "Google token cant be empty"
             }}, 400
 
-        if UsersModel.find_by_username(name=data['name']):
-            return {'message': "Account with name [{}] already exists".format(data['name'])}, 409
+        if not data['role']:
+            return {'message': {
+                "role": "Role cant be empty"
+            }}, 400
 
-        user = UsersModel(name=data['name'], surname=data['surname'], google_token=data['google_token'],
-                          role=data['role'], mail=data['mail'])
+        if UsersModel.find_by_mail(data['mail']):
+            return {'message': "Account with mail [{}] already exists".format(data['mail'])}, 409
+
+        user = UsersModel(google_token=data['google_token'], mail=data['mail'], role=data['role'])
 
         if data['role'] != '0':
             if not data['admin_code']:
@@ -79,21 +95,21 @@ class Users(Resource):
                 else:
                     try:
                         user.save_to_db()
-                        return {'user': UsersModel.find_by_username(user.name).json(1)}, 201
+                        return {'user': UsersModel.find_by_mail(user.mail).json(1)}, 201
                     except:
                         return {"message": "Error Description"}, 500
         else:
             try:
                 user.save_to_db()
-                return {'user': UsersModel.find_by_username(user.name).json(0)}, 201
+                return {'user': UsersModel.find_by_mail(user.mail).json(1)}, 201
             except:
                 return {"message": "Error Description"}, 500
 
-    def put(self, name):
+    def put(self, user_id):
         """
         PUT method
-        Modifies/Adds a user
-        Param: name (OPTIONAL)
+        Modifies a user
+        Param: id
         Return: dict (user created)
         """
         data = parser.parse_args()
@@ -104,63 +120,49 @@ class Users(Resource):
             if data['admin_code'] != 'admin_secret_code':
                 return {"message": "Wrong admin code"}, 400
             else:
-                if not data['name']:
-                    return {'message': {
-                        "name": "Name cant be empty"
-                    }}, 400
+                user = UsersModel.find_by_id(user_id=user_id)
 
-                if not data['surname']:
-                    return {'message': {
-                        "surname": "Surname cant be empty"
-                    }}, 400
-                if not data['mail']:
-                    return {'message': {
-                        "mail": "Mail cant be empty"
-                    }}, 400
-                if not data['google_token']:
-                    return {'message': {
-                        "google_token": "Google token cant be empty"
-                    }}, 400
-                if not data['role']:
-                    return {'message': {
-                        "role": "Role cant be empty"
-                    }}, 400
+                if data['name']:
+                    user.name = data["name"]
 
-                user = UsersModel.find_by_id(name)
+                if data['surname']:
+                    user.surname = data["surname"]
 
-                if not user:
-                    user = UsersModel(name=data['name'], surname=data['surname'], google_token=data['google_token'],
-                                      role=data['role'], mail=data['mail'])
-                    try:
-                        user.save_to_db()
-                        return {'user': UsersModel.find_by_username(user.name).json(1)}, 201
-                    except:
-                        return {"message": "Error Description"}, 500
+                if data['national_id_document']:
+                    user.national_id_document = data["national_id_document"]
 
-                user.name = data["name"]
-                user.surname = data["surname"]
-                user.mail = data["mail"]
-                user.google_token = data["google_token"]
-                user.role = data["role"]
+                if data['country']:
+                    user.country = data["country"]
+
+                if data['mail']:
+                    user.mail = data["mail"]
+
+                if data['google_token']:
+                    user.google_token = data["google_token"]
+
+                if data['role']:
+                    user.role = data["role"]
+
+                if data['id_bank_data']:
+                    user.id_bank_data = data["id_bank_data"]
 
                 try:
                     user.save_to_db()
-                    return {'user': UsersModel.find_by_id(user.id).json(1)}, 200
+                    return {'user': UsersModel.find_by_id(user_id).json(1)}, 200
                 except:
                     return {"message": "Error Description"}, 500
 
-
-    def delete(self, name):
+    def delete(self, user_id):
         """
         DELETE method
         Removes an account
-        Param: string username
+        Param: string id
         Return: dict (message ok / message)
         """
 
-        data = admin_parser.parse_args()
+        data = parser.parse_args()
 
-        user = UsersModel.find_by_username(name=name)
+        user = UsersModel.find_by_id(user_id=user_id)
 
         if not data['admin_code']:
             return {"message": "You need an admin code to delete an user"}, 400
@@ -171,12 +173,12 @@ class Users(Resource):
                 if user:
                     try:
                         user.delete_from_db()
-                        return {'message': "User with username [{}] and all associated info deleted".format(
-                            name)}, 200
+                        return {'message': "User with id [{}] and all associated info deleted".format(
+                            user_id)}, 200
                     except:
                         return {"message": "Error Description"}, 500
                 else:
-                    return {'message': "User with username [{}] Not found".format(name)}, 404
+                    return {'message': "User with id [{}] Not found".format(user_id)}, 404
 
 
 class UsersList(Resource):
@@ -188,7 +190,7 @@ class UsersList(Resource):
         GET method
         Return: dict (users)
         """
-        data = admin_parser.parse_args()
+        data = parser.parse_args()
 
         users = UsersModel.all_users()
 

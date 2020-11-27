@@ -46,6 +46,15 @@ class MotosModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def set_available(self, available):
+        self.available = available
+        db.session.commit()
+
+    def update_coords(self, latitude, longitude):
+        self.latitude = latitude
+        self.longitude = longitude
+        db.session.commit()
+
     @classmethod
     def find_by_id(cls, id):
         """
