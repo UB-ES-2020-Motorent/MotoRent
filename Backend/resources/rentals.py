@@ -34,6 +34,21 @@ class Rentals(Resource):
         else:
             return {'message': 'Rental with id [{}] not found'.format(id)}, 404
 
+    def get(self, user_id):
+        """
+        GET method
+        Gets active rental by user id
+        Param: int user id
+        Return: dict (account ok / message)
+        """
+
+        rental = RentalsModel.find_active_rental_by_user_id(user_id=user_id)
+
+        if rental:
+            return {'rental': rental.json()}, 200
+        else:
+            return {'message': 'User with id [{}] has no active rentals'.format(user_id)}, 404
+
     def post(self):
         """
         POST method
@@ -49,6 +64,10 @@ class Rentals(Resource):
             return {'message': {
                 "user_id": "User_id cant be empty"
             }}, 400
+
+        activerental = RentalsModel.find_active_rental_by_user_id(user_id=data['user_id'])
+        if activerental:
+            return {'message': "User with id [{}] already has an ongoing rental".format(data['user_id'])}, 409
 
         rental = RentalsModel(moto_id=data['moto_id'],
                               user_id=data['user_id'],
@@ -125,6 +144,25 @@ class Rentals(Resource):
                 return {'message': "Internal server error"}, 500
         else:
             return {'message': "Rental with id [{}] Not found".format(id)}, 404
+
+class ActiveRentals(Resource):
+    """
+    API Restful methods for ActiveRentals
+    """
+    def get(self, user_id):
+        """
+        GET method
+        Gets active rental by user id
+        Param: int user id
+        Return: dict (account ok / message)
+        """
+
+        rental = RentalsModel.find_active_rental_by_user_id(user_id=user_id)
+
+        if rental:
+            return {'rental': rental.json()}, 200
+        else:
+            return {'message': 'User with id [{}] has no active rentals'.format(user_id)}, 404
 
 class RentalsList(Resource):
     """
