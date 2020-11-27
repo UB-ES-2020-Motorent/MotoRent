@@ -41,6 +41,8 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         val txtCreditCardExpirationDate : EditText = findViewById(R.id.dataCaducitatFill)
         val txtCreditCardCVV : EditText = findViewById(R.id.cvvFill)
 
+        txtName.setText(presenter.getNameAndSurname())
+
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
             presenter.updateUserInfo(

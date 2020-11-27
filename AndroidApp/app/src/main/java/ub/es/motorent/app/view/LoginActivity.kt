@@ -28,14 +28,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.R
+import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.presenter.LoginPresenter
 
 class LoginActivity : FullScreenActivity(){
 
     private lateinit var presenter: LoginPresenter
-
-    private var PRIVATE_MODE = 0
-    private val PREF_NAME = "fluxControl"
 
     // login google
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -95,10 +94,15 @@ class LoginActivity : FullScreenActivity(){
 
     }
 
-    fun authenticationSuccessful(){
-        sendAuthToDatabase()
+    fun goToMaps(){
         toast(getString(R.string.ok_auth))
         val intentI = Intent(this, MapsActivity::class.java)
+        startActivity(intentI)
+    }
+
+    fun goToForm() {
+        toast("Welcome to MotoRent")
+        val intentI = Intent(this, ComplementaryFormActivity::class.java)
         startActivity(intentI)
     }
 
@@ -124,12 +128,6 @@ class LoginActivity : FullScreenActivity(){
                     Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
             }
         }
-    }
-
-    private fun sendAuthToDatabase() {
-        // show loading to the user while waiting for the database
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
-        // TO DO connect to db : - Judit: I'll do it
     }
 
     /*
@@ -181,6 +179,8 @@ class LoginActivity : FullScreenActivity(){
     companion object {
         private const val TAG = "LoginActivity"
         private const val RC_SIGN_IN = 9001
+        private const val PRIVATE_MODE = 0
+        private const val PREF_NAME = "fluxControl"
     }
 
 }

@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 
+
 /**
  * A simple [Fragment] subclass.
  * Use the [MotoDetailsFragment.newInstance] factory method to
@@ -34,6 +35,7 @@ class MotoDetailsFragment : Fragment() {
     private var moto_long: Double? = null
     lateinit var rentbtn: Button
     var inZone: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -66,11 +68,12 @@ class MotoDetailsFragment : Fragment() {
         val batteryText = view.findViewById<TextView>(R.id.moto_txt_battery_value)
         rentbtn = view.findViewById<Button>(R.id.reservarBtn)
         val reportBtn= view.findViewById<Button>(R.id.reportBtn)
+
         reportBtn.setOnClickListener{
             startFragmentReport(this.id!!)
         }
 
-        rentbtn.setOnClickListener({updateRentButton(rentbtn)})
+        rentbtn.setOnClickListener {updateRentButton(rentbtn)}
         licenseText.text = license
         batteryText.text = battery.toString()
     }
@@ -96,6 +99,7 @@ class MotoDetailsFragment : Fragment() {
         private const val ARG_BATTERY = "battery"
         private const val ARG_LAT = "moto_lat"
         private const val ARG_LONG = "moto_long"
+        private const val TAG = "MotoDetailFrag"
 
         /**
          * Use this factory method to create a new instance of
@@ -120,25 +124,25 @@ class MotoDetailsFragment : Fragment() {
 
     fun updateRentButton(rentbtn:Button){
         val user_id = CommonFunctions.loadUserInfoFromSharedPrefFragment(this.activity)?.id
-        if(rentbtn.text.equals("Reservar")){
-            rentbtn.setText("Iniciar viatge")
-            rentbtn.setBackgroundColor(getResources().getColor(R.color.rentedMoto))
+        if(rentbtn.text == "Reservar"){
+            rentbtn.text = "Iniciar viatge"
+            rentbtn.setBackgroundColor(resources.getColor(R.color.rentedMoto))
             RentalDB.addRental(this.id,user_id){
                 CommonFunctions.saveCurrentRentalInfoToSharedPref(it!!,this.activity)
             }
-        } else if(rentbtn.text.equals("Iniciar viatge")){
-            val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
-            Log.i("MOMENTOLOLAZO",rental_id.toString())
-            rentbtn.setText("Finalitzar viatge")
-            rentbtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary))
-            RentalDB.updateRentalById(rental_id,"False", null, null)
+        } else if(rentbtn.text == "Iniciar viatge"){
+            val rentalId = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this.activity)?.id
+            Log.i(TAG,rentalId.toString())
+            rentbtn.text = "Finalitzar viatge"
+            rentbtn.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            RentalDB.updateRentalById(rentalId,"False", null, null)
         } else {
             if (inZone){
-                val rental_id = CommonFunctions.loadCurrentRentalInfoToSharedPref(this.activity)?.id
-                Log.i("XXXXXXXXXXXXXXDDDD",rental_id.toString())
-                rentbtn.setText("Reservar")
-                rentbtn.setBackgroundColor(getResources().getColor(R.color.rentMoto))
-                RentalDB.updateRentalById(rental_id,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+                val rentalId = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this.activity)?.id
+                Log.i(TAG,rentalId.toString())
+                rentbtn.text = "Reservar"
+                rentbtn.setBackgroundColor(resources.getColor(R.color.rentMoto))
+                RentalDB.updateRentalById(rentalId,"True", moto_lat?.toFloat(), moto_long?.toFloat())
             } else {
                 Toast.makeText(activity, "No pots deixar la moto fora de Barcelona.", Toast.LENGTH_SHORT).show()
             }
