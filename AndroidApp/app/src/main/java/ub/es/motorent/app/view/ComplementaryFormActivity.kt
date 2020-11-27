@@ -28,6 +28,7 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         val txtSurname : EditText = findViewById(R.id.cognomFill)
         val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
 
+
         if(userInfo != null) {
             txtName.setText(userInfo.name)
             txtSurname.setText(userInfo.surname)
@@ -37,19 +38,6 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         ccp = findViewById(R.id.country_code_picker)
         ccp!!.setOnCountryChangeListener(this)
         ccp!!.setDefaultCountryUsingNameCode("ES")
-
-        //De moment no fa cap comprovació dins dels camps ni res a falta de tot el tema de backend
-        //ja que aqui aniria el recent usuari creat i s'afagiria tots aquests camps.
-
-        //un cop tinguem tot lo de la base de dades ben montat, faria cada cop que es fes un intent
-        //es comprovés que tota la informació d'aquesta pagina estigui dins de la DB
-        //en cas que no que surtis de nou aquest formulari
-
-
-        val txtName : EditText = findViewById(R.id.nomCognomFill)
-        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
-
-        txtName.setText(presenter.getNameAndSurname())
 
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
@@ -70,7 +58,7 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
     override fun onCountrySelected() {
         countryName = ccp!!.selectedCountryName
 
-        customToast("Has seleccionat: "+countryName,Toast.LENGTH_SHORT).show()
+        customToast("Has seleccionat: " + countryName,Toast.LENGTH_SHORT).show()
     }
 
     fun goToMap(){
