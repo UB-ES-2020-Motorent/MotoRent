@@ -34,11 +34,15 @@ object UserDB {
         val apiService = RestApiService()
         apiService.getUserByIdOrGoogleToken(id, google_token) {
             Log.i(TAG, it.toString())
-            onResult(it?.user)
+            if (it != null) {
+                onResult(it.user)
+            } else {
+                onResult(null)
+            }
         }
     }
 
-    fun registerUser(email: String, gToken: String, role: Int = 0, onRegistered: (UserInfo?) -> Unit) {
+    fun registerUser(email: String?, gToken: String, role: Int = 0, onRegistered: (UserInfo?) -> Unit) {
         val apiService = RestApiService()
         apiService.addUser(email, gToken, role) {
             Log.i(TAG, it.toString())

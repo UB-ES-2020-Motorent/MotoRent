@@ -66,22 +66,13 @@ class SignUpPresenter (private val activity: SignUpActivity) {
                 }
             }
         }*/
-        val token = CommonFunctions.saveUIDToSharedPerf()
-        UserDB.registerUser(email, token, 0) {
-            if (email != it?.mail ?: true){
+        val token = CommonFunctions.getUIDFromFirebase()
+        UserDB.registerUser(email, token, 0) { registeredUser ->
+            if (email != registeredUser?.mail ?: true){
                 Log.w(TAG, "user not registered correctly")
             } else {
-                Log.i(TAG, "user: $it")
-                val token = CommonFunctions.saveUIDToSharedPerf()
-                UserDB.getUserByIdOrGoogleToken (null, token) {
-                    if (token != it?.google_token ?: true){
-                        Log.w(SignUpPresenter.TAG, "user not registered correctly")
-                    } else {
-                        Log.i(SignUpPresenter.TAG, "user: $it")
-                        CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
-                    }
-                }
-                CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                Log.i(TAG, "user: $registeredUser")
+                CommonFunctions.saveUserInfoToSharedPref(registeredUser!!, activity)
                 activity.goToFormAfterRegister()
             }
         }

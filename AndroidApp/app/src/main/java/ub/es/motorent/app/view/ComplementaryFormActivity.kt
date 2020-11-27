@@ -45,6 +45,12 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
         //es comprovés que tota la informació d'aquesta pagina estigui dins de la DB
         //en cas que no que surtis de nou aquest formulari
 
+
+        val txtName : EditText = findViewById(R.id.nomCognomFill)
+        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
+
+        txtName.setText(presenter.getNameAndSurname())
+
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
             presenter.updateUserInfo(

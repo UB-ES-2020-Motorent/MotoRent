@@ -2,6 +2,7 @@ package ub.es.motorent.app.presenter
 
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -48,6 +49,12 @@ class ComplementaryFormPresenter (var activity: ComplementaryFormActivity): Full
             return userInfo
         }
         return null
+    }
+
+    fun getNameAndSurname () : String{//List<String?>?{
+        val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
+        //return if (user != null) listOf(user.name, user.surname) else null
+        return if (user != null) user.name + " " + user.surname else ""
     }
 
     companion object{

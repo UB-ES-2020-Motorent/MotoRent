@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:background="@drawable/fons_login">
 
     <LinearLayout
@@ -75,6 +77,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Canviar informació bancaria" />
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/callNumberButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Servei d'assistencia" />
 
     </LinearLayout>
 </LinearLayout>
