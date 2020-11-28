@@ -8,7 +8,7 @@ import ub.es.motorent.app.presenter.SettingsPresenter
 import ub.es.motorent.app.view.SettingsActivity
 
 class SettingsTest {
-    val context = ApplicationProvider.getApplicationContext<Context>()
+
     val presenter = SettingsPresenter(activity = SettingsActivity())
 
 }

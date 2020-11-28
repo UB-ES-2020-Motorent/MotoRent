@@ -10,11 +10,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.view.SettingsActivity
 
+// Initialize Firebase Auth
+private var auth: FirebaseAuth = Firebase.auth
 
 class SettingsPresenter(var activity: SettingsActivity) {
 
-    // Initialize Firebase Auth
-    private var auth: FirebaseAuth = Firebase.auth
+
 
 
     fun logOutAccount(){

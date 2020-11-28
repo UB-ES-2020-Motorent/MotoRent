@@ -8,7 +8,6 @@ import ub.es.motorent.app.presenter.WelcomePresenter
 import ub.es.motorent.app.view.WelcomeActivity
 
 class WelcomeTest {
-    val context = ApplicationProvider.getApplicationContext<Context>()
 
     val presenter = WelcomePresenter(activity = WelcomeActivity())
 

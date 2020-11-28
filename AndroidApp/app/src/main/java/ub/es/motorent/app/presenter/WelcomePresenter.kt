@@ -11,10 +11,9 @@ import ub.es.motorent.app.view.LoginActivity
 import ub.es.motorent.app.view.MapsActivity
 import ub.es.motorent.app.view.WelcomeActivity
 
+private var auth: FirebaseAuth = Firebase.auth
+
 class WelcomePresenter (var activity: WelcomeActivity) {
-
-    private var auth: FirebaseAuth = Firebase.auth
-
 
     fun navigationPath() : Intent {
         return if((auth.currentUser != null) && (activity.autoLogin())){
