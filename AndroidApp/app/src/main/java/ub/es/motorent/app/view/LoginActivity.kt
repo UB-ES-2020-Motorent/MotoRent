@@ -41,11 +41,6 @@ import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.identity.TwitterLoginButton
 import kotlinx.android.synthetic.main.activity_login.*
 import ub.es.motorent.R
-import ub.es.motorent.app.model.Data
-import ub.es.motorent.app.model.USER_NAME
-import ub.es.motorent.app.model.User
-import ub.es.motorent.app.view.login.LoginSignFragment
-import ub.es.motorent.app.view.login.LoginWaitFragment
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -64,9 +59,6 @@ class LoginActivity : FullScreenActivity(){
     private lateinit var mAuth: FirebaseAuth
 
     private val callbackManager = CallbackManager.Factory.create()
-
-    private var loginTwitterBtn : Button ? = null
-    //private var loginFacebookBtn : Button ? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,13 +79,12 @@ class LoginActivity : FullScreenActivity(){
         mAuth = FirebaseAuth.getInstance()
 
 
-        //val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
         //val loginFacebookBtn : Button = findViewById(R.id.facebook_btn)
+        //loginFacebookBtn?.setOnClickListener { loginFacebook() }
 
-        //loginFacebookBtn?.setOnClickListener { loginFacebook() }
-        //loginFacebookBtn?.setOnClickListener { loginFacebook() }
+        val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
         loginTwitterBtn?.setOnClickListener {
-            this.signInWithTwitter(this, mAuth)
+            signInWithTwitter()
         }
 
         val btnResetPsw: Button= findViewById(R.id.recu_psw)
@@ -141,38 +132,33 @@ class LoginActivity : FullScreenActivity(){
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    private fun signInWithTwitter(activity: Activity, firebaseAuth: FirebaseAuth) {
-        mAuth.startActivityForSignInWithProvider(activity, OAuthProvider.newBuilder("twitter.com").build())
-            .addOnSuccessListener {
-                val user = firebaseAuth.currentUser
-                setAuth(user)
-
-                val intentI = Intent(this@LoginActivity, MapsActivity::class.java)
-                startActivity(intentI)
-            }
-            .addOnFailureListener {
-                Log.e("twitter", "Fail AUTH")
-
-            }
-    }
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 presenter.firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
-                // Google Sign In failed
                 Log.w(TAG, "Google sign in failed", e)
                 customToast(
                     getString(R.string.fail_google_auth),
                     Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
             }
         }
+    }
+
+    private fun signInWithTwitter() {
+        mAuth.startActivityForSignInWithProvider(this, OAuthProvider.newBuilder("twitter.com").build())
+            .addOnSuccessListener {
+                //authResult.additionalUserInfo.profile.values
+                presenter.getUserFromDBAndSaveItToSP(mAuth.currentUser?.email)
+                presenter.goToNextActivity()
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "twitter Fail AUTH")
+            }
     }
 
     /*
