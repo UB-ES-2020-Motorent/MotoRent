@@ -9,7 +9,7 @@ from config import config
 from resources.users import Users, UsersList
 from resources.motos import Motos, MotosList
 from resources.map_coords import MapCoords, MapCoordsList
-from resources.rentals import Rentals, RentalsList
+from resources.rentals import Rentals, ActiveRentals, RentalsList
 from resources.bank_data import BankData, BankDataList
 
 from db import db, init_db
