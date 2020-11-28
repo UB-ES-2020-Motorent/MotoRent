@@ -73,6 +73,12 @@
             android:text="Canviar informació personal" />
 
         <Button
+            android:id="@+id/changeBankInfBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Canviar informació bancaria" />
+
+        <Button
             android:layout_marginTop="10dp"
             android:id="@+id/callNumberButton"
             android:layout_width="match_parent"
