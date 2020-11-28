@@ -44,6 +44,7 @@ api.add_resource(MapCoords, '/mapcoord')
 api.add_resource(MapCoordsList, '/mapcoords')
 
 api.add_resource(Rentals, '/rental', '/rental/<int:id>')
+api.add_resource(ActiveRentals, '/activerental/<int:user_id>')
 api.add_resource(RentalsList, '/rentals')
 
 api.add_resource(BankData, '/bankdata', '/bankdata/<string:id_bank_data>')
