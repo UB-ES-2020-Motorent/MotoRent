@@ -38,6 +38,13 @@ object RentalDB {
         }
     }
 
+    fun getActiveRentalByUserId(user_id: Int) {
+        val apiService = RestApiService()
+        apiService.getActiveRentalByUserId(user_id) {
+            Log.i(TAG, it.toString())
+        }
+    }
+
     fun addRental(moto_id: Int?, user_id: Int?,  onResult: (RentalInfo?) -> Unit){
         val apiService = RestApiService()
         apiService.addRental(moto_id, user_id) {

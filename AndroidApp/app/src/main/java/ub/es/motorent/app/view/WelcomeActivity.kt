@@ -3,6 +3,7 @@ package ub.es.motorent.app.view
 import android.Manifest
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -50,8 +51,7 @@ class WelcomeActivity : FullScreenActivity() {
             }
         } else {
             timer.schedule(2000) {
-                startActivity(presenter.navigationPath())
-                finish()
+                presenter.navigationPath()
             }
         }
     }
@@ -72,8 +72,7 @@ class WelcomeActivity : FullScreenActivity() {
     override fun onRequestPermissionsResult(requestCode : Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == 1) {
             if (!grantResults.contains(PackageManager.PERMISSION_DENIED)) {
-                startActivity(presenter.navigationPath())
-                finish()
+                presenter.navigationPath()
             }
         }
     }
@@ -81,6 +80,12 @@ class WelcomeActivity : FullScreenActivity() {
     fun autoLogin() :Boolean{
         val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
         return sharedPref.getBoolean("autoLog",true)
+    }
+
+    fun<T> goToNextActivity(activity:  Class<T>){
+        val intentI = Intent(this, activity)
+        startActivity(intentI)
+        finish()
     }
 
 }

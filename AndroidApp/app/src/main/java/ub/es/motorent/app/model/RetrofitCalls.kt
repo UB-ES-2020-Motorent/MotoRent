@@ -16,7 +16,7 @@ interface RestApi {
     /******************** USERS ********************/
     @POST("user")
     fun addUser(
-                @Query("mail") mail:String,
+                @Query("mail") mail:String?,
                 @Query("google_token") google_token:String,
                 @Query("role") role:Int,
                 @Query("admin_code") admin_code:String?
@@ -164,6 +164,11 @@ interface RestApi {
         @Query("id") id:Int
     ): Call<RentalJson>
 
+    @GET("activerental")
+    fun getActiveRentalByUserId(
+        @Query("user_id") user_id:Int
+    ): Call<RentalJson>
+
     @PUT("rental/{id}")
     fun updateRentalById(
         @Path("id") id: Int?,
@@ -216,7 +221,7 @@ class RestApiService {
         )
     }
 
-    fun addUser(mail:String, google_token:String, role:Int, onResult: (UserJson?) -> Unit){
+    fun addUser(mail:String?, google_token:String, role:Int, onResult: (UserJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
         retrofit.addUser(mail, google_token, role, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
@@ -541,6 +546,22 @@ class RestApiService {
                 }
                 override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
                     logResult(response, "getRentalById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getActiveRentalByUserId(user_id: Int, onResult: (RentalJson?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getActiveRentalByUserId(user_id).enqueue(
+            object : Callback<RentalJson> {
+                override fun onFailure(call: Call<RentalJson>, t: Throwable) {
+                    Log.i(TAG, "onFailure - getActiveRentalByUserId: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
+                    logResult(response, "getActiveRentalByUserId: ")
                     onResult(response.body())
                 }
             }

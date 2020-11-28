@@ -34,11 +34,15 @@ object UserDB {
         val apiService = RestApiService()
         apiService.getUserByIdOrGoogleToken(id, google_token) {
             Log.i(TAG, it.toString())
-            onResult(it?.user)
+            if (it != null) {
+                onResult(it.user)
+            } else {
+                onResult(null)
+            }
         }
     }
 
-    fun registerUser(email: String, gToken: String, role: Int = 0, onRegistered: (UserInfo?) -> Unit) {
+    fun registerUser(email: String?, gToken: String, role: Int = 0, onRegistered: (UserInfo?) -> Unit) {
         val apiService = RestApiService()
         apiService.addUser(email, gToken, role) {
             Log.i(TAG, it.toString())
@@ -54,11 +58,12 @@ object UserDB {
 
     fun updateUserInfoInDataBase(id: Int, email: String? = null, google_token: String? = null,
                                  role: Int? = null, name: String?, surname: String?, country: String?,
-                                 id_bank_data: Int? = null, national_id_document: String? = null){
+                                 id_bank_data: Int? = null, national_id_document: String? = null, onResult: (UserJson?) -> Unit){
         val apiService = RestApiService()
         apiService.updateUser(id, name, surname, national_id_document, country, email, google_token,
                               role, id_bank_data ) {
             Log.i(TAG, it.toString())
+            onResult(it)
         }
     }
 

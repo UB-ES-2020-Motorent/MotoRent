@@ -8,7 +8,7 @@ class UsersModel(db.Model):
 
     __tablename__ = 'users'
     id = db.Column(db.Integer(), primary_key=True, unique=True, nullable=False, autoincrement=True)
-    id_bank_data = db.Column(db.Integer(), nullable=True, unique=True)
+    id_bank_data = db.Column(db.Integer(), nullable=True, unique=False)
     national_id_document = db.Column(db.String(), nullable=True)
     country = db.Column(db.String(), nullable=True)
     name = db.Column(db.String(), nullable=True)
