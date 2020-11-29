@@ -34,21 +34,6 @@ class Rentals(Resource):
         else:
             return {'message': 'Rental with id [{}] not found'.format(id)}, 404
 
-    def get(self, user_id):
-        """
-        GET method
-        Gets active rental by user id
-        Param: int user id
-        Return: dict (account ok / message)
-        """
-
-        rental = RentalsModel.find_active_rental_by_user_id(user_id=user_id)
-
-        if rental:
-            return {'rental': rental.json()}, 200
-        else:
-            return {'message': 'User with id [{}] has no active rentals'.format(user_id)}, 404
-
     def post(self):
         """
         POST method
