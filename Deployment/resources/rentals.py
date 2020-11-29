@@ -74,11 +74,8 @@ class Rentals(Resource):
                               book_hour=datetime.now().isoformat())
         moto = MotosModel.find_by_id(data['moto_id'])
         try:
-            print("entra")
             rental.save_to_db()
-            print("saverental")
             moto.set_available(False)
-            print("setavailable")
             return {'rental': RentalsModel.find_by_id(rental.id).json()}, 201
 
         except:

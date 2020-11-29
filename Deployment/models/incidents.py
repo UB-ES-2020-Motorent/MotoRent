@@ -12,8 +12,7 @@ class IncidentsModel(db.Model):
     moto_id = db.Column(db.Integer(), nullable=False, unique=False)
     comment = db.Column(db.String(), nullable=False, unique=False)
 
-    def __init__(self, id, user_id, moto_id, comment):
-        self.id = id
+    def __init__(self, user_id, moto_id, comment):
         self.user_id = user_id
         self. moto_id = moto_id
         self.comment = comment
