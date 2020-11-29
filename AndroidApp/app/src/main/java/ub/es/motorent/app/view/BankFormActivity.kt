@@ -24,11 +24,6 @@ class BankFormActivity : FullScreenActivity() {
         val caducityDate : EditText = findViewById(R.id.dataCaducitatFill)
         val cvv : EditText = findViewById(R.id.cvvFill)
 
-        presenter.getAllCardFromUser {
-            Log.i("BANK", it.toString())
-        }
-
-
 
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
@@ -37,6 +32,10 @@ class BankFormActivity : FullScreenActivity() {
 
         val btnTornar : Button = findViewById(R.id.backBtn)
         btnTornar.setOnClickListener({
+            presenter.getAllCardFromUser {
+                Log.i("GET CARD FROM USER", it.toString())
+            }
+
             val intentI = Intent(this, CreditCardsActivity::class.java)
             startActivity(intentI)
         });
