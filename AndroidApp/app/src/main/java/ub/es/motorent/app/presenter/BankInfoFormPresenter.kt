@@ -27,8 +27,7 @@ class BankInfoFormPresenter(var activity: BankFormActivity){
         if(userInfo != null) {
             BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
                 onResult(it)
-                Log.i("it", it?.bankdatas?.get(0)?.card_cvv.toString())
-
+                Log.i("CREDIT CARD", it?.bankdatas?.get(0)?.card_number?.toString())
             }
         }
     }

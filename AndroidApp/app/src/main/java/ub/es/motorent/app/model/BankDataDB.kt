@@ -42,7 +42,6 @@ object BankDataDB {
     ) {
         val apiService = RestApiService()
         apiService.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number) {
-            Log.i(TAG, it.toString())
             onResult(it)
         }
     }
