@@ -19,7 +19,6 @@ class BankFormActivity : FullScreenActivity() {
 
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
-
         });
     }
 }

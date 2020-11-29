@@ -51,10 +51,6 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
 
     }
 
-    override fun onBackPressed() {
-        // presenter.eliminarUserActual()
-    }
-
     override fun onCountrySelected() {
         countryName = ccp!!.selectedCountryName
 
