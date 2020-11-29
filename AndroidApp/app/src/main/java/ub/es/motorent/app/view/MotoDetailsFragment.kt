@@ -1,7 +1,6 @@
 package ub.es.motorent.app.view
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,10 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
-import kotlinx.android.synthetic.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 
@@ -30,19 +26,24 @@ class MotoDetailsFragment : Fragment() {
     private var id : Int? = null
     private var battery: Int? = null
     private var fromFragmentToActivity: FromFragmentToActivity ?= null
-    private var moto_lat: Double? = null
-    private var moto_long: Double? = null
+    private var motoLat: Double? = null
+    private var motoLong: Double? = null
+    private var rentalStatus: Int = 0
     lateinit var rentbtn: Button
     var inZone: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             license = it.getString(ARG_LICENSE)
             id = it.getInt(ARG_ID)
             battery = it.getInt(ARG_BATTERY)
-            moto_lat = it.getDouble(ARG_LAT)
-            moto_long = it.getDouble(ARG_LONG)
+            motoLat = it.getDouble(ARG_LAT)
+            motoLong = it.getDouble(ARG_LONG)
+            rentalStatus = it.getInt(ARG_RENTAL_STATUS)
         }
+
+        updateRentButtonText(rentalStatus)
 
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
@@ -70,7 +71,7 @@ class MotoDetailsFragment : Fragment() {
             startFragmentReport(this.id!!)
         }
 
-        rentbtn.setOnClickListener {updateRentButton(rentbtn)}
+        rentbtn.setOnClickListener {updateRentButton()}
         licenseText.text = license
         batteryText.text = battery.toString()
     }
@@ -96,6 +97,7 @@ class MotoDetailsFragment : Fragment() {
         private const val ARG_BATTERY = "battery"
         private const val ARG_LAT = "moto_lat"
         private const val ARG_LONG = "moto_long"
+        private const val ARG_RENTAL_STATUS = "rental_status"
         private const val TAG = "MotoDetailFrag"
 
         /**
@@ -107,7 +109,7 @@ class MotoDetailsFragment : Fragment() {
          * @return A new instance of fragment MotoDetailsFragment.
          */
         @JvmStatic
-        fun newInstance(license: String, id: Int, battery: Int, coords: LatLng) =
+        fun newInstance(license: String, id: Int, battery: Int, coords: LatLng, rentalStatus: Int) =
             MotoDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_LICENSE, license)
@@ -115,36 +117,50 @@ class MotoDetailsFragment : Fragment() {
                     putInt(ARG_BATTERY, battery)
                     putDouble(ARG_LAT, coords.latitude)
                     putDouble(ARG_LONG, coords.longitude)
+                    putInt(ARG_RENTAL_STATUS, rentalStatus)
                 }
             }
     }
 
-    fun updateRentButton(rentbtn:Button){
-        val user_id = CommonFunctions.loadUserInfoFromSharedPrefFragment(this.activity)?.id
+    fun updateRentButton(){
+        val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
         if(rentbtn.text == "Reservar"){
-            rentbtn.text = "Iniciar viatge"
-            rentbtn.setBackgroundColor(resources.getColor(R.color.rentedMoto))
-            RentalDB.addRental(this.id,user_id){
-                CommonFunctions.saveCurrentRentalInfoToSharedPref(it!!,this.activity)
+            updateRentButtonText(1)
+            RentalDB.addRental(this.id, userId){rental ->
+                CommonFunctions.saveCurrentRentalInfoToSharedPref(rental, activity)
             }
         } else if(rentbtn.text == "Iniciar viatge"){
-            val rentalId = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this.activity)?.id
+            val rentalId = CommonFunctions.loadCurrentRentalInfoFromSharedPref(activity)?.id
             Log.i(TAG,rentalId.toString())
-            rentbtn.text = "Finalitzar viatge"
-            rentbtn.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            updateRentButtonText(2)
             RentalDB.updateRentalById(rentalId,"False", null, null)
         } else {
             if (inZone){
-                val rentalId = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this.activity)?.id
+                val rentalId = CommonFunctions.loadCurrentRentalInfoFromSharedPref(activity)?.id
                 Log.i(TAG, rentalId.toString())
-                rentbtn.text = "Reservar"
-                rentbtn.setBackgroundColor(resources.getColor(R.color.rentMoto))
-                RentalDB.updateRentalById(rentalId,"True", moto_lat?.toFloat(), moto_long?.toFloat())
+                updateRentButtonText(0)
+                RentalDB.updateRentalById(rentalId,"True", motoLat?.toFloat(), motoLong?.toFloat())
                 CommonFunctions.saveCurrentRentalInfoToSharedPref(null, activity)
             } else {
                 Toast.makeText(activity, "No pots deixar la moto fora de Barcelona.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
 
+    fun updateRentButtonText(state: Int){
+        when (state) {
+            0 -> {
+                rentbtn.text = "Reservar"
+                rentbtn.setBackgroundColor(resources.getColor(R.color.rentMoto))
+            }
+            1 -> {
+                rentbtn.text = "Iniciar viatge"
+                rentbtn.setBackgroundColor(resources.getColor(R.color.rentedMoto))
+            }
+            2 -> {
+                rentbtn.text = "Finalitzar viatge"
+                rentbtn.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            }
         }
     }
 

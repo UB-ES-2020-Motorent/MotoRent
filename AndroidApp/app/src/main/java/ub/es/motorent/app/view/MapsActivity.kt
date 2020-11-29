@@ -35,6 +35,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var markerUser : Marker
     var markersInDisplay: ArrayList<Marker> = ArrayList()
     private val hole : ArrayList<LatLng> = ArrayList()
+    private var rentalStatus : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         mainHandler.post(object : Runnable {
             override fun run() {
-                getMotosFromMap()
+                chooseMotosOnMap()
                 mainHandler.postDelayed(this, 5000)
             }
         })
@@ -108,7 +109,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        getMotosFromMap()
+        chooseMotosOnMap()
 
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
@@ -225,15 +226,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
-    private fun loadMotoRentalOnMap(motoId: Int){
-        markersInDisplay.forEach { moto ->
-            if (moto.id.toInt() == motoId){
-                val markerOp = MarkerOptions().position(moto.position).icon(BitmapDescriptorFactory.
+    private fun loadMotoRentalOnMap(motoId: Int, motoList: MotoList){
+        markersInDisplay.forEach { it.remove() }
+        motoList.motos.forEach { moto ->
+            if (moto.id == motoId){
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val markerOp = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
                 fromResource(R.drawable.motoicon))
                 val marker = mMap.addMarker(markerOp)
-                marker.tag = moto.tag
-            } else {
-                moto.remove()
+                marker.tag = moto
+                markersInDisplay.add(marker)
             }
         }
     }
@@ -248,29 +250,48 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int, coords: LatLng){
         supportFragmentManager.popBackStack()
-        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords)
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords, rentalStatus)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
 
-    fun getMotosFromMap(){
+    fun chooseMotosOnMap(){
         MotoDB.getMotos { motoList: MotoList? ->
-            val rental = CommonFunctions.loadCurrentRentalInfoToSharedPref(this)
             if (motoList == null) {
                 Log.w(TAG, "db returned motoList null")
-            } else{
-                RentalDB.getRentalById(rental.id){ actualRental ->
-                    if (actualRental != null && actualRental.active){
-                        val motoId = rental.moto_id
-                        loadMotoRentalOnMap(motoId)
-                    } else {
-                        CommonFunctions.saveCurrentRentalInfoToSharedPref(null, this)
-                        loadMotosOnMap(motoList)
+            } else {
+                CommonFunctions.getUserIdOnDB(this)?.let {
+                    RentalDB.getActiveRentalByUserId(it) { rentalDB ->
+                        val rentalSP = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this)
+                        if (rentalDB != rentalSP) {
+                            doSthWithWrongRentalOnSP(rentalDB)
+                        }
+
+                        if (rentalDB == null || !rentalDB.active){
+                            loadMotosOnMap(motoList)
+                        } else {
+                            setCurrentRentalInfo(rentalDB)
+                            loadMotoRentalOnMap(rentalDB.moto_id, motoList)
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun doSthWithWrongRentalOnSP(rentalDB: RentalInfo?) {
+        CommonFunctions.saveCurrentRentalInfoToSharedPref(rentalDB, this)
+    }
+    private fun setCurrentRentalInfo(rentalDB: RentalInfo) {
+        //val fragment: MotoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail) as MotoDetailsFragment
+        if (rentalDB.finish_book_hour != null){
+            //fragment.updateRentButtonText(2)
+            rentalStatus = 2
+        } else {
+            //fragment.updateRentButtonText(1)
+            rentalStatus = 1
         }
     }
 
