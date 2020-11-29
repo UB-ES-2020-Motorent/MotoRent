@@ -13,8 +13,6 @@ jobs:
       - develop
       before_deploy:
         - cd Deployment
-        - flask db migrate
-        - flask db upgrade
       deploy:
         - provider: heroku
           skip_cleanup: true
