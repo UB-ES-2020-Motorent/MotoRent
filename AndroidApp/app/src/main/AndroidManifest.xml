@@ -22,6 +22,8 @@
             android:name=".app.view.BankFormActivity"
             android:label="@string/title_activity_bank_form" />
         <activity
+            android:name=".app.view.CreditCardsActivity" />
+        <activity
             android:name=".app.view.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".app.view.ComplementaryFormActivity" />
