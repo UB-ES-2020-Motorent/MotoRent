@@ -7,7 +7,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.model.*
 import ub.es.motorent.app.model.BankDataDB.getBankDataByCardNumberOrAllCardsByUserId
-import ub.es.motorent.app.model.BankDataDB.getDefaultBankDataByUidOrBid
 import java.lang.Integer.parseInt
 import ub.es.motorent.app.view.BankFormActivity
 
@@ -26,8 +25,8 @@ class BankInfoFormPresenter(var activity: BankFormActivity){
     fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
         val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
 
-        /* if(userInfo != null) {
-            getDefaultBankDataByUidOrBid(userInfo.id, null) {
+        /*if(userInfo != null) {
+            getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
                 onResult(it)
             }
         }*/
