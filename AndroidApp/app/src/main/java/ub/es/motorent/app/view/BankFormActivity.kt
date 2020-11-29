@@ -26,7 +26,7 @@ class BankFormActivity : FullScreenActivity() {
 
 
         val btnRegister : Button = findViewById(R.id.signInBtn)
-        btnRegister.setOnClickListener(View.OnClickListener() {
+        btnRegister.setOnClickListener( {
             presenter.addCardToUser(numCard.text.toString(), name.text.toString(), cvv.text.toString().toInt(), caducityDate.text.toString())
         });
 

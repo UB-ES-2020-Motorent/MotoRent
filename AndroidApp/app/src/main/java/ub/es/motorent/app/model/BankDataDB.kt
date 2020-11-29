@@ -38,11 +38,10 @@ object BankDataDB {
     fun getBankDataByCardNumberOrAllCardsByUserId(
         user_id: Int?,
         card_number: BigInteger?,
-        view_all: Boolean?,
         onResult: (BankDataList?) -> Unit
     ) {
         val apiService = RestApiService()
-        apiService.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number, view_all) {
+        apiService.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number) {
             Log.i(TAG, it.toString())
             onResult(it)
         }

@@ -25,7 +25,7 @@ class BankInfoFormPresenter(var activity: BankFormActivity){
         val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
 
         if(userInfo != null) {
-            BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null, true) {
+            BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
                 onResult(it)
                 Log.i("it", it?.bankdatas?.get(0)?.card_cvv.toString())
 
