@@ -173,8 +173,12 @@ class RentalsList(Resource):
         GET method
         Return: dict (rentals)
         """
-        rentals = RentalsModel.all_rentals()
-        return {'rentals': [rental.json() for rental in rentals]}, 200
+        try:
+            rentals = RentalsModel.all_rentals()
+            return {'rentals': [rental.json() for rental in rentals]}, 200
+        except Exception as e:
+            return {'message': 'Internal server error.\n' + str(e)}, 500
+
 
 def str_to_bool(s):
     print(s)
