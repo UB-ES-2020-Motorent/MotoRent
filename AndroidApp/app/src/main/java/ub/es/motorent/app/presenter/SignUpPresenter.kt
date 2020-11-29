@@ -73,6 +73,7 @@ class SignUpPresenter (private val activity: SignUpActivity) {
             } else {
                 Log.i(TAG, "user: $registeredUser")
                 CommonFunctions.saveUserInfoToSharedPref(registeredUser!!, activity)
+                UserDB.registerUser(email,token,0){}
                 activity.goToFormAfterRegister()
             }
         }
