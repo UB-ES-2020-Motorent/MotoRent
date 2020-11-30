@@ -4,12 +4,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.settings_activity.*
 import ub.es.motorent.R
 import ub.es.motorent.app.presenter.SettingsPresenter
+
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -36,6 +38,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val editor = sharedPref.edit()
 
+        val buttonSendMail:Button = findViewById(R.id.sendMailButton)
 
         if(sharedPref.contains("autoLog")){
             autoLog.isChecked = sharedPref.getBoolean("autoLog", true)
@@ -89,6 +92,17 @@ class SettingsActivity : AppCompatActivity() {
             val intentI = Intent(this, BankFormActivity::class.java)
             startActivity(intentI)
         }
+        buttonSendMail.setOnClickListener(View.OnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            val recipients = arrayOf("motorent@gmail.com")
+            intent.putExtra(Intent.EXTRA_EMAIL, recipients)
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Assistencia a Motorent")
+            //intent.putExtra(Intent.EXTRA_TEXT, "Body of the content here...")
+            intent.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com")
+            intent.type = "text/html"
+            intent.setPackage("com.google.android.gm")
+            startActivity(Intent.createChooser(intent, "Send mail"))
+        })
     }
 
 }

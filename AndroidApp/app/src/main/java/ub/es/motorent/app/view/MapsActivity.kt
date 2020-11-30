@@ -149,7 +149,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         CommonFunctions.saveCurrentUserCoordsToSharedPref(coordenadas, this)
 
         markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
         val holePolyg = listOf(
             LatLng(41.346835, 2.139348),
