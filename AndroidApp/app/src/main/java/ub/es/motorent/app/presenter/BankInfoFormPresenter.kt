@@ -11,6 +11,7 @@ import ub.es.motorent.app.view.BankFormActivity
 
 class BankInfoFormPresenter(var activity: BankFormActivity){
     private var auth: FirebaseAuth = Firebase.auth
+    private lateinit var bankdatas : List<BankDataInfo>
 
     fun addCardToUser(card_number: String, card_owner: String, card_cvv: Int, card_expiration: String) {
         val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
@@ -27,7 +28,7 @@ class BankInfoFormPresenter(var activity: BankFormActivity){
         if(userInfo != null) {
             BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
                 onResult(it)
-                Log.i("CREDIT CARD", it?.bankdatas?.get(0)?.card_number?.toString())
+                Log.i("CREDIT CARD", it?.AllBankData?.get(0)?.card_number?.toString())
             }
         }
     }

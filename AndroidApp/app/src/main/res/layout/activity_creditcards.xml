@@ -16,18 +16,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="629dp"
+            android:layout_height="491dp"
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="502dp" />
         </LinearLayout>
 
         <Button
             android:id="@+id/addCreditCard"
             android:layout_width="match_parent"
-            android:layout_height="98dp"
+            android:layout_height="85dp"
             android:background="@android:color/transparent"
             android:text="@string/addCreditCard"
             android:textAllCaps="true"

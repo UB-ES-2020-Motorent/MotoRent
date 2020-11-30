@@ -464,7 +464,6 @@ class RestApiService {
                 }
                 override fun onResponse( call: Call<BankDataList>, response: Response<BankDataList>) {
                     logResult(response, "getBankData: ")
-                    Log.i("RESPONSE", response.body()?.bankdatas?.get(0)?.card_owner?.toString())
                     onResult(response.body())
                 }
             }
