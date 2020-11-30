@@ -42,7 +42,7 @@ class BankData(Resource):
             else:
                 bank_datas = BankDataModel.find_by_user_id(user_id=data['user_id'], view_all=False)
             if bank_datas:
-                return {'bankdata': [bank_data.json() for bank_data in bank_datas]}, 200
+                return {'bankdatas': [bank_data.json() for bank_data in bank_datas]}, 200
             else:
                 return {'message': "Data for {} [{}] Not found".format('user with id', data['user_id'])}, 404
         elif data['id_bank_data']:
@@ -54,7 +54,7 @@ class BankData(Resource):
         elif data['card_number']:
             bank_datas = BankDataModel.find_by_card_number(card_number=data['card_number'])
             if bank_datas:
-                return {'bankdata': [bank_data.json() for bank_data in bank_datas]}, 200
+                return {'bankdatas': [bank_data.json() for bank_data in bank_datas]}, 200
             else:
                 return {'message': "Data with {} [{}] Not found".format('card number', data['card_number'])}, 404
         else:
