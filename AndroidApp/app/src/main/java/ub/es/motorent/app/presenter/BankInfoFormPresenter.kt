@@ -1,10 +1,12 @@
 package ub.es.motorent.app.presenter
 
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import ub.es.motorent.R
 import ub.es.motorent.app.model.*
 import java.lang.Integer.parseInt
 import ub.es.motorent.app.view.BankFormActivity
@@ -24,7 +26,6 @@ class BankInfoFormPresenter(var activity: BankFormActivity){
 
     fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
         val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
-
         if(userInfo != null) {
             BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
                 onResult(it)
@@ -32,6 +33,7 @@ class BankInfoFormPresenter(var activity: BankFormActivity){
             }
         }
     }
+
 
     fun getCardFromUser() {
 
