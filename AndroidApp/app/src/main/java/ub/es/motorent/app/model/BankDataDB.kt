@@ -5,7 +5,6 @@ import java.math.BigInteger
 
 
 data class BankDataInfo (
-    var id_bank_data: Int,
     var user_id: Int,
     var card_number: BigInteger,
     var card_owner: String,
@@ -17,7 +16,7 @@ data class BankDataJson (
     var bankdata: BankDataInfo
 )
 data class BankDataList (
-    var bankdatas : List<BankDataInfo>
+    var AllBankData : List<BankDataInfo>
 )
 
 object BankDataDB {
@@ -36,10 +35,14 @@ object BankDataDB {
         }
     }
 
-    fun getBankDataByCardNumberOrAllCardsByUserId(user_id: Int?, card_number: BigInteger?) {
+    fun getBankDataByCardNumberOrAllCardsByUserId(
+        user_id: Int?,
+        card_number: BigInteger?,
+        onResult: (BankDataList?) -> Unit
+    ) {
         val apiService = RestApiService()
         apiService.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number) {
-            Log.i(TAG, it.toString())
+            onResult(it)
         }
     }
 

@@ -1,26 +1,42 @@
 package ub.es.motorent.app.presenter
 
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import ub.es.motorent.app.model.CommonFunctions
-import ub.es.motorent.app.model.UserDB
-import ub.es.motorent.app.model.UserInfo
-import ub.es.motorent.app.view.ComplementaryFormActivity
-import ub.es.motorent.app.view.FullScreenActivity
-import java.lang.Double.parseDouble
+import ub.es.motorent.R
+import ub.es.motorent.app.model.*
 import java.lang.Integer.parseInt
 import ub.es.motorent.app.view.BankFormActivity
 
 class BankInfoFormPresenter(var activity: BankFormActivity){
     private var auth: FirebaseAuth = Firebase.auth
+    private lateinit var bankdatas : List<BankDataInfo>
 
-    fun addCardToUser() {
+    fun addCardToUser(card_number: String, card_owner: String, card_cvv: Int, card_expiration: String) {
+        val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
+        /* user_id, card_number, card_owner, card_cvv, card_expiration*/
+        if(userInfo != null) {
+            BankDataDB.addBankData(userInfo.id!!, card_number.toBigInteger(), card_owner, card_cvv, card_expiration)
+            Log.i("ADD BANK DATA", "successful")
+        }
     }
 
+    fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
+        val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
+        if(userInfo != null) {
+            BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
+                onResult(it)
+                Log.i("CREDIT CARD", it?.AllBankData?.get(0)?.card_number?.toString())
+            }
+        }
+    }
+
+
     fun getCardFromUser() {
+
     }
 
     fun checkBankData(name:String, numtargeta:String, caducitat: String, cvv: String): Boolean {
