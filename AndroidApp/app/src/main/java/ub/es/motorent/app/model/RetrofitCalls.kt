@@ -122,14 +122,14 @@ interface RestApi {
 
     @GET("bankdata")
     fun getDefaultBankDataByUidOrBid(
-        @Query("user_id ") user_id:Int?,
+        @Query("user_id") user_id:Int?,
         @Query("id_bank_data ") id_bank_data:Int?,
         @Query("view_all") view_all: Boolean?
     ): Call<BankDataJson>
 
     @GET("bankdata")
     fun getBankDataByCardNumberOrAllCardsByUserId(
-        @Query("user_id ") user_id:Int?,
+        @Query("user_id") user_id:Int?,
         @Query("card_number") card_number:BigInteger?,
         @Query("view_all") view_all: Boolean?
     ): Call<BankDataList>
@@ -464,6 +464,7 @@ class RestApiService {
                 }
                 override fun onResponse( call: Call<BankDataList>, response: Response<BankDataList>) {
                     logResult(response, "getBankData: ")
+                    Log.i("RESPONSE", response.body()?.bankdatas?.get(0)?.card_owner?.toString())
                     onResult(response.body())
                 }
             }
