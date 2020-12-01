@@ -20,6 +20,7 @@
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/CreditCardsListView"
                 android:layout_width="match_parent"
                 android:layout_height="502dp" />
         </LinearLayout>

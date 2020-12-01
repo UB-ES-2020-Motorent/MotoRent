@@ -16,7 +16,7 @@ data class BankDataJson (
     var bankdata: BankDataInfo
 )
 data class BankDataList (
-    var AllBankData : List<BankDataInfo>
+    var bankdatas : List<BankDataInfo>
 )
 
 object BankDataDB {
