@@ -30,7 +30,6 @@ class SignUpActivity : FullScreenActivity() {
 
         presenter = SignUpPresenter(this);
 
-        val txtUserName : TextView=findViewById(R.id.etx_user_name)
         val txtEmail : TextView=findViewById(R.id.etx_mail)
         val txtPassword : TextView=findViewById(R.id.etx_password)
         val txtPassword2 : TextView=findViewById(R.id.etx_password2)
@@ -39,10 +38,9 @@ class SignUpActivity : FullScreenActivity() {
 
 
         btnRegister.setOnClickListener(View.OnClickListener() {
-            if ((txtUserName.text.toString() != "") && (txtEmail.text.toString() != "")) {
+            if (txtEmail.text.toString() != "") {
                 if(presenter.checkPassword(txtPassword.text.toString(), txtPassword2.text.toString())) {
                     presenter.createAccount(
-                        txtUserName.text.toString(),
                         txtEmail.text.toString(),
                         txtPassword.text.toString()
                     )

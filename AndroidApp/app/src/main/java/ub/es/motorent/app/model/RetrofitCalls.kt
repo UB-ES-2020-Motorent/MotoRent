@@ -146,7 +146,8 @@ interface RestApi {
 
     @DELETE("bankdata/{id_bank_data}")
     fun deleteBankDataById(
-        @Path("id_bank_data") id_bank_data: Int
+        @Path("id_bank_data") id_bank_data: Int,
+        @Query("user_id") user_id:Int
     ): Call<BankDataJson>
 
     @GET("bankdatas")
@@ -503,9 +504,9 @@ class RestApiService {
         )
     }
 
-    fun deleteBankDataById(id: Int, onResult: (BankDataJson?) -> Unit){
+    fun deleteBankDataById(id_bank_data: Int, user_id: Int, onResult: (BankDataJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.deleteBankDataById(id).enqueue(
+        retrofit.deleteBankDataById(id_bank_data,user_id).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - deleteBankDataById: ", t)

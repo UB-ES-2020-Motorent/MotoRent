@@ -159,11 +159,26 @@ class BankData(Resource):
         Param: string bank data ip
         Return: dict (message ok / message)
         """
+        data = parser.parse_args()
 
-        bdata = BankDataModel.find_by_id_bank_data(id_bank_data=id_bank_data)
+        if not data['user_id']:
+            return {'message': {
+                "user_id": "Specify user to delete card from"
+            }}, 400
+
+        bdata = BankDataModel.find_by_user_id_and_id_bank_data(user_id=data['user_id'], id_bank_data=id_bank_data)
+
+        user = UsersModel.find_by_id(data['user_id'])
+
+        if not user:
+            return {'message': "User with id [{}] does not exist".format(data['user_id'])}, 409
 
         if bdata:
+            if str(user.id_bank_data) == id_bank_data:
+                user.id_bank_data = None
+            
             try:
+                user.save_to_db()
                 bdata.delete_from_db()
                 return {'message': "Data with bank data id [{}] and all associated info deleted".format(id_bank_data)
                         }, 200
