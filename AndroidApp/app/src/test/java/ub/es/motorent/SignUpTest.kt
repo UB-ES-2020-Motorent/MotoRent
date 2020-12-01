@@ -21,7 +21,7 @@ class SignUpTest {
         assertEquals(presenter.userAndMailNotEmpty("","pepe@sech.com"), false )
         assertEquals(presenter.userAndMailNotEmpty("",""), false)
     }
-    /*
+    /* MIRA RPROBLEMA AMB ELS TOASTS
     @Test fun checkPasswordTest(){
         assertEquals(presenter.checkPassword("qwerty1", "qwerty1"), true)
         assertEquals(presenter.checkPassword("qwerty", "qwerty"), false)
