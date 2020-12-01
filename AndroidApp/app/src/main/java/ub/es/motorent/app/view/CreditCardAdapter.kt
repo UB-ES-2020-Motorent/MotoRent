@@ -2,16 +2,19 @@ package ub.es.motorent.app.view
 
 import android.content.Context
 import android.database.DataSetObserver
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
+import android.widget.ListAdapter
 import android.widget.TextView
 import kotlinx.android.synthetic.main.creditcard_item.view.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.BankDataList
 
-class CreditCardAdapter( private val mContext: Context, val creditCards: BankDataList) : Adapter {
+class CreditCardAdapter( private val mContext: Context, val creditCards: BankDataList) :
+    ListAdapter {
     override fun isEmpty(): Boolean {
         TODO("Not yet implemented")
     }
@@ -28,47 +31,58 @@ class CreditCardAdapter( private val mContext: Context, val creditCards: BankDat
         // set layout de cada item
         val itemLayout = LayoutInflater.from(mContext).inflate(R.layout.creditcard_item, parent, false)
 
-        // set info de la List<BankDataInfo>
-        // agafo la primera creditCard..
-        var creditCard = creditCards.bankdatas.get(0)
-
+        var creditCard = creditCards.bankdatas.get(position)
         itemLayout.visaNumberTextView.text = creditCard.card_number.toString()
 
-        // si voleu es pot afegir al layout la caducitat (poso codi)
-        // itemLayout.caducitatTextView.text = creditCard.card_expiration.toString()
+        /*
+        var itemLayout = LayoutInflater.from(mContext).inflate(R.layout.creditcard_item, parent, false)
+
+        for (bankdata in creditCards.bankdatas){
+            var creditCard = bankdata
+            itemLayout.visaNumberTextView.text = creditCard.card_number.toString()
+        }
+         */
+
         return itemLayout
     }
 
     override fun registerDataSetObserver(observer: DataSetObserver?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getItemViewType(position: Int): Int {
-        TODO("Not yet implemented")
+        return 1
     }
 
     override fun getItem(position: Int): Any {
-        TODO("Not yet implemented")
+        return creditCards.bankdatas.get(position)
     }
 
     override fun getViewTypeCount(): Int {
-        TODO("Not yet implemented")
+        return 1
+    }
+
+    override fun isEnabled(p0: Int): Boolean {
+        return true
     }
 
     override fun getItemId(position: Int): Long {
-        TODO("Not yet implemented")
+        return position.toLong()
     }
 
     override fun hasStableIds(): Boolean {
-        TODO("Not yet implemented")
+        return true
+    }
+
+    override fun areAllItemsEnabled(): Boolean {
+        return true
     }
 
     override fun unregisterDataSetObserver(observer: DataSetObserver?) {
-        TODO("Not yet implemented")
     }
 
     override fun getCount(): Int {
-        TODO("Not yet implemented")
+        return creditCards.bankdatas.size
     }
 
 
