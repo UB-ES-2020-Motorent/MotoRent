@@ -164,9 +164,9 @@ interface RestApi {
         @Query("id") id:Int
     ): Call<RentalJson>
 
-    @GET("activerental")
+    @GET("activerental/{user_id}")
     fun getActiveRentalByUserId(
-        @Query("user_id") user_id:Int
+        @Path("user_id") user_id: Int
     ): Call<RentalJson>
 
     @PUT("rental/{id}")
@@ -210,7 +210,7 @@ class RestApiService {
         retrofit.getUserByIdOrGoogleToken(id, google_token, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getUserByIdOrGoogleToken: ", t)
+                    Log.e(TAG, "onFailure - getUserByIdOrGoogleToken: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
@@ -226,7 +226,7 @@ class RestApiService {
         retrofit.addUser(mail, google_token, role, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - addUser: ", t)
+                    Log.e(TAG, "onFailure - addUser: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
@@ -245,7 +245,7 @@ class RestApiService {
                             role, id_bank_data, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - updateUser: ", t)
+                    Log.e(TAG, "onFailure - updateUser: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
@@ -261,7 +261,7 @@ class RestApiService {
         retrofit.deleteUser(id, ADMIN_CODE).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - deleteUser: ", t)
+                    Log.e(TAG, "onFailure - deleteUser: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<UserJson>, response: Response<UserJson>) {
@@ -278,7 +278,7 @@ class RestApiService {
         retrofit.getMotos().enqueue(
             object : Callback<MotoList> {
                 override fun onFailure(call: Call<MotoList>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getMotos", t)
+                    Log.e(TAG, "onFailure - getMotos", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MotoList>, response: Response<MotoList>) {
@@ -294,7 +294,7 @@ class RestApiService {
         retrofit.getMotoById(id).enqueue(
             object : Callback<MotoJson> {
                 override fun onFailure(call: Call<MotoJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getMotoById", t)
+                    Log.e(TAG, "onFailure - getMotoById", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
@@ -311,7 +311,7 @@ class RestApiService {
         retrofit.addMoto(license_number, battery, longitude, latitude).enqueue(
             object : Callback<MotoJson> {
                 override fun onFailure(call: Call<MotoJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - addMoto: ", t)
+                    Log.e(TAG, "onFailure - addMoto: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
@@ -327,7 +327,7 @@ class RestApiService {
         retrofit.deleteMotoById(id).enqueue(
             object : Callback<MotoJson> {
                 override fun onFailure(call: Call<MotoJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - deleteMotoById: ", t)
+                    Log.e(TAG, "onFailure - deleteMotoById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
@@ -344,7 +344,7 @@ class RestApiService {
         retrofit.getAllMapCoords(ADMIN_CODE).enqueue(
             object : Callback<MapCoordList> {
                 override fun onFailure(call: Call<MapCoordList>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getAllMapCoords", t)
+                    Log.e(TAG, "onFailure - getAllMapCoords", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordList>, response: Response<MapCoordList>) {
@@ -362,7 +362,7 @@ class RestApiService {
         retrofit.getMapCoordsByPair(from_longitude, from_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getMapCoordsByPair", t)
+                    Log.e(TAG, "onFailure - getMapCoordsByPair", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
@@ -378,7 +378,7 @@ class RestApiService {
         retrofit.addMapCoords(from_longitude, from_latitude, to_longitude, to_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - addMapCoords: ", t)
+                    Log.e(TAG, "onFailure - addMapCoords: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
@@ -394,7 +394,7 @@ class RestApiService {
         retrofit.updateMapCoordsByOrigin(from_longitude, from_latitude, to_longitude, to_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - updateMapCoordsByOrigin: ", t)
+                    Log.e(TAG, "onFailure - updateMapCoordsByOrigin: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
@@ -410,7 +410,7 @@ class RestApiService {
         retrofit.deleteMapCoordByOrigin(from_longitude, from_latitude, ADMIN_CODE).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - deleteMapCoordByOrigin: ", t)
+                    Log.e(TAG, "onFailure - deleteMapCoordByOrigin: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<MapCoordJson>, response: Response<MapCoordJson>) {
@@ -427,7 +427,7 @@ class RestApiService {
         retrofit.getAllBankData().enqueue(
             object : Callback<BankDataList> {
                 override fun onFailure(call: Call<BankDataList>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getAllBankData", t)
+                    Log.e(TAG, "onFailure - getAllBankData", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataList>, response: Response<BankDataList>) {
@@ -443,7 +443,7 @@ class RestApiService {
         retrofit.getDefaultBankDataByUidOrBid(user_id, id_bank_data, false).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getBankData", t)
+                    Log.e(TAG, "onFailure - getBankData", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
@@ -459,7 +459,7 @@ class RestApiService {
         retrofit.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number, true).enqueue(
             object : Callback<BankDataList> {
                 override fun onFailure(call: Call<BankDataList>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getBankData", t)
+                    Log.e(TAG, "onFailure - getBankData", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataList>, response: Response<BankDataList>) {
@@ -475,7 +475,7 @@ class RestApiService {
         retrofit.addBankData(user_id, card_number, card_owner, card_cvv, card_expiration).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - addBankData: ", t)
+                    Log.e(TAG, "onFailure - addBankData: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
@@ -492,7 +492,7 @@ class RestApiService {
         retrofit.updateBankDataById(id, user_id, card_number, card_owner, card_cvv, card_expiration).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - updateBankDataById: ", t)
+                    Log.e(TAG, "onFailure - updateBankDataById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
@@ -508,7 +508,7 @@ class RestApiService {
         retrofit.deleteBankDataById(id).enqueue(
             object : Callback<BankDataJson> {
                 override fun onFailure(call: Call<BankDataJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - deleteBankDataById: ", t)
+                    Log.e(TAG, "onFailure - deleteBankDataById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<BankDataJson>, response: Response<BankDataJson>) {
@@ -541,7 +541,7 @@ class RestApiService {
         retrofit.getRentalById(id).enqueue(
             object : Callback<RentalJson> {
                 override fun onFailure(call: Call<RentalJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getRentalById: ", t)
+                    Log.e(TAG, "onFailure - getRentalById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
@@ -557,7 +557,7 @@ class RestApiService {
         retrofit.getActiveRentalByUserId(user_id).enqueue(
             object : Callback<RentalJson> {
                 override fun onFailure(call: Call<RentalJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - getActiveRentalByUserId: ", t)
+                    Log.e(TAG, "onFailure - getActiveRentalByUserId: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
@@ -573,7 +573,7 @@ class RestApiService {
         retrofit.addRental(moto_id, user_id).enqueue(
             object : Callback<RentalJson> {
                 override fun onFailure(call: Call<RentalJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - addRental: ", t)
+                    Log.e(TAG, "onFailure - addRental: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
@@ -589,7 +589,7 @@ class RestApiService {
         retrofit.updateRentalById(id, end_rental, latitude, longitude).enqueue(
             object : Callback<RentalJson> {
                 override fun onFailure(call: Call<RentalJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - updateRentalById: ", t)
+                    Log.e(TAG, "onFailure - updateRentalById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {
@@ -605,7 +605,7 @@ class RestApiService {
         retrofit.deleteRentalById(id).enqueue(
             object : Callback<RentalJson> {
                 override fun onFailure(call: Call<RentalJson>, t: Throwable) {
-                    Log.i(TAG, "onFailure - deleteRentalById: ", t)
+                    Log.e(TAG, "onFailure - deleteRentalById: ", t)
                     onResult(null)
                 }
                 override fun onResponse( call: Call<RentalJson>, response: Response<RentalJson>) {

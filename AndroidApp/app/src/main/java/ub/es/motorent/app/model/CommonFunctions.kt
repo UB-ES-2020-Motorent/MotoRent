@@ -61,10 +61,10 @@ object CommonFunctions {
         return gson.fromJson(coordsString, LatLng::class.java)
     }
 
-    fun saveCurrentRentalInfoToSharedPref(rentalInfo: RentalInfo, activity: FragmentActivity?){
+    fun saveCurrentRentalInfoToSharedPref(rentalInfo: RentalInfo?, activity: FragmentActivity?){
         val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
-        val jsonString = gson.toJson(rentalInfo)
+        val jsonString = if(rentalInfo != null) gson.toJson(rentalInfo) else null
         sharedPref?.edit()?.putString("rentalInfo", jsonString)?.apply()
     }
 
@@ -89,11 +89,17 @@ object CommonFunctions {
         sharedPref.edit().putString("userInfo", jsonString).apply()
     }
 
-    fun loadUserInfoFromSharedPref(activity: AppCompatActivity): UserInfo? {
+    fun loadUserInfoFromSharedPref(activity: FragmentActivity): UserInfo? {
         val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
         val userString = sharedPref.getString("userInfo", null)
         return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
+    }
+
+    fun getUserIdOnDB(activity: FragmentActivity) : Int? {
+        val user = loadUserInfoFromSharedPref(activity)
+        val id = if (user?.id != null) user.id as Int else null
+        return id
     }
 
     fun deleteUserInfoFromSharedPref(activity: FragmentActivity) {

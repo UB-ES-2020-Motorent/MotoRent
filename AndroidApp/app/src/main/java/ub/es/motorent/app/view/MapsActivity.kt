@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,10 +24,7 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import com.google.maps.android.PolyUtil
 import ub.es.motorent.R
-import ub.es.motorent.app.model.CommonFunctions
-import ub.es.motorent.app.model.MotoDB
-import ub.es.motorent.app.model.MotoInfo
-import ub.es.motorent.app.model.MotoList
+import ub.es.motorent.app.model.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
     MotoDetailsFragment.FromFragmentToActivity, LocationListener {
@@ -37,8 +33,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var locationManager: LocationManager
     lateinit var coordenadas: LatLng
     lateinit var markerUser : Marker
-    var markers_in_display: ArrayList<Marker> = ArrayList()
-    val hole : ArrayList<LatLng> = ArrayList()
+    var markersInDisplay: ArrayList<Marker> = ArrayList()
+    private val hole : ArrayList<LatLng> = ArrayList()
+    private var rentalStatus : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         mainHandler.post(object : Runnable {
             override fun run() {
-                getMotosFromMap()
+                chooseMotosOnMap()
                 mainHandler.postDelayed(this, 5000)
             }
         })
@@ -84,7 +81,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onLocationChanged(location: Location?) {
-        coordenadas = LatLng(location?.latitude as Double, location?.longitude)
+        coordenadas = LatLng(location?.latitude as Double, location.longitude)
         markerUser.position = coordenadas
     }
 
@@ -112,7 +109,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        getMotosFromMap()
+        chooseMotosOnMap()
 
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
@@ -197,62 +194,109 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         )
     }
 
-    private fun loadMotosOnMap(motoList: MotoList?){
+    private fun loadMotosOnMap(motoList: MotoList){
 
-        val markers_to_update: ArrayList<MarkerOptions?> = ArrayList()
-        val motos_to_update: ArrayList<MotoInfo> = ArrayList()
+        val markersToUpdate: ArrayList<MarkerOptions?> = ArrayList()
+        val motosToUpdate: ArrayList<MotoInfo> = ArrayList()
 
-        for ( i in 0 until markers_in_display.size){
-            if(motoList?.motos!!.contains(markers_in_display.get(i).tag)){
+        for ( i in 0 until markersInDisplay.size){ // drop motos
+            if(motoList.motos.contains(markersInDisplay[i].tag)){
                 motoList.motos.drop(i)
             }
         }
-
-        if (motoList != null) {
-            for (moto in motoList.motos) {
-                if (moto.available?.toBoolean() == true){
-                    val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
-                    val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
-                                                fromResource(R.drawable.motoicon))
-                    markers_to_update.add(marker)
-                    motos_to_update.add(moto)
-                }
+        for (moto in motoList.motos) { // add new motos ( only available )
+            if (moto.available?.toBoolean() == true){
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                fromResource(R.drawable.motoicon))
+                markersToUpdate.add(marker)
+                motosToUpdate.add(moto)
             }
-            for (i in 0 until markers_to_update.size){
-                val tmp_marker = mMap.addMarker(markers_to_update.get(i))
-                tmp_marker.tag = motos_to_update.get(i)
-                markers_in_display.add(tmp_marker)
-            }
-            for (i in 0 until markers_in_display.size){
-                if (!motos_to_update.contains(markers_in_display.get(i).tag)){
-                    markers_in_display.get(i).remove()
-                }
+        }
+        for (i in 0 until markersToUpdate.size){  // show new motos
+            val tmpMarker = mMap.addMarker(markersToUpdate[i])
+            tmpMarker.tag = motosToUpdate[i]
+            markersInDisplay.add(tmpMarker)
+        }
+        for (i in 0 until markersInDisplay.size){ // update markers in display
+            if (!motosToUpdate.contains(markersInDisplay[i].tag)){
+                markersInDisplay[i].remove()
             }
         }
     }
 
+    private fun loadMotoRentalOnMap(motoId: Int, motoList: MotoList){
+        markersInDisplay.forEach { it.remove() }
+        motoList.motos.forEach { moto ->
+            if (moto.id == motoId){
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val markerOp = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                fromResource(R.drawable.motoicon))
+                val marker = mMap.addMarker(markerOp)
+                marker.tag = moto
+                markersInDisplay.add(marker)
+            }
+        }
+    }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
         if (p0 != markerUser && p0 != null){
             val moto: MotoInfo = p0.tag as MotoInfo
-            startFragmentMotoDetail(moto.license_number, moto.id!!.toInt(), moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
+            startFragmentMotoDetail(moto.license_number, moto.id, moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
         }
         return false
     }
 
     private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int, coords: LatLng){
         supportFragmentManager.popBackStack()
-        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords)
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords, rentalStatus)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
 
-    fun getMotosFromMap(){
-        MotoDB.getMotos {
-            loadMotosOnMap(it)
+    fun chooseMotosOnMap(){
+        MotoDB.getMotos { motoList: MotoList? ->
+            if (motoList == null) {
+                Log.w(TAG, "db returned motoList null")
+            } else {
+                CommonFunctions.getUserIdOnDB(this)?.let {
+                    RentalDB.getActiveRentalByUserId(it) { rentalDB ->
+                        val rentalSP = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this)
+                        if (rentalDB != rentalSP) {
+                            doSthWithWrongRentalOnSP(rentalDB)
+                        }
+
+                        if (rentalDB == null || !rentalDB.active){
+                            loadMotosOnMap(motoList)
+                        } else {
+                            setCurrentRentalInfo(rentalDB)
+                            loadMotoRentalOnMap(rentalDB.moto_id, motoList)
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private fun doSthWithWrongRentalOnSP(rentalDB: RentalInfo?) {
+        CommonFunctions.saveCurrentRentalInfoToSharedPref(rentalDB, this)
+    }
+
+    private fun setCurrentRentalInfo(rentalDB: RentalInfo) {
+        //val fragment: MotoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail) as MotoDetailsFragment
+        if (rentalDB.finish_book_hour != null){
+            //fragment.updateRentButtonText(2)
+            rentalStatus = 2
+        } else {
+            //fragment.updateRentButtonText(1)
+            rentalStatus = 1
+        }
+    }
+
+    override fun setRentalStatus(status: Int) {
+        rentalStatus = status
     }
 
     override fun onOptionChosenFromFragment(option: Int) {
@@ -273,9 +317,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun inZone(): Boolean {
-        return PolyUtil.containsLocation(coordenadas, hole, true)
+        return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, hole, true) else false
     }
 
+    companion object {
+        private const val TAG = "MapsActivity"
+    }
 
 }
 
