@@ -145,7 +145,7 @@ class MotoDetailsFragment : Fragment() {
                     RentalDB.updateRentalById(rentalId, "True", motoLat?.toFloat(), motoLong?.toFloat())
                     CommonFunctions.saveCurrentRentalInfoToSharedPref(null, activity)
                 } else {
-                    Toast.makeText(activity, "No pots deixar la moto fora de Barcelona.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "No pots deixar la moto fora de l'àrea delimitada.", Toast.LENGTH_SHORT).show()
                 }
             }
             else -> {

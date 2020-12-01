@@ -12,6 +12,8 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.creditcard_item.view.*
 import ub.es.motorent.R
 import ub.es.motorent.app.model.BankDataList
+import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.model.UserDB
 
 class CreditCardAdapter( private val mContext: Context, val creditCards: BankDataList) :
     ListAdapter {
@@ -31,17 +33,18 @@ class CreditCardAdapter( private val mContext: Context, val creditCards: BankDat
         // set layout de cada item
         val itemLayout = LayoutInflater.from(mContext).inflate(R.layout.creditcard_item, parent, false)
 
-        var creditCard = creditCards.bankdatas.get(position)
+        val creditCard = creditCards.bankdatas.get(position)
         itemLayout.visaNumberTextView.text = creditCard.card_number.toString()
 
-        /*
-        var itemLayout = LayoutInflater.from(mContext).inflate(R.layout.creditcard_item, parent, false)
-
-        for (bankdata in creditCards.bankdatas){
-            var creditCard = bankdata
-            itemLayout.visaNumberTextView.text = creditCard.card_number.toString()
+        UserDB.getUserByIdOrGoogleToken(id = CommonFunctions.loadUserInfoFromSharedPrefWithContext(mContext)?.id) {
+            Log.i("CCCCCCCCCC",it?.id_bank_data.toString())
+            Log.i("FFFFFFFFFF",creditCard.id_bank_data.toString())
+            if(it?.id_bank_data == creditCard.id_bank_data){
+                Log.i("AAAAAAAAAAAA","XDDDDDDDDDDDDD")
+                itemLayout.visaNumberTextView.setTextColor(R.color.rentMoto)
+            }
+            Log.i("BBBBBBBBBBB","BBBBBBBBBBBBBB")
         }
-         */
 
         return itemLayout
     }

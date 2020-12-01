@@ -29,6 +29,7 @@ class BankDataModel(db.Model):
         Return: dict
         """
         return {
+            'id_bank_data': self.id_bank_data,
             'user_id': self.user_id,
             'card_number': self.card_number,
             'card_owner': self.card_owner,
@@ -92,6 +93,15 @@ class BankDataModel(db.Model):
         Return: BankDataModel
         """
         return BankDataModel.query.filter_by(user_id=user_id, card_number=card_number).first()
+
+    @classmethod
+    def find_by_user_id_and_id_bank_data(cls, user_id, id_bank_data):
+        """
+        Finds bank data by user id and card number
+        Param: number user id and card number
+        Return: BankDataModel
+        """
+        return BankDataModel.query.filter_by(user_id=user_id, id_bank_data=id_bank_data).first()
 
     @classmethod
     def all_bank_data(cls):

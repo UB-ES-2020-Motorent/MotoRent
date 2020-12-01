@@ -14,7 +14,7 @@ class SignUpPresenter (private val activity: SignUpActivity) {
     // Initialize Firebase Auth
     private var auth: FirebaseAuth = Firebase.auth
 
-    fun createAccount(userName: String, email: String, password: String) {
+    fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {

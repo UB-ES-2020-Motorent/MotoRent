@@ -5,6 +5,7 @@ import java.math.BigInteger
 
 
 data class BankDataInfo (
+    var id_bank_data: Int,
     var user_id: Int,
     var card_number: BigInteger,
     var card_owner: String,
@@ -42,6 +43,7 @@ object BankDataDB {
     ) {
         val apiService = RestApiService()
         apiService.getBankDataByCardNumberOrAllCardsByUserId(user_id, card_number) {
+            Log.i(TAG, it.toString())
             onResult(it)
         }
     }
@@ -60,9 +62,9 @@ object BankDataDB {
         }
     }
 
-    fun deleteBankDataById(id: Int) {
+    fun deleteBankDataById(id_bank_data: Int, user_id: Int) {
         val apiService = RestApiService()
-        apiService.deleteBankDataById(id) {
+        apiService.deleteBankDataById(id_bank_data, user_id) {
             Log.i(TAG, it.toString())
         }
     }

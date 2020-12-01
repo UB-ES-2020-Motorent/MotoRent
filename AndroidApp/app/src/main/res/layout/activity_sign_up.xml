@@ -27,23 +27,6 @@
         android:layout_height="fill_parent" android:id="@+id/fragment_login">
 
         <TextView
-            android:id="@+id/txt_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/nom_d_usuari"
-            android:textColor="@color/colorWelcomeName"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etx_user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/username"
-            android:inputType="textPersonName"
-            android:autofillHints="" />
-
-        <TextView
             android:id="@+id/txt_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
