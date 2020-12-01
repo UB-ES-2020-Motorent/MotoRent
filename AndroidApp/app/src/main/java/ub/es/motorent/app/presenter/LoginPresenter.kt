@@ -50,7 +50,7 @@ class LoginPresenter (private val activity: LoginActivity) {
             }
     }
 
-    private fun getUserFromDBAndSaveItToSP(email: String?, name: String? = null, surname: String? = null){
+    fun getUserFromDBAndSaveItToSP(email: String?, name: String? = null, surname: String? = null){
         // show loading to the user while waiting for the database
         activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
         val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
@@ -94,7 +94,7 @@ class LoginPresenter (private val activity: LoginActivity) {
         }
     }
 
-    private fun goToNextActivity () {
+    fun goToNextActivity () {
         val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
         if (user == null) {
             Log.w(TAG, "user in SP is null and it should not be")

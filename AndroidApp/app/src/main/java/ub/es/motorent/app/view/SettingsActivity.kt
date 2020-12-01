@@ -86,7 +86,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         changeBankInf.setOnClickListener(){
-            val intentI = Intent(this, BankFormActivity::class.java)
+            val intentI = Intent(this, CreditCardsActivity::class.java)
             startActivity(intentI)
         }
     }

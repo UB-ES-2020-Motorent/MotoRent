@@ -42,19 +42,19 @@ class BankData(Resource):
             else:
                 bank_datas = BankDataModel.find_by_user_id(user_id=data['user_id'], view_all=False)
             if bank_datas:
-                return {'BankData': [bank_data.json() for bank_data in bank_datas]}, 200
+                return {'bankdatas': [bank_data.json() for bank_data in bank_datas]}, 200
             else:
                 return {'message': "Data for {} [{}] Not found".format('user with id', data['user_id'])}, 404
         elif data['id_bank_data']:
             bank_data = BankDataModel.find_by_id_bank_data(id_bank_data=data['id_bank_data'])
             if bank_data:
-                return {'BankData': bank_data.json()}, 200
+                return {'bankdata': bank_data.json()}, 200
             else:
                 return {'message': "Data with {} [{}] Not found".format('ID bank data', data['id_bank_data'])}, 404
         elif data['card_number']:
             bank_datas = BankDataModel.find_by_card_number(card_number=data['card_number'])
             if bank_datas:
-                return {'BankData': [bank_data.json() for bank_data in bank_datas]}, 200
+                return {'bankdatas': [bank_data.json() for bank_data in bank_datas]}, 200
             else:
                 return {'message': "Data with {} [{}] Not found".format('card number', data['card_number'])}, 404
         else:
@@ -110,7 +110,7 @@ class BankData(Resource):
                         user.id_bank_data = bdata.id_bank_data
                     user.save_to_db()
                 except:
-                    return {'BankData': "Bank data was created, but could not update user card preferences"}, 201
+                    return {'bankdata': "Bank data was created, but could not update user card preferences"}, 201
                 return {'message': BankDataModel.find_by_user_id_and_card_number(bdata.user_id, bdata.card_number).json()}, 201
             except:
                 return {"message": "Error Description"}, 500
@@ -148,7 +148,7 @@ class BankData(Resource):
 
         try:
             bdata.save_to_db()
-            return {'BankData': BankDataModel.find_by_id_bank_data(id_bank_data).json()}, 200
+            return {'bankdata': BankDataModel.find_by_id_bank_data(id_bank_data).json()}, 200
         except:
             return {"message": "Error Description"}, 500
 
@@ -184,4 +184,4 @@ class BankDataList(Resource):
         """
         bank_datas = BankDataModel.all_bank_data()
 
-        return {'All BankData': [data.json() for data in bank_datas]}, 200
+        return {'bankdatas': [data.json() for data in bank_datas]}, 200

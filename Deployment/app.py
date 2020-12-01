@@ -9,8 +9,9 @@ from config import config
 from resources.users import Users, UsersList
 from resources.motos import Motos, MotosList
 from resources.map_coords import MapCoords, MapCoordsList
-from resources.rentals import Rentals, RentalsList
+from resources.rentals import Rentals, ActiveRentals, RentalsList
 from resources.bank_data import BankData, BankDataList
+from resources.incidents import Incident, IncidentsList
 
 from db import db, init_db
 
@@ -44,10 +45,14 @@ api.add_resource(MapCoords, '/mapcoord')
 api.add_resource(MapCoordsList, '/mapcoords')
 
 api.add_resource(Rentals, '/rental', '/rental/<int:id>')
+api.add_resource(ActiveRentals, '/activerental/<int:user_id>')
 api.add_resource(RentalsList, '/rentals')
 
 api.add_resource(BankData, '/bankdata', '/bankdata/<string:id_bank_data>')
 api.add_resource(BankDataList, '/bankdatas')
+
+api.add_resource(Incident, '/incident', '/incident/<string:incident_id>')
+api.add_resource(IncidentsList, '/incidents')
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
