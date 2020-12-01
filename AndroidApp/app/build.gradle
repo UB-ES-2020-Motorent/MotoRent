@@ -83,7 +83,8 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.google.maps.android:android-maps-utils:0.4+'
     implementation 'com.hbb20:ccp:2.2.2'
-
+    implementation 'com.sun.mail:android-mail:1.6.0'
+    implementation 'com.sun.mail:android-activation:1.6.0'
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     // Declare the dependency for the Firebase Authentication library

@@ -58,7 +58,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10sp"
@@ -78,12 +78,27 @@
             android:layout_height="wrap_content"
             android:text="Canviar informació bancaria" />
 
+        <TextView
+            android:id="@+id/textViewAssist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:text="Opcions de servei d'Assistencia:"
+            android:textColor="@color/colorWelcomeName"
+            android:textStyle="bold" />
+
         <Button
             android:layout_marginTop="10dp"
             android:id="@+id/callNumberButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Servei d'assistencia" />
+            android:text="Assistencia per trucada" />
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/sendMailButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Assistencia per missatge" />
 
     </LinearLayout>
 </LinearLayout>
