@@ -101,4 +101,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="targeta">Targeta:</string>
+    <string name="marcar_com_a_preferida">Marcar com a preferida</string>
+    <string name="caducitat_mm_yy">Caducitat MM/YY</string>
 </resources>

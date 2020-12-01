@@ -3,40 +3,51 @@ package ub.es.motorent.app.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
+import android.widget.ListAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_creditcards.*
 import ub.es.motorent.R
-import ub.es.motorent.app.model.BankDataInfo
-import ub.es.motorent.app.presenter.BankInfoFormPresenter
+import ub.es.motorent.app.model.BankDataDB
+import ub.es.motorent.app.model.BankDataList
+import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.presenter.BankFormPresenter
 
 class CreditCardsActivity : AppCompatActivity() {
-    private lateinit var presenter: BankInfoFormPresenter
     private lateinit var adapter: CreditCardAdapter
+    private lateinit var listView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_creditcards)
 
         // comprovar aixo
-        presenter = BankInfoFormPresenter(BankFormActivity())
+        listView = findViewById(R.id.CreditCardsListView)
 
         // obtenir targetes
-        val listCreditCards =presenter.getAllCardFromUser {
-            Log.i("GET CARD FROM USER", it.toString())
+        val listCreditCards = getAllCardFromUser {
+            adapter = CreditCardAdapter(this, it!!)
+            listView.adapter = adapter
         }
 
-        // type mismatch
-
-        // adapter = CreditCardAdapter(this, listCreditCards)
-        // CreditCardsListView.adapter = adapter
-        val btnRegister : Button = findViewById(R.id.addCreditCard)
-        btnRegister.setOnClickListener(){
+        val btnAddCard : Button = findViewById(R.id.addCreditCard)
+        btnAddCard.setOnClickListener(){
             val intentI = Intent(this, BankFormActivity::class.java)
             startActivity(intentI)
         }
 
+    }
+
+    fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
+        val userInfo = CommonFunctions.loadUserInfoFromSharedPref(this)
+        if(userInfo != null) {
+            BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
+                Log.i("CREDIT CARD", it?.bankdatas?.get(0)?.card_number?.toString())
+                onResult(it)
+            }
+        }
     }
 
 }
