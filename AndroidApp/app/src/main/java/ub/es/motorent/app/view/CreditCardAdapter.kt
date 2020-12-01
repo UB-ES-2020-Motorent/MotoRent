@@ -37,6 +37,8 @@ class CreditCardAdapter( private val mContext: Context, val creditCards: BankDat
         itemLayout.visaNumberTextView.text = creditCard.card_number.toString()
 
         UserDB.getUserByIdOrGoogleToken(id = CommonFunctions.loadUserInfoFromSharedPrefWithContext(mContext)?.id) {
+            Log.i("CCCCCCCCCC",it?.id_bank_data.toString())
+            Log.i("FFFFFFFFFF",creditCard.id_bank_data.toString())
             if(it?.id_bank_data == creditCard.id_bank_data){
                 Log.i("AAAAAAAAAAAA","XDDDDDDDDDDDDD")
                 itemLayout.visaNumberTextView.setTextColor(R.color.rentMoto)
