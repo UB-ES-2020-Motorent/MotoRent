@@ -243,7 +243,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMarkerClick(p0: Marker?): Boolean {
         if (p0 != markerUser && p0 != null){
             val moto: MotoInfo = p0.tag as MotoInfo
-            startFragmentMotoDetail(moto.license_number, moto.id!!.toInt(), moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
+            startFragmentMotoDetail(moto.license_number, moto.id, moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
         }
         return false
     }
@@ -284,6 +284,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private fun doSthWithWrongRentalOnSP(rentalDB: RentalInfo?) {
         CommonFunctions.saveCurrentRentalInfoToSharedPref(rentalDB, this)
     }
+
     private fun setCurrentRentalInfo(rentalDB: RentalInfo) {
         //val fragment: MotoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail) as MotoDetailsFragment
         if (rentalDB.finish_book_hour != null){
@@ -293,6 +294,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             //fragment.updateRentButtonText(1)
             rentalStatus = 1
         }
+    }
+
+    override fun setRentalStatus(status: Int) {
+        rentalStatus = status
     }
 
     override fun onOptionChosenFromFragment(option: Int) {
@@ -313,7 +318,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun inZone(): Boolean {
-        return PolyUtil.containsLocation(coordenadas, hole, true)
+        return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, hole, true) else false
     }
 
     companion object {

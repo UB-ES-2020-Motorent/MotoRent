@@ -81,7 +81,16 @@ class LoginPresenter (private val activity: LoginActivity) {
                 }
             }
         } else { // SP si && SP == login
-            goToNextActivity()
+            UserDB.getUserByIdOrGoogleToken (google_token = token) {
+                if (token != it?.google_token ?: true || it == null) { // DB no
+                    Log.w(TAG, "user not in DataBase")
+                } else if (it != user){
+                    CommonFunctions.saveUserInfoToSharedPref(it, activity)
+                    goToNextActivity()
+                } else {
+                    goToNextActivity()
+                }
+            }
         }
     }
 
