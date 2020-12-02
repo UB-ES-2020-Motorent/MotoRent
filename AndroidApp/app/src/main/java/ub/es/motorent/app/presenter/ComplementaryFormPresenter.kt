@@ -14,10 +14,9 @@ import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.view.ComplementaryFormActivity
 import ub.es.motorent.app.view.FullScreenActivity
 
+private var auth: FirebaseAuth = Firebase.auth
+
 class ComplementaryFormPresenter (var activity: ComplementaryFormActivity): FullScreenActivity(){
-
-    private var auth: FirebaseAuth = Firebase.auth
-
 
     //possible implementació? o millor comprovar despres del login que te les dades del formulari introduides?
     fun eliminarUserActual(){
