@@ -287,9 +287,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     fun generateCoordLimitation(){
 
         MapCoordDB.getAllMapCoords(){
-            if(holePolyg.size != it?.map_coords?.size) {
-                Log.i("ES DISTINTO ", holePolyg.size.toString())
-                Log.i("DE ", it?.map_coords?.size.toString())
                 holePolyg.removeAll(holePolyg)
                 hollowPolygon.remove()
                 holePolyg.add(
@@ -298,16 +295,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         it.map_coords.get(0).from_longitude.toDouble()
                     )
                 )
-                var futureLat = it.map_coords.get(0).to_latitude
-                var futureLong = it.map_coords?.get(0).to_longitude
+                var futureLat = it.map_coords.get(0).to_latitude.toDouble()
+                var futureLong = it.map_coords.get(0).to_longitude.toDouble()
                 for (i in 0 until it.map_coords.size-2) {
                     for (j in 0 until it.map_coords.size) {
-                        if (it.map_coords.get(j).from_latitude == futureLat && it.map_coords.get(j).from_longitude == futureLong) {
-                            futureLat = it.map_coords.get(j).to_latitude
-                            futureLong = it.map_coords.get(j).to_longitude
-                            holePolyg.add(LatLng(futureLat.toDouble(), futureLong.toDouble()))
+                        if (it.map_coords.get(j).from_latitude.toDouble() == futureLat && it.map_coords.get(j).from_longitude.toDouble() == futureLong) {
+                            futureLat = it.map_coords.get(j).to_latitude.toDouble()
+                            futureLong = it.map_coords.get(j).to_longitude.toDouble()
+                            holePolyg.add(LatLng(it.map_coords.get(j).from_latitude.toDouble(), it.map_coords.get(j).from_longitude.toDouble()))
                         }
                     }
+                }
+                for (i in 0 until holePolyg.size){
+                    Log.i("LATITUD", holePolyg.get(i).latitude.toString())
+                    Log.i("LONGITUD", holePolyg.get(i).longitude.toString())
                 }
 
                 hollowPolygon = mMap.addPolygon(
@@ -316,14 +317,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         LatLng(58.950017, 26.123910),
                         LatLng(25.943059, 26.123910),
                         LatLng(25.943059, -16.157126)
-                    ).addHole(holePolyg)
+                    ).geodesic(false).addHole(holePolyg)
                         .fillColor(Color.GRAY)
                         .strokeWidth(5.0f)
                         .fillColor(0x55686868)
-                        .geodesic(true)
+                        .geodesic(false)
                 )
-            }
         }
+
     }
 }
 

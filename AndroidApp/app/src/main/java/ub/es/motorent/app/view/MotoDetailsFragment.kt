@@ -144,6 +144,7 @@ class MotoDetailsFragment : Fragment() {
                     updateRentButtonText(0)
                     RentalDB.updateRentalById(rentalId, "True", motoLat?.toFloat(), motoLong?.toFloat())
                     CommonFunctions.saveCurrentRentalInfoToSharedPref(null, activity)
+                    Toast.makeText(activity, "Viatje finalitzat. S'ha carregat l'import a la teva targeta per defecte.", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(activity, "No pots deixar la moto fora de l'àrea delimitada.", Toast.LENGTH_SHORT).show()
                 }
