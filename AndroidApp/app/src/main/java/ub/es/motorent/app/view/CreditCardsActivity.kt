@@ -41,6 +41,12 @@ class CreditCardsActivity : FullScreenActivity() {
             startActivity(intentI)
         }
 
+        val btnTornar : Button = findViewById(R.id.backBtn)
+        btnTornar.setOnClickListener {
+            val intentI = Intent(this, SettingsActivity::class.java)
+            startActivity(intentI)
+        }
+
     }
 
     fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
@@ -54,7 +60,7 @@ class CreditCardsActivity : FullScreenActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intentI = Intent(this, MapsActivity::class.java)
+        val intentI = Intent(this, SettingsActivity::class.java)
         startActivity(intentI)
         finish()
     }

@@ -47,6 +47,7 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
                 txtIDCard.text.toString(),
                 txtSurname.text.toString()
             )
+            Toast.makeText(this,"Informació personal actualitzada", Toast.LENGTH_LONG).show()
         });
 
     }
