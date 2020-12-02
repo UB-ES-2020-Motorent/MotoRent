@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
+import com.google.common.collect.Maps
 import kotlinx.android.synthetic.main.settings_activity.*
 import ub.es.motorent.R
 import ub.es.motorent.app.presenter.SettingsPresenter
@@ -103,6 +104,13 @@ class SettingsActivity : AppCompatActivity() {
             intent.setPackage("com.google.android.gm")
             startActivity(Intent.createChooser(intent, "Send mail"))
         })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intentI = Intent(this, MapsActivity::class.java)
+        startActivity(intentI)
+        finish()
     }
 
 }
