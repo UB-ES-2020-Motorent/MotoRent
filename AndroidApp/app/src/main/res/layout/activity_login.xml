@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".app.view.LoginActivity"
     android:orientation="vertical"
-    android:background="@drawable/fons_login"
+    android:background="@drawable/bg_testing"
     android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root"
     >
 
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contrasenya"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -65,7 +65,9 @@
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/iniciar_sessi" />
+            android:text="@string/iniciar_sessi"
+            android:textColor="@color/colorWelcomeName"
+            android:background="@drawable/buttons_bg"/>
 
         <Button
             android:id="@+id/recu_psw"
@@ -73,7 +75,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:text="@string/recuperar_contrasenya"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold|italic" />
 
         <Button
@@ -83,19 +85,22 @@
             android:background="@android:color/transparent"
             android:text="@string/o_registrar_se_v_a_mail"
             android:textAllCaps="true"
-            android:textColor="@color/colorWelcomeName"
-            android:textStyle="bold" />
+            android:textColor="@color/browser_actions_text_color"
+            android:textStyle="bold"/>
 
 
         <TextView
             android:id="@+id/registrar_sm_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:text="@string/registrar_amb"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@color/colorWelcomeName" />
+            android:textColor="@color/browser_actions_text_color"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,15 +111,21 @@
                 android:id="@+id/google_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:text="@string/google" />
+                android:text="@string/google"
+                android:textColor="#b50703"
+                android:background="@drawable/google_btn"/>
 
             <Button
                 android:id="@+id/facebook_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:text="@string/facebook" />
+                android:text="@string/facebook"
+                android:textColor="#1A14EB"
+                android:background="@drawable/facebook_btn"/>
 
             <Button
                 android:id="@+id/twitter_btn"
@@ -122,6 +133,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/twitter"
+                android:textColor="#125CED"
+                android:background="@drawable/twitter_btn"
                 />
         </LinearLayout>
 

@@ -12,5 +12,6 @@
     <color name="colorDarkWhite">#ACACAC</color>
     <color name="rentedMoto">#e28527</color>
     <color name="rentMoto">#18af2c</color>
+    <color name="darkGreen">#0e6f08</color>
 
 </resources>

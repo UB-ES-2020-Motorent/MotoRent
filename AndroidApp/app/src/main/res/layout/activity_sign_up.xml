@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".app.view.LoginActivity"
     android:orientation="vertical"
-    android:background="@drawable/fons_login"
+    android:background="@drawable/bg_testing"
     android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
 
     <ImageView
@@ -27,28 +27,11 @@
         android:layout_height="fill_parent" android:id="@+id/fragment_login">
 
         <TextView
-            android:id="@+id/txt_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/nom_d_usuari"
-            android:textColor="@color/colorWelcomeName"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etx_user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/username"
-            android:inputType="textPersonName"
-            android:autofillHints="" />
-
-        <TextView
             android:id="@+id/txt_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -65,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contrasenya"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -82,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contrasenya"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -98,7 +81,9 @@
             android:id="@+id/btn_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/dades_personal" />
+            android:text="@string/dades_personal"
+            android:textColor="@color/colorWelcomeName"
+            android:background="@drawable/buttons_bg"/>
 
     </LinearLayout>
 </LinearLayout>

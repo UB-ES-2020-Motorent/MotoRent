@@ -8,6 +8,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:allowBackup="true"
@@ -17,9 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".app.view.BankFormActivity"
+            android:label="@string/title_activity_bank_form" />
+        <activity
+            android:name=".app.view.CreditCardsActivity" />
+        <activity
             android:name=".app.view.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
-        <activity android:name=".app.view.SettingActivity" />
+            android:label="@string/title_activity_settings" />
         <activity android:name=".app.view.ComplementaryFormActivity" />
         <activity
             android:name=".app.view.WelcomeActivity"

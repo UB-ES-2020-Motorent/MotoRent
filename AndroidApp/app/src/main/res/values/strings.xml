@@ -35,7 +35,8 @@
     <string name="recuperar_contrasenya">Recuperar contrasenya</string>
     <string name="facebook_app_id">1088984701532674</string>
     <string name="fb_login_protocol_scheme">fb1088984701532674</string>
-
+    <string name="twitter_consumer_key" translatable="false">uRMpz6t62GD33HLylStt71kyl</string>
+    <string name="twitter_consumer_secret" translatable="false">7E3YLGOkLx7rFCQjaorBA8uBRT5cdC1IwStT9oDhicY2dNbyYU</string>
     <string name="email">Email:</string>
     <string name="email_example">motorent@exemple.com</string>
     <string name="registrar">Registrar-me</string>
@@ -43,7 +44,8 @@
     <string name="logomotorent">logoMotorent</string>
     <string name="dades_personals">Dades personals:</string>
     <string name="introdueix_el_pa_s_i_num_document_identitat">Introdueix el país i num. document identitat:</string>
-    <string name="nom_i_cognoms">Nom i cognoms</string>
+    <string name="nom">Nom</string>
+    <string name="cognom">Cognoms</string>
     <string name="numero_d_identitat">Numero d\'identitat</string>
     <string name="nomcognoms">Nom i Cognoms:</string>
     <string name="nom_complet">Nom complet</string>
@@ -70,6 +72,8 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="acceptar">acceptar</string>
+    <string name="tornar">tornar</string>
+    <string name="addCreditCard">Afegir targeta crèdit</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="matricula">Matricula:</string>
@@ -77,4 +81,28 @@
     <string name="initViatge">Iniciat viatge</string>
     <string name="finViatge">Finalitzar viatge</string>
     <string name="repIncidencia">Reportar incidencia</string>
+    <string name="opcions_de_la_queixa">Incidències més comuns:</string>
+    <string name="la_motocicleta_no_funciona">La motocicleta no funciona</string>
+    <string name="la_motocicleta_no_est_a_la_direcci">La motocicleta no està a la direcció</string>
+    <string name="he_notat_un_comportament_extrany_a_la_moto">He notat un comportament extrany a la moto</string>
+    <string name="motocicleta_en_mal_estat">Motocicleta en mal estat</string>
+    <string name="introdueix_un_breu_resum">Introdueix un breu resum:</string>
+    <string name="breu_resum">Breu resum</string>
+    <string name="enviar_queixa">Reportar incidència</string>
+    <string name="todo">TODO</string>
+    <string name="title_activity_bank_form">BankFormActivity</string>
+    <string name="title_activity_creditcards">CreditCardsActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="succesAddCreditCard">Targeta de credit afegida</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="targeta">Targeta:</string>
+    <string name="marcar_com_a_preferida">Marcar com a preferida</string>
+    <string name="caducitat_mm_yy">Caducitat MM/YY</string>
 </resources>

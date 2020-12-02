@@ -1,5 +1,6 @@
 package ub.es.motorent.app.view
 
+import android.app.Activity
 import android.Manifest
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -11,13 +12,19 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.lifecycle.MutableLiveData
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.internal.WebDialog
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -27,21 +34,31 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.*
+import com.google.firebase.firestore.FirebaseFirestore
+import com.twitter.sdk.android.core.*
+import com.twitter.sdk.android.core.identity.TwitterAuthClient
+import com.twitter.sdk.android.core.identity.TwitterLoginButton
+import kotlinx.android.synthetic.main.activity_login.*
 import ub.es.motorent.R
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.TwitterAuthProvider;
+
+import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.presenter.LoginPresenter
 
 class LoginActivity : FullScreenActivity(){
 
     private lateinit var presenter: LoginPresenter
 
-    private var PRIVATE_MODE = 0
-    private val PREF_NAME = "fluxControl"
-
     // login google
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var mAuth: FirebaseAuth
 
-    // Facebook
-    //private val callbackManager = CallbackManager.Factory.create()
+    private val callbackManager = CallbackManager.Factory.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +76,16 @@ class LoginActivity : FullScreenActivity(){
 
         //if(sharedPref.getBoolean("autoLog",true) == true){
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        //}
+        mAuth = FirebaseAuth.getInstance()
 
 
-        //val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
         //val loginFacebookBtn : Button = findViewById(R.id.facebook_btn)
-
         //loginFacebookBtn?.setOnClickListener { loginFacebook() }
+
+        val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
+        loginTwitterBtn?.setOnClickListener {
+            signInWithTwitter()
+        }
 
         val btnResetPsw: Button= findViewById(R.id.recu_psw)
         btnResetPsw.setOnClickListener {
@@ -95,10 +115,15 @@ class LoginActivity : FullScreenActivity(){
 
     }
 
-    fun authenticationSuccessful(){
-        sendAuthToDatabase()
+    fun goToMaps(){
         toast(getString(R.string.ok_auth))
         val intentI = Intent(this, MapsActivity::class.java)
+        startActivity(intentI)
+    }
+
+    fun goToForm() {
+        toast("Welcome to MotoRent")
+        val intentI = Intent(this, ComplementaryFormActivity::class.java)
         startActivity(intentI)
     }
 
@@ -112,12 +137,10 @@ class LoginActivity : FullScreenActivity(){
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 presenter.firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
-                // Google Sign In failed
                 Log.w(TAG, "Google sign in failed", e)
                 customToast(
                     getString(R.string.fail_google_auth),
@@ -126,10 +149,16 @@ class LoginActivity : FullScreenActivity(){
         }
     }
 
-    private fun sendAuthToDatabase() {
-        // show loading to the user while waiting for the database
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginWaitFragment()).commit()
-        // TO DO connect to db : - Judit: I'll do it
+    private fun signInWithTwitter() {
+        mAuth.startActivityForSignInWithProvider(this, OAuthProvider.newBuilder("twitter.com").build())
+            .addOnSuccessListener {
+                //authResult.additionalUserInfo.profile.values
+                presenter.getUserFromDBAndSaveItToSP(mAuth.currentUser?.email)
+                presenter.goToNextActivity()
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "twitter Fail AUTH")
+            }
     }
 
     /*
@@ -178,9 +207,19 @@ class LoginActivity : FullScreenActivity(){
     }
      */
 
+    private fun getTwitterSession(): TwitterSession? {
+        /*TwitterAuthToken authToken = session.getAuthToken();
+        String token = authToken.token;
+        String secret = authToken.secret;*/
+
+        return TwitterCore.getInstance().sessionManager.activeSession
+    }
+
     companion object {
         private const val TAG = "LoginActivity"
         private const val RC_SIGN_IN = 9001
+        private const val PRIVATE_MODE = 0
+        private const val PREF_NAME = "fluxControl"
     }
 
 }

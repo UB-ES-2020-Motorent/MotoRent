@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.view.ReportFragment"
+    android:background="@drawable/bg_testing">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_testing"
+        android:padding="20dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="354dp"
+            android:layout_height="717dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="21dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imatgeLogo"
+                android:layout_width="match_parent"
+                android:layout_height="145dp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp"
+                android:src="@drawable/moto_toast"
+                android:contentDescription="@string/todo" />
+
+            <TextView
+                android:id="@+id/opQueixestxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp"
+                android:text="@string/opcions_de_la_queixa"
+                android:textColor="@color/browser_actions_text_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/noFuncionaCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/la_motocicleta_no_funciona" />
+
+            <CheckBox
+                android:id="@+id/noEstaCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/la_motocicleta_no_est_a_la_direcci" />
+
+            <CheckBox
+                android:id="@+id/compExtranyCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/he_notat_un_comportament_extrany_a_la_moto" />
+
+            <CheckBox
+                android:id="@+id/malEstaCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/motocicleta_en_mal_estat" />
+
+            <TextView
+                android:id="@+id/intBreuResumtxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp"
+                android:text="@string/introdueix_un_breu_resum"
+                android:textColor="@color/browser_actions_text_color"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/textResum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/breu_resum"
+                android:inputType="textPersonName"
+                android:maxLines="5" />
+
+            <Button
+                android:id="@+id/sendReportBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enviar_queixa"
+                android:textColor="@color/colorWelcomeName"
+                android:background="@drawable/buttons_bg"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

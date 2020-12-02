@@ -6,7 +6,7 @@ import kotlin.collections.ArrayList
 
 
 data class MotoInfo (
-    var id: Int? = null,
+    var id: Int,
     var license_number: String,
     var battery: Int,
     var available: String?,

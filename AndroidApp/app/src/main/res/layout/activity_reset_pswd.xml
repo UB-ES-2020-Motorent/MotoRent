@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fons_login"
+    android:background="@drawable/bg_testing"
     android:gravity="center|top"
     android:orientation="vertical"
     android:padding="40dp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/intrdueix_el_email_del_teu_perfil"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -50,7 +50,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -59,14 +60,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/enviar_correu" />
+                android:layout_marginRight="10dp"
+                android:text="@string/enviar_correu"
+                android:textColor="@color/colorWelcomeName"
+                android:background="@drawable/buttons_bg"/>
 
             <Button
                 android:id="@+id/cancelMail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cancel_lar" />
+                android:text="@string/cancel_lar"
+                android:textColor="@color/colorWelcomeName"
+                android:background="@drawable/buttons_bg"/>
         </LinearLayout>
 
     </LinearLayout>

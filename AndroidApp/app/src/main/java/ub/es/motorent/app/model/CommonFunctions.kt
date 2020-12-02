@@ -3,6 +3,9 @@ package ub.es.motorent.app.model
 import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -30,7 +33,7 @@ object CommonFunctions {
         //return token
     }
 
-    fun saveUIDToSharedPerf(): String {
+    fun getUIDFromFirebase(): String {
         val user = Firebase.auth.currentUser
         var uid : String
         user?.uid.let {
@@ -39,9 +42,44 @@ object CommonFunctions {
         return uid
     }
 
-    fun getTokenFromSharedPref(activity: AppCompatActivity) : String?{
+    fun getTokenFromSharedPref(activity: FragmentActivity) : String?{
         val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         return sharedPref.getString("token", null)
+    }
+
+    fun saveCurrentUserCoordsToSharedPref(coords: LatLng, activity: FragmentActivity ){
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = gson.toJson(coords)
+        sharedPref?.edit()?.putString("coords", jsonString)?.apply()
+    }
+
+    fun loadCurrentUserCoordsFromSharedPref(activity: FragmentActivity): LatLng? {
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val coordsString = sharedPref?.getString("coords", null)
+        return gson.fromJson(coordsString, LatLng::class.java)
+    }
+
+    fun saveCurrentRentalInfoToSharedPref(rentalInfo: RentalInfo?, activity: FragmentActivity?){
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = if(rentalInfo != null) gson.toJson(rentalInfo) else null
+        sharedPref?.edit()?.putString("rentalInfo", jsonString)?.apply()
+    }
+
+    fun loadCurrentRentalInfoFromSharedPref(activity: FragmentActivity?): RentalInfo? {
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val rentalString = sharedPref?.getString("rentalInfo", null)
+        return gson.fromJson(rentalString, RentalInfo::class.java)
+    }
+
+    fun loadUserInfoFromSharedPrefFragment(activity: FragmentActivity?): UserInfo? {
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val userString = sharedPref?.getString("userInfo", null)
+        return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
     }
 
     fun saveUserInfoToSharedPref(userInfo: UserInfo, activity: AppCompatActivity){
@@ -51,13 +89,31 @@ object CommonFunctions {
         sharedPref.edit().putString("userInfo", jsonString).apply()
     }
 
-    fun loadUserInfoFromSharedPref(activity: AppCompatActivity): UserInfo? {
+    fun loadUserInfoFromSharedPref(activity: FragmentActivity): UserInfo? {
         val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val gson = Gson()
         val userString = sharedPref.getString("userInfo", null)
-        return gson.fromJson(userString, UserInfo::class.java)
+        return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
     }
 
-    private const val TAG = "Firebase"
+    fun loadUserInfoFromSharedPrefWithContext(activity: Context): UserInfo? {
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val userString = sharedPref.getString("userInfo", null)
+        return if (userString != null) gson.fromJson(userString, UserInfo::class.java) else null
+    }
+
+    fun getUserIdOnDB(activity: FragmentActivity) : Int? {
+        val user = loadUserInfoFromSharedPref(activity)
+        val id = if (user?.id != null) user.id as Int else null
+        return id
+    }
+
+    fun deleteUserInfoFromSharedPref(activity: FragmentActivity) {
+        val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        sharedPref.edit().putString("userInfo", null).apply()
+    }
+
+    private const val TAG = "CommonFunctions"
 
 }

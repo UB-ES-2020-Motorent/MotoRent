@@ -9,7 +9,9 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.view.MotionEvent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,7 +22,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
+import com.google.maps.android.PolyUtil
 import ub.es.motorent.R
+import ub.es.motorent.app.model.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
     MotoDetailsFragment.FromFragmentToActivity, LocationListener {
@@ -29,7 +33,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var locationManager: LocationManager
     lateinit var coordenadas: LatLng
     lateinit var markerUser : Marker
-
+    var markersInDisplay: ArrayList<Marker> = ArrayList()
+    private var rentalStatus : Int = 0
+    private val holePolyg : ArrayList<LatLng> = ArrayList()
+    lateinit private var hollowPolygon : Polygon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +65,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             ) != PackageManager.PERMISSION_GRANTED
         ) {}
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1.toFloat(), this)
+
+        val mainHandler = Handler(Looper.getMainLooper())
+
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                chooseMotosOnMap()
+                generateCoordLimitation()
+                mainHandler.postDelayed(this, 1000)
+            }
+        })
+
     }
 
     override fun onBackPressed() {
@@ -65,7 +83,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onLocationChanged(location: Location?) {
-        coordenadas = LatLng(location?.latitude as Double, location?.longitude)
+        coordenadas = LatLng(location?.latitude as Double, location.longitude)
         markerUser.position = coordenadas
     }
 
@@ -93,7 +111,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        initMotosOnMap()
+        hollowPolygon = mMap.addPolygon(PolygonOptions().add(LatLng(0.0, 0.0)))
+
+        chooseMotosOnMap()
+
         mMap.setOnMarkerClickListener { onMarkerClick(it) }
 
         mMap.setOnMapClickListener {
@@ -119,112 +140,123 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         }
 
-        coordenadas = LatLng(currentLocation?.latitude as Double, currentLocation?.longitude)
+
+        coordenadas = if (currentLocation == null) {
+            LatLng(41.387185, 2.163077)
+        } else{
+            LatLng(currentLocation.latitude, currentLocation.longitude)
+        }
+
+        CommonFunctions.saveCurrentUserCoordsToSharedPref(coordenadas, this)
 
         markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
-        val hole = listOf(
-            LatLng(41.346835, 2.139348),
-            LatLng(41.355486, 2.131968),
-            LatLng(41.362218, 2.135069),
-            LatLng(41.377781, 2.121317),
-            LatLng(41.375642, 2.117680),
-            LatLng(41.375865, 2.109544),
-            LatLng(41.381575, 2.107604),
-            LatLng(41.384287, 2.111785),
-            LatLng(41.387389, 2.106061),
-            LatLng(41.400614, 2.113133),
-            LatLng(41.415180, 2.131959),
-            LatLng(41.419323, 2.127931),
-            LatLng(41.421286, 2.134218),
-            LatLng(41.425994, 2.135808),
-            LatLng(41.427717, 2.128503),
-            LatLng(41.430291, 2.128299),
-            LatLng(41.430284, 2.139204),
-            LatLng(41.444066, 2.143382),
-            LatLng(41.442012, 2.153787),
-            LatLng(41.449161, 2.172412),
-            LatLng(41.460230, 2.167192),
-            LatLng(41.469531, 2.183957),
-            LatLng(41.433781, 2.211112),
-            LatLng(41.408529, 2.224949),
-            LatLng(41.375045, 2.190526),
-            LatLng(41.374874, 2.188226),
-            LatLng(41.381653, 2.184492),
-            LatLng(41.352369, 2.162530),
-            LatLng(41.346546, 2.139268)
-        )
-
-        val hollowPolygon = mMap.addPolygon(
-            PolygonOptions().add(
-                LatLng(58.950017, -16.157126),
-                LatLng(58.950017, 26.123910),
-                LatLng(25.943059, 26.123910),
-                LatLng(25.943059, -16.157126)
-            ).addHole(hole)
-                .fillColor(Color.GRAY)
-                .strokeWidth(5.0f)
-                .fillColor(0x55686868)
-                .geodesic(true)
-        )
+        generateCoordLimitation()
     }
 
-    private fun initMotosOnMap(){
-        val motoList = listOf(
-            LatLng(41.3818, 2.1685),
-            LatLng(41.382093, 2.131414),
-            LatLng(41.402959, 2.174802),
-            LatLng(41.413352, 2.202810),
-            LatLng(41.437218, 2.180026),
-            LatLng(41.411589, 2.152448)
-        )
-        val licenseList = listOf(
-            "9980 BKB",
-            "7528 CDT",
-            "5369 PLN",
-            "2491 LKC",
-            "6317 PPB",
-            "7018 KKB"
-        )
+    private fun loadMotosOnMap(motoList: MotoList){
 
-        for (i in motoList.indices) {
-            mMap.addMarker(MarkerOptions().position(motoList[i]).icon(BitmapDescriptorFactory.fromResource(R.drawable.motoicon)).title(licenseList[i]))
+        val markersToUpdate: ArrayList<MarkerOptions?> = ArrayList()
+        val motosToUpdate: ArrayList<MotoInfo> = ArrayList()
+
+        for ( i in 0 until markersInDisplay.size){ // drop motos
+            if(motoList.motos.contains(markersInDisplay[i].tag)){
+                motoList.motos.drop(i)
+            }
+        }
+        for (moto in motoList.motos) { // add new motos ( only available )
+            if (moto.available?.toBoolean() == true){
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                fromResource(R.drawable.motoicon))
+                markersToUpdate.add(marker)
+                motosToUpdate.add(moto)
+            }
+        }
+        for (i in 0 until markersToUpdate.size){  // show new motos
+            val tmpMarker = mMap.addMarker(markersToUpdate[i])
+            tmpMarker.tag = motosToUpdate[i]
+            markersInDisplay.add(tmpMarker)
+        }
+        for (i in 0 until markersInDisplay.size){ // update markers in display
+            if (!motosToUpdate.contains(markersInDisplay[i].tag)){
+                markersInDisplay[i].remove()
+            }
         }
     }
 
+    private fun loadMotoRentalOnMap(motoId: Int, motoList: MotoList){
+        markersInDisplay.forEach { it.remove() }
+        motoList.motos.forEach { moto ->
+            if (moto.id == motoId){
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val markerOp = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
+                fromResource(R.drawable.motoicon))
+                val marker = mMap.addMarker(markerOp)
+                marker.tag = moto
+                markersInDisplay.add(marker)
+            }
+        }
+    }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        when (p0!!.title) {
-            "9980 BKB" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 94)
-            }
-            "7528 CDT" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 81)
-            }
-            "5369 PLN" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 76)
-            }
-            "2491 LKC" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 89)
-            }
-            "6317 PPB" -> {
-                startFragmentMotoDetail(p0!!.title, 1, 87)
-            }
-            else -> {
-                startFragmentMotoDetail(p0!!.title, 1, 97)
-            }
+        if (p0 != markerUser && p0 != null){
+            val moto: MotoInfo = p0.tag as MotoInfo
+            startFragmentMotoDetail(moto.license_number, moto.id, moto.battery, LatLng(moto.latitude.toDouble(),moto.longitude.toDouble()))
         }
         return false
     }
 
-    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int){
+    private fun startFragmentMotoDetail(licence: String, id:Int, battery: Int, coords: LatLng){
         supportFragmentManager.popBackStack()
-        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery)
+        val newFragment = MotoDetailsFragment.newInstance(licence, id, battery, coords, rentalStatus)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_moto_detail, newFragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    fun chooseMotosOnMap(){
+        MotoDB.getMotos { motoList: MotoList? ->
+            if (motoList == null) {
+                Log.w(TAG, "db returned motoList null")
+            } else {
+                CommonFunctions.getUserIdOnDB(this)?.let {
+                    RentalDB.getActiveRentalByUserId(it) { rentalDB ->
+                        val rentalSP = CommonFunctions.loadCurrentRentalInfoFromSharedPref(this)
+                        if (rentalDB != rentalSP) {
+                            doSthWithWrongRentalOnSP(rentalDB)
+                        }
+
+                        if (rentalDB == null || !rentalDB.active){
+                            loadMotosOnMap(motoList)
+                        } else {
+                            setCurrentRentalInfo(rentalDB)
+                            loadMotoRentalOnMap(rentalDB.moto_id, motoList)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun doSthWithWrongRentalOnSP(rentalDB: RentalInfo?) {
+        CommonFunctions.saveCurrentRentalInfoToSharedPref(rentalDB, this)
+    }
+
+    private fun setCurrentRentalInfo(rentalDB: RentalInfo) {
+        //val fragment: MotoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail) as MotoDetailsFragment
+        if (rentalDB.finish_book_hour != null){
+            //fragment.updateRentButtonText(2)
+            rentalStatus = 2
+        } else {
+            //fragment.updateRentButtonText(1)
+            rentalStatus = 1
+        }
+    }
+
+    override fun setRentalStatus(status: Int) {
+        rentalStatus = status
     }
 
     override fun onOptionChosenFromFragment(option: Int) {
@@ -235,6 +267,64 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         this.fragment_moto_detail.removeAllViews()
     }
 
+    override fun launchReport(id: Int) {
+        supportFragmentManager.popBackStack()
+        val newFragment = ReportFragment.newInstance(id)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_moto_detail, newFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 
+    override fun inZone(): Boolean {
+        return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, holePolyg, true) else false
+    }
+
+    companion object {
+        private const val TAG = "MapsActivity"
+    }
+
+    fun generateCoordLimitation(){
+
+        MapCoordDB.getAllMapCoords(){
+                holePolyg.removeAll(holePolyg)
+                hollowPolygon.remove()
+                holePolyg.add(
+                    LatLng(
+                        it?.map_coords?.get(0)?.from_latitude!!.toDouble(),
+                        it.map_coords.get(0).from_longitude.toDouble()
+                    )
+                )
+                var futureLat = it.map_coords.get(0).to_latitude.toDouble()
+                var futureLong = it.map_coords.get(0).to_longitude.toDouble()
+                for (i in 0 until it.map_coords.size-2) {
+                    for (j in 0 until it.map_coords.size) {
+                        if (it.map_coords.get(j).from_latitude.toDouble() == futureLat && it.map_coords.get(j).from_longitude.toDouble() == futureLong) {
+                            futureLat = it.map_coords.get(j).to_latitude.toDouble()
+                            futureLong = it.map_coords.get(j).to_longitude.toDouble()
+                            holePolyg.add(LatLng(it.map_coords.get(j).from_latitude.toDouble(), it.map_coords.get(j).from_longitude.toDouble()))
+                        }
+                    }
+                }
+                for (i in 0 until holePolyg.size){
+                    Log.i("LATITUD", holePolyg.get(i).latitude.toString())
+                    Log.i("LONGITUD", holePolyg.get(i).longitude.toString())
+                }
+
+                hollowPolygon = mMap.addPolygon(
+                    PolygonOptions().add(
+                        LatLng(58.950017, -16.157126),
+                        LatLng(58.950017, 26.123910),
+                        LatLng(25.943059, 26.123910),
+                        LatLng(25.943059, -16.157126)
+                    ).geodesic(false).addHole(holePolyg)
+                        .fillColor(Color.GRAY)
+                        .strokeWidth(5.0f)
+                        .fillColor(0x55686868)
+                        .geodesic(false)
+                )
+        }
+
+    }
 }
 
