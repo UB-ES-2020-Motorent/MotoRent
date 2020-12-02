@@ -34,8 +34,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     lateinit var coordenadas: LatLng
     lateinit var markerUser : Marker
     var markersInDisplay: ArrayList<Marker> = ArrayList()
-    private val hole : ArrayList<LatLng> = ArrayList()
     private var rentalStatus : Int = 0
+    private val holePolyg : ArrayList<LatLng> = ArrayList()
+    lateinit private var hollowPolygon : Polygon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +71,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mainHandler.post(object : Runnable {
             override fun run() {
                 chooseMotosOnMap()
-                mainHandler.postDelayed(this, 5000)
+                generateCoordLimitation()
+                mainHandler.postDelayed(this, 1000)
             }
         })
 
@@ -108,6 +110,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        hollowPolygon = mMap.addPolygon(PolygonOptions().add(LatLng(0.0, 0.0)))
 
         chooseMotosOnMap()
 
@@ -147,51 +151,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         markerUser = mMap.addMarker(MarkerOptions().position(coordenadas).icon(BitmapDescriptorFactory.fromResource(R.drawable.you_are_here_resized)))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 17.0f))
-        val holePolyg = listOf(
-            LatLng(41.346835, 2.139348),
-            LatLng(41.355486, 2.131968),
-            LatLng(41.362218, 2.135069),
-            LatLng(41.377781, 2.121317),
-            LatLng(41.375642, 2.117680),
-            LatLng(41.375865, 2.109544),
-            LatLng(41.381575, 2.107604),
-            LatLng(41.384287, 2.111785),
-            LatLng(41.387389, 2.106061),
-            LatLng(41.400614, 2.113133),
-            LatLng(41.415180, 2.131959),
-            LatLng(41.419323, 2.127931),
-            LatLng(41.421286, 2.134218),
-            LatLng(41.425994, 2.135808),
-            LatLng(41.427717, 2.128503),
-            LatLng(41.430291, 2.128299),
-            LatLng(41.430284, 2.139204),
-            LatLng(41.444066, 2.143382),
-            LatLng(41.442012, 2.153787),
-            LatLng(41.449161, 2.172412),
-            LatLng(41.460230, 2.167192),
-            LatLng(41.469531, 2.183957),
-            LatLng(41.433781, 2.211112),
-            LatLng(41.408529, 2.224949),
-            LatLng(41.375045, 2.190526),
-            LatLng(41.374874, 2.188226),
-            LatLng(41.381653, 2.184492),
-            LatLng(41.352369, 2.162530),
-            LatLng(41.346546, 2.139268)
-        )
-        hole.addAll(holePolyg)
-
-        val hollowPolygon = mMap.addPolygon(
-            PolygonOptions().add(
-                LatLng(58.950017, -16.157126),
-                LatLng(58.950017, 26.123910),
-                LatLng(25.943059, 26.123910),
-                LatLng(25.943059, -16.157126)
-            ).addHole(holePolyg)
-                .fillColor(Color.GRAY)
-                .strokeWidth(5.0f)
-                .fillColor(0x55686868)
-                .geodesic(true)
-        )
+        generateCoordLimitation()
     }
 
     private fun loadMotosOnMap(motoList: MotoList){
@@ -317,12 +277,54 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun inZone(): Boolean {
-        return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, hole, true) else false
+        return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, holePolyg, true) else false
     }
 
     companion object {
         private const val TAG = "MapsActivity"
     }
 
+    fun generateCoordLimitation(){
+
+        MapCoordDB.getAllMapCoords(){
+                holePolyg.removeAll(holePolyg)
+                hollowPolygon.remove()
+                holePolyg.add(
+                    LatLng(
+                        it?.map_coords?.get(0)?.from_latitude!!.toDouble(),
+                        it.map_coords.get(0).from_longitude.toDouble()
+                    )
+                )
+                var futureLat = it.map_coords.get(0).to_latitude.toDouble()
+                var futureLong = it.map_coords.get(0).to_longitude.toDouble()
+                for (i in 0 until it.map_coords.size-2) {
+                    for (j in 0 until it.map_coords.size) {
+                        if (it.map_coords.get(j).from_latitude.toDouble() == futureLat && it.map_coords.get(j).from_longitude.toDouble() == futureLong) {
+                            futureLat = it.map_coords.get(j).to_latitude.toDouble()
+                            futureLong = it.map_coords.get(j).to_longitude.toDouble()
+                            holePolyg.add(LatLng(it.map_coords.get(j).from_latitude.toDouble(), it.map_coords.get(j).from_longitude.toDouble()))
+                        }
+                    }
+                }
+                for (i in 0 until holePolyg.size){
+                    Log.i("LATITUD", holePolyg.get(i).latitude.toString())
+                    Log.i("LONGITUD", holePolyg.get(i).longitude.toString())
+                }
+
+                hollowPolygon = mMap.addPolygon(
+                    PolygonOptions().add(
+                        LatLng(58.950017, -16.157126),
+                        LatLng(58.950017, 26.123910),
+                        LatLng(25.943059, 26.123910),
+                        LatLng(25.943059, -16.157126)
+                    ).geodesic(false).addHole(holePolyg)
+                        .fillColor(Color.GRAY)
+                        .strokeWidth(5.0f)
+                        .fillColor(0x55686868)
+                        .geodesic(false)
+                )
+        }
+
+    }
 }
 

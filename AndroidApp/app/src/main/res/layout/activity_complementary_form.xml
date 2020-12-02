@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".app.view.ComplementaryFormActivity"
     android:orientation="vertical"
-    android:background="@drawable/fons_login"
+    android:background="@drawable/bg_testing"
     android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
 
     <ImageView
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="@string/dades_personals"
             android:textAllCaps="true"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nom"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cognom"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/introdueix_el_pa_s_i_num_document_identitat"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -118,10 +118,10 @@
         android:id="@+id/signInBtn"
         android:layout_width="match_parent"
         android:layout_height="98dp"
-        android:background="@android:color/transparent"
         android:text="@string/acceptar"
         android:textAllCaps="true"
-        android:textColor="@color/colorWelcomeName"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/colorWelcomeName"
+        android:background="@drawable/buttons_bg"/>
 </LinearLayout>

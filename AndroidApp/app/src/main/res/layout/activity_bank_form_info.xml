@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".app.view.BankFormActivity"
     android:orientation="vertical"
-    android:background="@drawable/fons_login"
+    android:background="@drawable/bg_testing"
     android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
 
     <ImageView
@@ -37,7 +37,7 @@
             android:layout_marginTop="10sp"
             android:text="@string/dades_banc_ries"
             android:textAllCaps="true"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nom_complet_del_titular_de_la_targeta"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -56,14 +56,14 @@
             android:ems="10"
             android:hint="@string/nom_complet"
             android:inputType="textPersonName"
-            android:textColorHint="@color/colorWelcomeName" />
+            android:textColorHint="@color/browser_actions_text_color" />
 
         <TextView
             android:id="@+id/numeroTargetaText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/numero_de_la_targeta"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -74,7 +74,7 @@
             android:ems="10"
             android:hint="@string/numero_de_la_targeta"
             android:inputType="number"
-            android:textColorHint="@color/colorWelcomeName" />
+            android:textColorHint="@color/browser_actions_text_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:ems="10"
                 android:hint="@string/caducitat"
                 android:inputType="date"
-                android:textColorHint="@color/colorWelcomeName" />
+                android:textColorHint="@color/browser_actions_text_color" />
 
             <EditText
                 android:id="@+id/cvvFill"
@@ -101,7 +101,7 @@
                 android:ems="10"
                 android:hint="@string/cvv"
                 android:inputType="number"
-                android:textColorHint="@color/colorWelcomeName" />
+                android:textColorHint="@color/browser_actions_text_color" />
         </LinearLayout>
 
     </LinearLayout>
@@ -110,12 +110,12 @@
         android:id="@+id/signInBtn"
         android:layout_width="match_parent"
         android:layout_height="98dp"
-        android:background="@android:color/transparent"
         android:text="@string/acceptar"
         android:textAllCaps="true"
-        android:textColor="@color/colorWelcomeName"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/colorWelcomeName"
+        android:background="@drawable/buttons_bg"/>
 
     <Button
         android:id="@+id/backBtn"

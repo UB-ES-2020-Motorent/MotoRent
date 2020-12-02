@@ -91,15 +91,8 @@ class MapCoords(Resource):
                 coords = MapCoordsModel(from_latitude=data['from_latitude'], from_longitude=data['from_longitude'],
                                         to_latitude=data['to_latitude'], to_longitude=data['to_longitude'])
 
-                coords_to_change = MapCoordsModel.find_by_destiny(to_latitude=data['to_latitude'], to_longitude=data['to_longitude'])
-                if coords_to_change:
-                    coords_to_change.to_latitude = data['from_latitude']
-                    coords_to_change.to_longitude = data['from_longitude']
-
                 try:
                     coords.save_to_db()
-                    if coords_to_change:
-                        coords_to_change.save_to_db()
                     return {'coords': MapCoordsModel.find_by_origin(from_latitude=coords.from_latitude,
                                                                     from_longitude=coords.from_longitude).json()}, 201
                 except:
@@ -132,14 +125,6 @@ class MapCoords(Resource):
                 coords = MapCoordsModel.find_by_origin(from_latitude=data['from_latitude'],
                                                        from_longitude=data['from_longitude'])
 
-                coords_to_change_put = MapCoordsModel.find_by_origin(from_latitude=coords.to_latitude,
-                                                                     from_longitude=coords.to_longitude)
-                if coords_to_change_put:
-                    if data['to_latitude']:
-                        coords_to_change_put.from_latitude = data['to_latitude']
-                    if data['to_longitude']:
-                        coords_to_change_put.from_longitude = data['to_longitude']
-
                 if data['to_latitude']:
                     coords.to_latitude = data["to_latitude"]
                 if data['to_longitude']:
@@ -147,8 +132,6 @@ class MapCoords(Resource):
 
                 try:
                     coords.save_to_db()
-                    if coords_to_change_put:
-                        coords_to_change_put.save_to_db()
                     return {'coords': MapCoordsModel.find_by_origin(from_latitude=coords.from_latitude,
                                                                     from_longitude=coords.from_longitude).json()}, 200
                 except:
@@ -184,13 +167,6 @@ class MapCoords(Resource):
 
                 if coords:
                     try:
-                        coords_to_change = MapCoordsModel.find_by_destiny(to_latitude=data['from_latitude'],
-                                                                          to_longitude=data['from_longitude'])
-                        if coords_to_change:
-                            coords_to_change.to_latitude = coords.to_latitude
-                            coords_to_change.to_longitude = coords.to_longitude
-                            coords_to_change.save_to_db()
-
                         coords.delete_from_db()
                         return {'message': "Pair of coords with origin Lat[{}] - Long[{}] Deleted".format(
                             data['from_latitude'], data['from_longitude'])}, 200

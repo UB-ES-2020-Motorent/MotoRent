@@ -82,7 +82,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/repIncidencia" />
+                    android:text="@string/repIncidencia"
+                    android:textColor="@color/colorWelcomeName"
+                    android:background="@drawable/buttons_bg"/>
 
             </LinearLayout>
 
@@ -91,7 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/reservar"
-                android:background="@color/rentMoto"/>
+                android:textColor="@color/browser_actions_text_color"
+                android:background="@drawable/rental_buttons_bg1"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

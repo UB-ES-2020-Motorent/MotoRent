@@ -11,18 +11,19 @@ data class MapCoordInfo (
 )
 
 data class MapCoordJson (
-    var mapcoord: MapCoordInfo
+    var map_coord: MapCoordInfo
 )
 data class MapCoordList (
-    var mapcoords : List<MapCoordInfo>
+    var map_coords : List<MapCoordInfo>
 )
 
 object MapCoordDB {
 
-    fun getAllMapCoords() {
+    fun getAllMapCoords(onResult: (MapCoordList?) -> Unit) {
         val apiService = RestApiService()
         apiService.getAllMapCoords() {
             Log.i(TAG, it.toString())
+            onResult(it)
         }
     }
 

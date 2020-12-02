@@ -63,7 +63,7 @@ class CreditCardAdapter( private val mContext: Context, val creditCards: BankDat
             }
             itemLayout.PreferidaCheckBox.isChecked = true
             itemLayout.PreferidaCheckBox.setTextColor(ContextCompat.getColor(mContext, R.color.com_facebook_blue))
-            itemLayout.visaNumberTextView.setTextColor(ContextCompat.getColor(mContext, R.color.rentMoto))
+            itemLayout.visaNumberTextView.setTextColor(ContextCompat.getColor(mContext, R.color.darkGreen))
         }
 
         itemLayout.buttonEliminar.setOnClickListener {
@@ -85,7 +85,7 @@ class CreditCardAdapter( private val mContext: Context, val creditCards: BankDat
 
         UserDB.getUserByIdOrGoogleToken(id = userID) {
             if(it?.id_bank_data == creditCard.id_bank_data){
-                itemLayout.visaNumberTextView.setTextColor(ContextCompat.getColor(mContext, R.color.rentMoto))
+                itemLayout.visaNumberTextView.setTextColor(ContextCompat.getColor(mContext, R.color.darkGreen))
                 itemLayout.PreferidaCheckBox.isChecked = true
                 itemLayout.PreferidaCheckBox.setTextColor(ContextCompat.getColor(mContext, R.color.com_facebook_blue))
             }
