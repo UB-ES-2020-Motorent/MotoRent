@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object URL {
 
-    private const val isDeploy = false // Change to true for deployment
+    private const val isDeploy = true // Change to true for deployment
 
     private const val urlTest = "https://motorent-apitest.herokuapp.com"
     private const val urlDeploy = "https://motorent-deploy.herokuapp.com"
