@@ -9,12 +9,13 @@ import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.view.SignUpActivity
 
+// Initialize Firebase Auth
+private var auth: FirebaseAuth = Firebase.auth
+
 class SignUpPresenter (private val activity: SignUpActivity) {
 
-    // Initialize Firebase Auth
-    private var auth: FirebaseAuth = Firebase.auth
 
-    fun createAccount(userName: String, email: String, password: String) {
+    fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
@@ -30,27 +31,31 @@ class SignUpPresenter (private val activity: SignUpActivity) {
         if(password1 == password2){
             if(password1.length>5){
                 if(!checkNumberInString(password1)) {
-                    activity.customToast("La contrasenya ha de contenir com a mínim un número.", Toast.LENGTH_LONG).show()
+                    activity.toast("La contrasenya ha de contenir com a mínim un número.")
                     return false;
                 }
             }else{
-                activity.customToast("La contrasenya ha d'incloure 6 caràcters com a mínim.", Toast.LENGTH_LONG).show()
+                activity.toast("La contrasenya ha d'incloure 6 caràcters com a mínim.")
                 return false;
             }
         }else{
-            activity.customToast("Les contrasenyes no coincideixen.", Toast.LENGTH_LONG).show()
+
+            activity.toast("Les contrasenyes no coincideixen.")
             return false;
         }
         return true
     }
 
-    private fun checkNumberInString(password:String): Boolean {
+     fun checkNumberInString(password:String): Boolean {
         for (character in password){
             if(character.isDigit()){
                 return true
             }
         }
         return false
+    }
+    fun userAndMailNotEmpty(userName : String, email :String) : Boolean{
+        return (!userName.isEmpty()) && (!email.isEmpty())
     }
 
     private fun registerUser(email: String) {

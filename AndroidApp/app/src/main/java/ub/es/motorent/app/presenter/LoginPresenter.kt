@@ -15,14 +15,13 @@ import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.view.LoginActivity
 import ub.es.motorent.app.view.LoginWaitFragment
 
+// Initialize Firebase Auth
+private var auth: FirebaseAuth = Firebase.auth
 
 class LoginPresenter (private val activity: LoginActivity) {
 
-    // Initialize Firebase Auth
-    private var auth: FirebaseAuth = Firebase.auth
-
     fun signInWithEmailAndPassword(email: String, password: String){
-        if(!(email.isEmpty() or password.isEmpty())) {
+        if(notEmptyInfoField(email, password)) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
@@ -33,6 +32,9 @@ class LoginPresenter (private val activity: LoginActivity) {
                     }
                 }
         }
+    }
+    fun notEmptyInfoField(email: String, password: String): Boolean {
+        return !(email.isEmpty() or password.isEmpty())
     }
 
     fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {

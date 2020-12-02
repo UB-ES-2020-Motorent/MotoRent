@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import ub.es.motorent.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -70,6 +71,7 @@ class ReportFragment : Fragment() {
             //A FALTA DE UNA CRIDA A BACK, CRIDA AMB ID DE LA MOTO I AUTH.USER
 
             Log.d("ReportFragment", missatge)
+            Toast.makeText(context, "Incidència reportada correctament", Toast.LENGTH_LONG).show()
             activity?.supportFragmentManager?.popBackStack()
         }
 
