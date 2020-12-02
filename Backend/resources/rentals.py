@@ -50,16 +50,17 @@ class Rentals(Resource):
                 "user_id": "User_id cant be empty"
             }}, 400
 
+        activerental = RentalsModel.find_active_rental_by_user_id(user_id=data['user_id'])
+        if activerental:
+            return {'message': "User with id [{}] already has an ongoing rental".format(data['user_id'])}, 409
+
         rental = RentalsModel(moto_id=data['moto_id'],
                               user_id=data['user_id'],
                               book_hour=datetime.now().isoformat())
         moto = MotosModel.find_by_id(data['moto_id'])
         try:
-            print("entra")
             rental.save_to_db()
-            print("saverental")
             moto.set_available(False)
-            print("setavailable")
             return {'rental': RentalsModel.find_by_id(rental.id).json()}, 201
 
         except:
@@ -126,6 +127,25 @@ class Rentals(Resource):
         else:
             return {'message': "Rental with id [{}] Not found".format(id)}, 404
 
+class ActiveRentals(Resource):
+    """
+    API Restful methods for ActiveRentals
+    """
+    def get(self, user_id):
+        """
+        GET method
+        Gets active rental by user id
+        Param: int user id
+        Return: dict (account ok / message)
+        """
+
+        rental = RentalsModel.find_active_rental_by_user_id(user_id=user_id)
+
+        if rental:
+            return {'rental': rental.json()}, 200
+        else:
+            return {'message': 'User with id [{}] has no active rentals'.format(user_id)}, 404
+
 class RentalsList(Resource):
     """
     API Restful methods for RentalsList
@@ -135,8 +155,12 @@ class RentalsList(Resource):
         GET method
         Return: dict (rentals)
         """
-        rentals = RentalsModel.all_rentals()
-        return {'rentals': [rental.json() for rental in rentals]}, 200
+        try:
+            rentals = RentalsModel.all_rentals()
+            return {'rentals': [rental.json() for rental in rentals]}, 200
+        except Exception as e:
+            return {'message': 'Internal server error.\n' + str(e)}, 500
+
 
 def str_to_bool(s):
     print(s)

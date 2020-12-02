@@ -15,22 +15,22 @@ private var auth: FirebaseAuth = Firebase.auth
 
 class WelcomePresenter (var activity: WelcomeActivity) {
 
-    fun navigationPath() : Intent {
+        fun navigationPath() {
         return if((auth.currentUser != null) && (activity.autoLogin())){
-            val token = CommonFunctions.saveUIDToSharedPerf()
+            val token = CommonFunctions.getUIDFromFirebase()
             UserDB.getUserByIdOrGoogleToken (null, token) {
-                if (token != it?.google_token ?: true){
-                    Log.w(WelcomePresenter.TAG, "user not registered correctly")
+                if (token != it?.google_token ?: true || it == null){
+                    Log.w(TAG, "User not in DataBase... Redirecting to login")
+                    activity.goToNextActivity(LoginActivity::class.java)
                 } else {
-                    Log.i(WelcomePresenter.TAG, "user: $it")
-                    CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                    Log.i(TAG, "user: $it")
+                    CommonFunctions.saveUserInfoToSharedPref(it, activity)
+                    activity.goToNextActivity(MapsActivity::class.java)
                 }
             }
-            val intentI = Intent(activity, MapsActivity::class.java)
-            intentI
         }else{
-            val intentI = Intent(activity, LoginActivity::class.java)
-            intentI
+            CommonFunctions.deleteUserInfoFromSharedPref(activity)
+            activity.goToNextActivity(LoginActivity::class.java)
         }
     }
 

@@ -8,6 +8,7 @@ import android.widget.EditText
 import ub.es.motorent.R
 import android.widget.Toast
 import com.hbb20.CountryCodePicker
+import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.presenter.ComplementaryFormPresenter
 
 class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCountryChangeListener {
@@ -22,24 +23,21 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
 
         presenter = ComplementaryFormPresenter(this)
 
+        val userInfo = presenter.getUserInfo()
+        val txtName : EditText = findViewById(R.id.nomFill)
+        val txtSurname : EditText = findViewById(R.id.cognomFill)
+        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
+
+
+        if(userInfo != null) {
+            txtName.setText(userInfo.name)
+            txtSurname.setText(userInfo.surname)
+            txtIDCard.setText(userInfo.national_id_document)
+        }
+
         ccp = findViewById(R.id.country_code_picker)
         ccp!!.setOnCountryChangeListener(this)
         ccp!!.setDefaultCountryUsingNameCode("ES")
-
-        //De moment no fa cap comprovació dins dels camps ni res a falta de tot el tema de backend
-        //ja que aqui aniria el recent usuari creat i s'afagiria tots aquests camps.
-
-        //un cop tinguem tot lo de la base de dades ben montat, faria cada cop que es fes un intent
-        //es comprovés que tota la informació d'aquesta pagina estigui dins de la DB
-        //en cas que no que surtis de nou aquest formulari
-
-
-        val txtName : EditText = findViewById(R.id.nomCognomFill)
-        val txtIDCard : EditText = findViewById(R.id.numIdentiFill)
-        val txtCreditCardName : EditText = findViewById(R.id.nomCompletFill)
-        val txtCreditCardNumber : EditText = findViewById(R.id.numeroTargetaFill)
-        val txtCreditCardExpirationDate : EditText = findViewById(R.id.dataCaducitatFill)
-        val txtCreditCardCVV : EditText = findViewById(R.id.cvvFill)
 
         val btnRegister : Button = findViewById(R.id.signInBtn)
         btnRegister.setOnClickListener(View.OnClickListener() {
@@ -47,23 +45,17 @@ class ComplementaryFormActivity : FullScreenActivity(), CountryCodePicker.OnCoun
                 txtName.text.toString(),
                 ccp!!.selectedCountryName,
                 txtIDCard.text.toString(),
-                txtCreditCardName.text.toString(),
-                txtCreditCardNumber.text.toString(),
-                txtCreditCardExpirationDate.text.toString(),
-                txtCreditCardCVV.text.toString()
+                txtSurname.text.toString()
             )
+            Toast.makeText(this,"Informació personal actualitzada", Toast.LENGTH_LONG).show()
         });
 
-    }
-
-    override fun onBackPressed() {
-        // presenter.eliminarUserActual()
     }
 
     override fun onCountrySelected() {
         countryName = ccp!!.selectedCountryName
 
-        customToast("Has seleccionat: "+countryName,Toast.LENGTH_SHORT).show()
+        customToast("Has seleccionat: " + countryName,Toast.LENGTH_SHORT).show()
     }
 
     fun goToMap(){

@@ -15,7 +15,7 @@ private var auth: FirebaseAuth = Firebase.auth
 class SignUpPresenter (private val activity: SignUpActivity) {
 
 
-    fun createAccount(userName: String, email: String, password: String) {
+    fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
@@ -71,22 +71,14 @@ class SignUpPresenter (private val activity: SignUpActivity) {
                 }
             }
         }*/
-        val token = CommonFunctions.saveUIDToSharedPerf()
-        UserDB.registerUser(email, token, 0) {
-            if (email != it?.mail ?: true){
+        val token = CommonFunctions.getUIDFromFirebase()
+        UserDB.registerUser(email, token, 0) { registeredUser ->
+            if (email != registeredUser?.mail ?: true){
                 Log.w(TAG, "user not registered correctly")
             } else {
-                Log.i(TAG, "user: $it")
-                val token = CommonFunctions.saveUIDToSharedPerf()
-                UserDB.getUserByIdOrGoogleToken (null, token) {
-                    if (token != it?.google_token ?: true){
-                        Log.w(SignUpPresenter.TAG, "user not registered correctly")
-                    } else {
-                        Log.i(SignUpPresenter.TAG, "user: $it")
-                        CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
-                    }
-                }
-                CommonFunctions.saveUserInfoToSharedPref(it!!, activity)
+                Log.i(TAG, "user: $registeredUser")
+                CommonFunctions.saveUserInfoToSharedPref(registeredUser!!, activity)
+                UserDB.registerUser(email,token,0){}
                 activity.goToFormAfterRegister()
             }
         }

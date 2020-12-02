@@ -10,8 +10,8 @@ data class RentalInfo (
     var user_id: Int,
     var active: Boolean,
     var book_hour: String,
-    var finish_book_hour : String,
-    var finish_rental_hour : String
+    var finish_book_hour : String?,
+    var finish_rental_hour : String?
 )
 
 data class RentalJson (
@@ -30,10 +30,19 @@ object RentalDB {
         }
     }
 
-    fun getRentalById(id: Int) {
+    fun getRentalById(id: Int, onResult: (RentalInfo?) -> Unit) {
         val apiService = RestApiService()
         apiService.getRentalById(id) {
             Log.i(TAG, it.toString())
+            onResult(it?.rental)
+        }
+    }
+
+    fun getActiveRentalByUserId(user_id: Int,  onResult: (RentalInfo?) -> Unit) {
+        val apiService = RestApiService()
+        apiService.getActiveRentalByUserId(user_id) {
+            Log.i(TAG, it.toString())
+            onResult(it?.rental)
         }
     }
 
@@ -41,7 +50,7 @@ object RentalDB {
         val apiService = RestApiService()
         apiService.addRental(moto_id, user_id) {
             Log.i(TAG, it.toString())
-            onResult(it!!.rental)
+            onResult(it?.rental)
         }
     }
 

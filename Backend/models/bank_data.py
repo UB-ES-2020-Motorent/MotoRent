@@ -1,4 +1,5 @@
 from db import db
+from models.users import UsersModel
 
 
 class BankDataModel(db.Model):
@@ -28,6 +29,7 @@ class BankDataModel(db.Model):
         Return: dict
         """
         return {
+            'id_bank_data': self.id_bank_data,
             'user_id': self.user_id,
             'card_number': self.card_number,
             'card_owner': self.card_owner,
@@ -50,13 +52,20 @@ class BankDataModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_user_id(cls, user_id):
+    def find_by_user_id(cls, user_id, view_all):
         """
         Finds bank data by user id
         Param: number user id
         Return: BankDataModel
         """
-        return BankDataModel.query.filter_by(user_id=user_id).all()
+        if (view_all):
+            return BankDataModel.query.filter_by(user_id=user_id).all()
+        else:
+            user = UsersModel.find_by_id(user_id)
+            if user:
+                return BankDataModel.query.filter_by(id_bank_data=user.id_bank_data).all()
+            else:
+                return None
 
     @classmethod
     def find_by_id_bank_data(cls, id_bank_data):
@@ -84,6 +93,15 @@ class BankDataModel(db.Model):
         Return: BankDataModel
         """
         return BankDataModel.query.filter_by(user_id=user_id, card_number=card_number).first()
+
+    @classmethod
+    def find_by_user_id_and_id_bank_data(cls, user_id, id_bank_data):
+        """
+        Finds bank data by user id and card number
+        Param: number user id and card number
+        Return: BankDataModel
+        """
+        return BankDataModel.query.filter_by(user_id=user_id, id_bank_data=id_bank_data).first()
 
     @classmethod
     def all_bank_data(cls):

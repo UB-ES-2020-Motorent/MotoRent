@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.view.CreditCardsActivity"
+    android:orientation="vertical"
+    android:background="@drawable/fons_login"
+    android:padding="40dp" android:gravity="center_vertical" android:id="@+id/CreditCardLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="491dp"
+            android:orientation="horizontal">
+
+            <ListView
+                android:id="@+id/CreditCardsListView"
+                android:layout_width="match_parent"
+                android:layout_height="502dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/addCreditCard"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:background="@android:color/transparent"
+            android:text="@string/addCreditCard"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWelcomeName"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:background="@android:color/transparent"
+            android:text="@string/tornar"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWelcomeName"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,35 @@
+https://motorent-deploy.herokuapp.com/moto?license_number=9980 BKB&battery=94&longitude=41.3818&latitude=2.1685
+https://motorent-deploy.herokuapp.com/moto?license_number=7528 CDT&battery=81&longitude=41.382093&latitude=2.131414
+https://motorent-deploy.herokuapp.com/moto?license_number=5369 PLN&battery=76&longitude=41.402959&latitude=2.174802
+https://motorent-deploy.herokuapp.com/moto?license_number=2491 LKC&battery=89&longitude=41.413352&latitude=2.202810
+https://motorent-deploy.herokuapp.com/moto?license_number=6317 PPB&battery=87&longitude=41.437218&latitude=2.180026
+https://motorent-deploy.herokuapp.com/moto?license_number=7018 KKB&battery=97&longitude=41.411589&latitude=2.152448
+
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.346546&from_longitude=2.139268&to_latitude=41.346835&to_longitude=2.139348&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.352369&from_longitude=2.162530&to_latitude=41.346546&to_longitude=2.139268&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.381653&from_longitude=2.184492&to_latitude=41.352369&to_longitude=2.162530&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.374874&from_longitude=2.188226&to_latitude=41.381653&to_longitude=2.184492&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.375045&from_longitude=2.190526&to_latitude=41.374874&to_longitude=2.188226&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.408529&from_longitude=2.224949&to_latitude=41.375045&to_longitude=2.190526&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.433781&from_longitude=2.211112&to_latitude=41.408529&to_longitude=2.224949&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.469531&from_longitude=2.183957&to_latitude=41.433781&to_longitude=2.211112&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.460230&from_longitude=2.167192&to_latitude=41.469531&to_longitude=2.183957&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.449161&from_longitude=2.172412&to_latitude=41.460230&to_longitude=2.167192&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.442012&from_longitude=2.153787&to_latitude=41.449161&to_longitude=2.172412&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.444066&from_longitude=2.143382&to_latitude=41.442012&to_longitude=2.153787&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.430284&from_longitude=2.139204&to_latitude=41.444066&to_longitude=2.143382&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.430291&from_longitude=2.128299&to_latitude=41.430284&to_longitude=2.139204&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.427717&from_longitude=2.128503&to_latitude=41.430291&to_longitude=2.128299&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.425994&from_longitude=2.135808&to_latitude=41.427717&to_longitude=2.128503&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.421286&from_longitude=2.134218&to_latitude=41.425994&to_longitude=2.135808&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.419323&from_longitude=2.127931&to_latitude=41.421286&to_longitude=2.134218&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.415180&from_longitude=2.131959&to_latitude=41.419323&to_longitude=2.127931&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.400614&from_longitude=2.113133&to_latitude=41.415180&to_longitude=2.131959&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.387389&from_longitude=2.106061&to_latitude=41.400614&to_longitude=2.113133&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.384287&from_longitude=2.111785&to_latitude=41.387389&to_longitude=2.106061&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.381575&from_longitude=2.107604&to_latitude=41.384287&to_longitude=2.111785&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.375865&from_longitude=2.109544&to_latitude=41.381575&to_longitude=2.107604&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.375642&from_longitude=2.117680&to_latitude=41.375865&to_longitude=2.109544&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.362218&from_longitude=2.135069&to_latitude=41.377781&to_longitude=2.121317&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.355486&from_longitude=2.131968&to_latitude=41.362218&to_longitude=2.135069&admin_code=admin_secret_code
+https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.346835&from_longitude=2.139348&to_latitude=41.355486&to_longitude=2.131968&admin_code=admin_secret_code
