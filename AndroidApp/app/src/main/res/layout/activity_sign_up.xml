@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".app.view.LoginActivity"
     android:orientation="vertical"
-    android:background="@drawable/fons_login"
+    android:background="@drawable/bg_testing"
     android:padding="40dp" android:gravity="center_vertical" android:id="@+id/root">
 
     <ImageView
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contrasenya"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contrasenya"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textStyle="bold" />
 
         <EditText
@@ -81,7 +81,9 @@
             android:id="@+id/btn_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/dades_personal" />
+            android:text="@string/dades_personal"
+            android:textColor="@color/colorWelcomeName"
+            android:background="@drawable/buttons_bg"/>
 
     </LinearLayout>
 </LinearLayout>

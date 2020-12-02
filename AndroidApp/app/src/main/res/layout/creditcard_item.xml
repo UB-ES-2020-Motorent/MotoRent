@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="@string/targeta"
             android:textAllCaps="true"
-            android:textColor="@color/colorWelcomeName"
+            android:textColor="@color/browser_actions_text_color"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -48,7 +48,9 @@
                 android:layout_width="120dp"
                 android:layout_height="36dp"
                 android:layout_marginBottom="504dp"
-                android:text="@string/eliminar" />
+                android:text="@string/eliminar"
+                android:textColor="@color/colorWelcomeName"
+                android:background="@drawable/buttons_bg"/>
 
             <CheckBox
                 android:id="@+id/PreferidaCheckBox"

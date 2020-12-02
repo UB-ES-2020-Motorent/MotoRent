@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".app.view.WelcomeActivity"
-    android:background="@drawable/fons_login">
+    android:background="@drawable/bg_testing">
 
     <TextView
         android:id="@+id/welcomeText"
@@ -15,7 +15,7 @@
         android:inputType="textUri"
         android:text="@string/benvingut_a_motorent"
         android:textAllCaps="false"
-        android:textColor="#FF1100"
+        android:textColor="@color/browser_actions_text_color"
         android:textSize="24sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/imageView"

@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".app.view.ReportFragment"
-    android:background="@drawable/fons_login">
+    android:background="@drawable/bg_testing">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_testing"
         android:padding="20dp"
         android:paddingTop="10dp">
 
@@ -48,7 +48,7 @@
                 android:layout_marginTop="10sp"
                 android:layout_marginBottom="10sp"
                 android:text="@string/opcions_de_la_queixa"
-                android:textColor="@color/colorWelcomeName"
+                android:textColor="@color/browser_actions_text_color"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -83,7 +83,7 @@
                 android:layout_marginTop="10sp"
                 android:layout_marginBottom="10sp"
                 android:text="@string/introdueix_un_breu_resum"
-                android:textColor="@color/colorWelcomeName"
+                android:textColor="@color/browser_actions_text_color"
                 android:textStyle="bold" />
 
             <EditText
@@ -99,7 +99,9 @@
                 android:id="@+id/sendReportBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/enviar_queixa" />
+                android:text="@string/enviar_queixa"
+                android:textColor="@color/colorWelcomeName"
+                android:background="@drawable/buttons_bg"/>
         </LinearLayout>
     </RelativeLayout>
 

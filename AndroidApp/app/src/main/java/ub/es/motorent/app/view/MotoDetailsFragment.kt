@@ -160,15 +160,15 @@ class MotoDetailsFragment : Fragment() {
         when (status) {
             0 -> {
                 rentbtn.text = "Reservar"
-                rentbtn.setBackgroundColor(resources.getColor(R.color.rentMoto))
+                rentbtn.setBackgroundResource(R.drawable.rental_buttons_bg1)
             }
             1 -> {
                 rentbtn.text = "Iniciar viatge"
-                rentbtn.setBackgroundColor(resources.getColor(R.color.rentedMoto))
+                rentbtn.setBackgroundResource(R.drawable.rental_buttons_bg2)
             }
             2 -> {
                 rentbtn.text = "Finalitzar viatge"
-                rentbtn.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                rentbtn.setBackgroundResource(R.drawable.rental_buttons_bg3)
             }
         }
     }

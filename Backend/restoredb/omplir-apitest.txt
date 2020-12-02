@@ -33,3 +33,4 @@ https://motorent-apitest.herokuapp.com/mapcoord?from_latitude=41.375642&from_lon
 https://motorent-apitest.herokuapp.com/mapcoord?from_latitude=41.362218&from_longitude=2.135069&to_latitude=41.377781&to_longitude=2.121317&admin_code=admin_secret_code
 https://motorent-apitest.herokuapp.com/mapcoord?from_latitude=41.355486&from_longitude=2.131968&to_latitude=41.362218&to_longitude=2.135069&admin_code=admin_secret_code
 https://motorent-apitest.herokuapp.com/mapcoord?from_latitude=41.346835&from_longitude=2.139348&to_latitude=41.355486&to_longitude=2.131968&admin_code=admin_secret_code
+https://motorent-apitest.herokuapp.com/mapcoord?from_latitude=41.377781&from_longitude=2.121317&to_latitude=41.375642&to_longitude=2.11768&admin_code=admin_secret_code
