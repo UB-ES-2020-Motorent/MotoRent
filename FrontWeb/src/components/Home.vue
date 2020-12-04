@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <h1> {{ message }} </h1>
-    <button class="btn btn-success btn-lg" @click="addLike"> like </button>
-    <h4> Total tickets bought: {{ likes }} </h4>
+    <button class="btn btn-dark btn-lg" @click="goToMotos"> MOTOS </button>
   </div>
 </template>
 
@@ -11,13 +10,11 @@ export default {
   name: 'Home',
   data () {
     return {
-      message: 'Ramo Industries',
-      likes: 0
     }
   },
   methods: {
-    addLike () {
-      this.likes += 1
+    goToMotos () {
+      this.$router.replace({path: '/motos'})
     }
   }
 }
