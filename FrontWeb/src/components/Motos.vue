@@ -4,9 +4,6 @@
     <div class="container">
       <b-table striped hover :items="motos"></b-table>
     </div>
-    <div>
-      {{ res }}
-    </div>
   </div>
 </template>
 
@@ -20,9 +17,6 @@ export default {
     }
   },
   methods: {
-    addLike () {
-      this.likes += 1
-    },
     getMotos () {
       const path = `https://motorent-apitest.herokuapp.com/motos`
       axios.get(path)
