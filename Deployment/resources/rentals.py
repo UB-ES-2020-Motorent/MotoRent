@@ -163,10 +163,9 @@ class RentalsList(Resource):
 
 
 def str_to_bool(s):
-    print(s)
-    if s == 'True':
-        return True
-    elif s == 'False':
+    if s.lower() == 'true':
+         return True
+    elif s.lower() == 'false':
          return False
     else:
          raise ValueError

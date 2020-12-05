@@ -166,7 +166,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
         for (moto in motoList.motos) { // add new motos ( only available )
             if (moto.available?.toBoolean() == true){
-                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val location = LatLng(moto.latitude.toDouble(), moto.longitude.toDouble())
                 val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
                 fromResource(R.drawable.motoicon))
                 markersToUpdate.add(marker)
@@ -189,7 +189,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         markersInDisplay.forEach { it.remove() }
         motoList.motos.forEach { moto ->
             if (moto.id == motoId){
-                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
+                val location = LatLng(moto.latitude.toDouble(), moto.longitude.toDouble())
                 val markerOp = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
                 fromResource(R.drawable.motoicon))
                 val marker = mMap.addMarker(markerOp)

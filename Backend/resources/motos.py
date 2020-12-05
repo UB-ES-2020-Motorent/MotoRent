@@ -84,6 +84,35 @@ class Motos(Resource):
         except:
             return {"message": "Something went wrong"}, 500
 
+    def put(self, id):
+        """
+        PUT method
+        Modifies a motos
+        Param: id
+        Return: dict (moto updated)
+        """
+        data = parser.parse_args()
+
+        if not data['available']:
+            return {'message': {
+                "available": "Specify true or false"
+            }}, 400
+
+        moto = MotosModel.find_by_id(id=id)
+
+        try:
+            moto.available = str_to_bool(data['available'])
+        except ValueError:
+            return {'message': {
+                "available": "Specify a boolean value, true or false"
+            }}, 400
+
+        try:
+            moto.save_to_db()
+            return {'user': MotosModel.find_by_id(id).json()}, 200
+        except:
+            return {"message": "Error Description"}, 500
+
     def delete(self, id):
         """
         DELETE method
@@ -91,7 +120,6 @@ class Motos(Resource):
         Param: int id
         Return: dict (message ok / message)
         """
-
         moto = MotosModel.find_by_id(id=id)
         if moto:
             try:
@@ -129,9 +157,9 @@ class MotosList(Resource):
 
 
 def str_to_bool(s):
-    if s == 'True':
+    if s.lower() == 'true':
          return True
-    elif s == 'False':
+    elif s.lower() == 'false':
          return False
     else:
          raise ValueError

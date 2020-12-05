@@ -66,6 +66,12 @@ interface RestApi {
                     @Path("id") id:Int?
                     ): Call<MotoJson>
 
+    @PUT("moto/{id}")
+    fun updateMotoById(
+                    @Path("id") id: Int,
+                    @Query("available") available:String
+                    ): Call<MotoJson>
+
     @DELETE("moto/{id}")
     fun deleteMotoById(
                         @Path("id") id: Int
@@ -342,6 +348,22 @@ class RestApiService {
                 }
                 override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
                     logResult(response, "addMoto: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun updateMotoById(id: Int, available:String, onResult: (MotoJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.updateMotoById(id, available).enqueue(
+            object : Callback<MotoJson> {
+                override fun onFailure(call: Call<MotoJson>, t: Throwable) {
+                    Log.e(TAG, "onFailure - updateMotoById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<MotoJson>, response: Response<MotoJson>) {
+                    logResult(response, "updateMotoById: ")
                     onResult(response.body())
                 }
             }

@@ -1,9 +1,9 @@
-https://motorent-deploy.herokuapp.com/moto?license_number=9980 BKB&battery=94&longitude=41.3818&latitude=2.1685
-https://motorent-deploy.herokuapp.com/moto?license_number=7528 CDT&battery=81&longitude=41.382093&latitude=2.131414
-https://motorent-deploy.herokuapp.com/moto?license_number=5369 PLN&battery=76&longitude=41.402959&latitude=2.174802
-https://motorent-deploy.herokuapp.com/moto?license_number=2491 LKC&battery=89&longitude=41.413352&latitude=2.202810
-https://motorent-deploy.herokuapp.com/moto?license_number=6317 PPB&battery=87&longitude=41.437218&latitude=2.180026
-https://motorent-deploy.herokuapp.com/moto?license_number=7018 KKB&battery=97&longitude=41.411589&latitude=2.152448
+https://motorent-deploy.herokuapp.com/moto?license_number=9980 BKB&battery=94&latitude=41.3818&longitude=2.1685
+https://motorent-deploy.herokuapp.com/moto?license_number=7528 CDT&battery=81&latitude=41.382093&longitude=2.131414
+https://motorent-deploy.herokuapp.com/moto?license_number=5369 PLN&battery=76&latitude=41.402959&longitude=2.174802
+https://motorent-deploy.herokuapp.com/moto?license_number=2491 LKC&battery=89&latitude=41.413352&longitude=2.202810
+https://motorent-deploy.herokuapp.com/moto?license_number=6317 PPB&battery=87&latitude=41.437218&longitude=2.180026
+https://motorent-deploy.herokuapp.com/moto?license_number=7018 KKB&battery=97&latitude=41.411589&longitude=2.152448
 
 https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.346546&from_longitude=2.139268&to_latitude=41.346835&to_longitude=2.139348&admin_code=admin_secret_code
 https://motorent-deploy.herokuapp.com/mapcoord?from_latitude=41.352369&from_longitude=2.162530&to_latitude=41.346546&to_longitude=2.139268&admin_code=admin_secret_code
