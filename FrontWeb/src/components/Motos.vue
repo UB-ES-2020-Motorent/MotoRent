@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Motos</h1>
     <div class="container">
-      <b-table striped hover :items="motos"></b-table>
+      <b-table responsive striped hover :items="motos" :fields="fields"></b-table>
     </div>
   </div>
 </template>
@@ -13,7 +13,15 @@ export default {
   name: 'Motos',
   data () {
     return {
-      motos: []
+      motos: [],
+      fields: [
+        {key: 'id', sortable: true},
+        {key: 'license_number', sortable: false},
+        {key: 'battery', sortable: true},
+        {key: 'available', sortable: true},
+        {key: 'latitude', sortable: false},
+        {key: 'longitude', sortable: false}
+      ]
     }
   },
   methods: {
