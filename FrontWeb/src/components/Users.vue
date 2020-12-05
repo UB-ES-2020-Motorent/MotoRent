@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <h1>Motos</h1>
+    <h1>Usuaris</h1>
     <div class="container">
-      <b-table striped hover :items="motos"></b-table>
+      <b-table striped hover :items="users"></b-table>
     </div>
   </div>
 </template>
@@ -10,29 +10,29 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'Motos',
+  name: 'User',
   data () {
     return {
-      motos: []
+      users: []
     }
   },
   methods: {
-    getMotos () {
-      const path = `https://motorent-apitest.herokuapp.com/motos`
+    getUsers () {
+      const path = `https://motorent-apitest.herokuapp.com/users?admin_code=admin_secret_code`
       axios.get(path)
         .then((res) => {
-          this.motos = res.data.motos
+          this.users = res.data.users
         })
         .catch((error) => {
           console.error(error)
         })
     },
-    deleteMoto (moto) {
+    deleteUser (user) {
 
     }
   },
   created () {
-    this.getMotos()
+    this.getUsers()
   }
 }
 </script>
