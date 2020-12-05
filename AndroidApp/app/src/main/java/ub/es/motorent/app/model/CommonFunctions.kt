@@ -114,6 +114,13 @@ object CommonFunctions {
         sharedPref.edit().putString("userInfo", null).apply()
     }
 
+    fun saveCurrentIncidenceInfoToSharedPref(incidencesInfo: IncidencesInfo?, activity: FragmentActivity?){
+        val sharedPref = activity?.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = if(incidencesInfo != null) gson.toJson(incidencesInfo) else null
+        sharedPref?.edit()?.putString("rentalInfo", jsonString)?.apply()
+    }
+
     private const val TAG = "CommonFunctions"
 
 }

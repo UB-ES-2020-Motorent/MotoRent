@@ -185,6 +185,31 @@ interface RestApi {
 
     @GET("rentals")
     fun getAllRentals() : Call<RentalList>
+
+    /******************** INCIDENCES ********************/
+
+    @GET("incident/{id}")
+    fun getIncidentById(
+        @Path("id") id: Int?
+    ):Call<IncidencesJson>
+
+    @POST("incident")
+    fun addIncident(
+        @Query("moto_id") moto_id:Int?,
+        @Query("user_id") user_id:Int?,
+        @Query("comment") comment:String
+
+    ): Call<IncidencesJson>
+
+    @DELETE("incident/{id}")
+    fun deleteIncidentById(
+        @Path("id") id: Int?
+    ):Call<IncidencesJson>
+
+    @GET("incident")
+    fun getAllIncidents(
+
+    ): Call<IncidencesList>
 }
 
 class RestApiService {
@@ -616,6 +641,74 @@ class RestApiService {
             }
         )
     }
+
+    /******************** INCIDENCES ********************/
+
+    fun getIncidentById(id: Int, onResult: (IncidencesJson?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getIncidentById(id).enqueue(
+            object : Callback<IncidencesJson> {
+                override fun onFailure(call: Call<IncidencesJson>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getIncidenceById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<IncidencesJson>, response: Response<IncidencesJson>) {
+                    logResult(response, "getIncidenceById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun addIncident(moto_id: Int?, user_id: Int?, comment: String, onResult: (IncidencesJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.addIncident(moto_id, user_id, comment ).enqueue(
+            object : Callback<IncidencesJson> {
+                override fun onFailure(call: Call<IncidencesJson>, t: Throwable) {
+                    Log.e(TAG, "onFailure - addIncident: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<IncidencesJson>, response: Response<IncidencesJson>) {
+                    logResult(response, "addIncident: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun deleteIncidentById(id: Int?, onResult: (IncidencesJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.deleteIncidentById(id).enqueue(
+            object : Callback<IncidencesJson> {
+                override fun onFailure(call: Call<IncidencesJson>, t: Throwable) {
+                    Log.e(TAG, "onFailure - deleteIncidentById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<IncidencesJson>, response: Response<IncidencesJson>) {
+                    logResult(response, "deleteIncidentById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getAllIncidents(onResult: (IncidencesList?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getAllIncidents().enqueue(
+            object : Callback<IncidencesList> {
+                override fun onFailure(call: Call<IncidencesList>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getRentals : ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<IncidencesList>, response: Response<IncidencesList>) {
+                    logResult(response, "getUsers: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+
 
     companion object {
         private const val ADMIN_CODE = "admin_secret_code"
