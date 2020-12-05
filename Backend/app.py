@@ -9,6 +9,7 @@ from resources.motos import Motos, MotosList
 from resources.map_coords import MapCoords, MapCoordsList
 from resources.rentals import Rentals, ActiveRentals, RentalsList
 from resources.bank_data import BankData, BankDataList
+from resources.payments import Payment, PaymentsList
 
 from db import db, secret_key
 
@@ -49,6 +50,9 @@ api.add_resource(BankDataList, '/bankdatas')
 
 api.add_resource(Incident, '/incident', '/incident/<string:incident_id>')
 api.add_resource(IncidentsList, '/incidents')
+
+api.add_resource(Payment, '/payment', '/payment/<string:id_payment>')
+api.add_resource(PaymentsList, '/payments')
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

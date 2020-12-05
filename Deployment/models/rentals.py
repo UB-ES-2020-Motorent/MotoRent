@@ -84,6 +84,24 @@ class RentalsModel(db.Model):
         return RentalsModel.query.filter_by(id=id).first()
 
     @classmethod
+    def find_by_user_id(cls, user_id):
+        """
+        Finds a Rental by id
+        Param: number id
+        Return: RentalModel
+        """
+        return RentalsModel.query.filter_by(user_id=user_id).all()
+
+    @classmethod
+    def find_by_moto_id(cls, moto_id):
+        """
+        Finds a Rental by id
+        Param: number id
+        Return: RentalModel
+        """
+        return RentalsModel.query.filter_by(moto_id=moto_id).all()
+
+    @classmethod
     def find_active_rental_by_user_id(cls, user_id):
         """
         Finds a Rental by id
