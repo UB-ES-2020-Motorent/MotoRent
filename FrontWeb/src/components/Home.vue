@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h1> {{ message }} </h1>
     <button class="btn btn-dark btn-lg" @click="goToMotos"> MOTOS </button>
   </div>
 </template>

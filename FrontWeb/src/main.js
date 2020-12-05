@@ -8,6 +8,7 @@ import router from './router'
 
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
+Vue.prototype.$heroku = 'https://motorent-apitest.herokuapp.com'
 
 /* eslint-disable no-new */
 new Vue({
