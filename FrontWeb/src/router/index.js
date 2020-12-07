@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Motos from '@/components/Motos'
 import Users from '@/components/Users'
+import Incidencies from '@/components/Incidents'
+
 Vue.use(Router)
 
 export default new Router({
@@ -23,6 +25,11 @@ export default new Router({
       path: '/users',
       name: 'Usuaris',
       component: Users
+    },
+    {
+      path: '/incidents',
+      name: 'Incidencies',
+      component: Incidencies
     }
   ]
 })

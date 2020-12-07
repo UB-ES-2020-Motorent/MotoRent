@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Usuaris</h1>
+    <h1>Users</h1>
     <div class="container">
       <b-table striped hover :items="users" :fields="fields"></b-table>
     </div>
