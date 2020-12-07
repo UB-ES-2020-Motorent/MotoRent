@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Usuaris</h1>
     <div class="container">
-      <b-table striped hover :items="users"></b-table>
+      <b-table striped hover :items="users" :fields="fields"></b-table>
     </div>
   </div>
 </template>
@@ -13,12 +13,14 @@ export default {
   name: 'User',
   data () {
     return {
-      users: []
+      users: [],
+      // fields: ['id', 'id_bank_data', 'national_id_document', 'country', 'name', 'surname', 'mail', 'google_token', 'role']
+      fields: ['id', 'id_bank_data', 'national_id_document', 'country', 'name', 'surname', 'mail', 'role']
     }
   },
   methods: {
     getUsers () {
-      const path = `https://motorent-apitest.herokuapp.com/users?admin_code=admin_secret_code`
+      const path = this.$heroku + `/users?admin_code=admin_secret_code`
       axios.get(path)
         .then((res) => {
           this.users = res.data.users
