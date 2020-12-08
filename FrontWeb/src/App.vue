@@ -7,10 +7,10 @@
           <input type="radio" name="options" id="motosID" autocomplete="off" checked @click="goToMotos"> Motos
         </label>
         <label class="btn btn-secondary">
-          <input type="radio" name="options" id="usersID" autocomplete="off" checked @click="goToUsers"> Usuaris
+          <input type="radio" name="options" id="usersID" autocomplete="off" checked @click="goToUsers"> Users
         </label>
         <label class="btn btn-secondary">
-          <input type="radio" name="options" id="rentalsID" autocomplete="off"> Rentals
+          <input type="radio" name="options" id="IncidentsID" autocomplete="off" checked @click="goToIncidents"> Incidents
         </label>
       </div>
     </div>
@@ -27,6 +27,9 @@ export default {
     },
     goToUsers () {
       this.$router.replace({path: '/users'})
+    },
+    goToIncidents () {
+      this.$router.replace({path: '/incidents'})
     }
   }
 }
