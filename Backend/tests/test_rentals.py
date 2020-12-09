@@ -29,6 +29,6 @@ class RentalsTest(BaseTestClass):
 
     def test_get_all_rentals(self):
         request = self.client.get('/rentals')
-        self.assertEqual(request.status_code, 201)
+        self.assertEqual(request.status_code, 200)
 
 
