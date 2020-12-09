@@ -12,6 +12,7 @@ import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.model.UserInfo
+import ub.es.motorent.app.model.UserList
 import ub.es.motorent.app.view.LoginActivity
 import ub.es.motorent.app.view.LoginWaitFragment
 
@@ -105,6 +106,10 @@ class LoginPresenter (private val activity: LoginActivity) {
         } else {
             activity.goToMaps()
         }
+    }
+
+    fun getUsers(): UserList {
+        return getUsers()
     }
 
     fun logOutAccount(){

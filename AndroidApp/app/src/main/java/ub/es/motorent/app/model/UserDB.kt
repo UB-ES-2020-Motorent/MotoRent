@@ -28,6 +28,7 @@ object UserDB {
         apiService.getUsers() {
             Log.i(TAG, it.toString())
         }
+        return@getUsers
     }
 
     fun getUserByIdOrGoogleToken(id: Int? = null, google_token: String? = null, onResult: (UserInfo?) -> Unit) {
