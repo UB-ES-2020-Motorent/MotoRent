@@ -1,28 +1,18 @@
 from flask_restful import Resource, reqparse
 from models.motos import MotosModel
+from models.rentals import RentalsModel
 
 parser = reqparse.RequestParser()
-parser.add_argument('id',
-                    type=int
-                    )
-parser.add_argument('license_number',
-                    type=str
-                    )
-parser.add_argument('battery',
-                    type=int
-                    )
-parser.add_argument('available',
-                    type=str
-                    )
-parser.add_argument('license_number',
-                    type=str
-                    )
-parser.add_argument('latitude',
-                    type=float
-                    )
-parser.add_argument('longitude',
-                    type=float
-                    )
+parser.add_argument('id', type=int)
+parser.add_argument('license_number', type=str)
+parser.add_argument('battery', type=int)
+parser.add_argument('available', type=str)
+parser.add_argument('license_number', type=str)
+parser.add_argument('latitude', type=float)
+parser.add_argument('longitude', type=float)
+parser.add_argument('num_rentals', type=float)
+
+
 class Motos(Resource):
     """
     API Restful methods for Accounts
@@ -154,6 +144,36 @@ class MotosList(Resource):
                         'message': "Moto with license number [{}] Not found".format(data['license_number'])}, 404
         motos = MotosModel.all_motos()
         return {'motos': [moto.json() for moto in motos]}, 200
+
+
+class LastRentals(Resource):
+    """
+    API Restful methods for LastRentals
+    """
+
+    def get(self, id):
+        """
+        GET method
+        Return: dict (moto, rentals and users)
+        """
+        data = parser.parse_args()
+
+        if not data['num_rentals']:
+            return {'message': {
+                "num_rentals": "Specify the number of rentals you want"
+            }}, 400
+
+        moto = MotosModel.find_by_id(id)
+
+        associated_rentals = RentalsModel.find_by_moto_id(id)
+
+        if not associated_rentals:
+            return {'message': 'Moto with id [{}] has no associated rentals'.format(id)}, 404
+
+        if moto:
+            return {'last_rentals': MotosModel.find_last_rentals_info(moto, data['num_rentals'], associated_rentals)}, 200
+        else:
+            return {'message': 'Moto with id [{}] not found'.format(id)}, 404
 
 
 def str_to_bool(s):

@@ -1,4 +1,6 @@
 from db import db
+from models.rentals import RentalsModel
+from models.users import UsersModel
 
 class MotosModel(db.Model):
     """
@@ -90,6 +92,26 @@ class MotosModel(db.Model):
         """
         return MotosModel.query.filter_by(license_number=license_number).first()
 
+    @classmethod
+    def find_last_rentals_info(cls, moto, num_rentals, associated_rentals):
+        """
+        Finds n last rentals from a moto
+        Param: moto id and rentals num
+        Return: Json
+        """
+        final_list = [moto.json()]
+        count = 0
 
+        associated_rentals_json = [rental.json() for rental in associated_rentals]
+        sorted_associated_rentals = sorted(associated_rentals_json, key=lambda k: k['id'])
+        sorted_associated_rentals.reverse()
 
+        for rental in sorted_associated_rentals:
+            if(count < num_rentals):
+                count += 1
+                user = UsersModel.find_by_id(rental['user_id'])
+                final_list.append([rental, user.json(1)])
+            else:
+                break
 
+        return final_list

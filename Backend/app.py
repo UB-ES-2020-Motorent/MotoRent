@@ -5,7 +5,7 @@ from flask_restful import Api
 
 from resources.incidents import Incident, IncidentsList
 from resources.users import Users, UsersList
-from resources.motos import Motos, MotosList
+from resources.motos import Motos, MotosList, LastRentals
 from resources.map_coords import MapCoords, MapCoordsList
 from resources.rentals import Rentals, ActiveRentals, RentalsList
 from resources.bank_data import BankData, BankDataList
@@ -36,6 +36,7 @@ api.add_resource(Users, '/user/<string:user_id>', '/user')
 api.add_resource(UsersList, '/users')
 
 api.add_resource(MotosList, '/motos')
+api.add_resource(LastRentals, '/lastrentals/<int:id>')
 api.add_resource(Motos, '/moto', '/moto/<int:id>', '/moto/<string:license_number>')
 
 api.add_resource(MapCoords, '/mapcoord')
