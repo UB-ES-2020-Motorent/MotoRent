@@ -2,7 +2,7 @@ from tests import BaseTestClass
 import json
 
 
-class MyTestCase(BaseTestClass):
+class UsersTest(BaseTestClass):
 
     def test_post_user(self):
         sent = {'mail': 'joan1123@gmail.com',
@@ -58,9 +58,9 @@ class MyTestCase(BaseTestClass):
 
     def test_delete_user(self):
         id = 1
-        request = self.client.delete('/user/' + str(id) + '?admin_code=admin_secret_code')
+        request = self.client.delete('/moto/' + str(id))
         self.assertEqual(request.status_code, 200)
-        request = self.client.get('/user?id=' + str(id) + '&admin_code=admin_secret_code')
+        request = self.client.get('/moto/' + str(id))
         self.assertEqual(request.status_code, 404)
 
 
