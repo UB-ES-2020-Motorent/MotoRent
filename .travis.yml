@@ -3,6 +3,8 @@ jobs:
     - language: python
       python:
         - "3.6"      # current default Python on Travis CI
+      before_install:
+        - cd Backend
       install:
         - pip install -r Deployment/requirements.txt
       script:
