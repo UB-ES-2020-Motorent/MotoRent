@@ -30,7 +30,6 @@ class UsersTest(BaseTestClass):
         google_token = 'juy65rfty76Hg65FVytfGGDD63ccxeDFg'
         request = self.client.get('/user?google_token=' + google_token + '&admin_code=admin_secret_code')
         my_json = json.loads(request.data.decode('utf8').replace("'", '"'))
-        print(my_json)
         google_token_requested = my_json['user']['google_token']
         self.assertEqual(request.status_code, 200)
         self.assertEqual(google_token, google_token_requested)
@@ -48,7 +47,6 @@ class UsersTest(BaseTestClass):
         new_name = 'Johan'
         request = self.client.put('user/' + str(id) +'?admin_code=admin_secret_code&name=' + new_name)
         my_json = json.loads(request.data.decode('utf8').replace("'", '"'))
-        print(my_json)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(new_name, my_json['user']['name'])
         request = self.client.get('/user?id=' + str(id) + '&admin_code=admin_secret_code')

@@ -142,7 +142,6 @@ class MotosList(Resource):
         Return: dict (accounts)
         """
         data = parser.parse_args()
-        print(data)
         if data['available']:
             available = str_to_bool(data['available'])
             motos = MotosModel.get_available_motos(available=available)
