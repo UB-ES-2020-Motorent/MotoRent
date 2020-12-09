@@ -6,7 +6,8 @@ jobs:
       install:
         - pip install -r Deployment/requirements.txt
       script:
-        - python -c "print ('Python is running in Travis.')"
+        - cd Backend
+        - python -m unittest
       branches:
       only:
       - main
