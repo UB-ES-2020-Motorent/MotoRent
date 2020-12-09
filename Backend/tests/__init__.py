@@ -3,6 +3,8 @@ from app import app
 from db import db
 from models.users import UsersModel
 from models.motos import MotosModel
+from models.rentals import RentalsModel
+from datetime import datetime
 
 class BaseTestClass(unittest.TestCase):
     def setUp(self):
@@ -14,6 +16,7 @@ class BaseTestClass(unittest.TestCase):
             db.create_all()
             self.init_users()
             self.init_motos()
+            self.init_rentals()
 
     def tearDown(self):
         with self.app.app_context():
@@ -31,6 +34,15 @@ class BaseTestClass(unittest.TestCase):
         user1.surname = 'Martin'
         user1.national_id_document = '23432123P'
         user1.save_to_db()
+        user2 = UsersModel(mail='joanmartin456@gmail.com',
+                           google_token='jug65FVytfGGDD63ccxeDFg',
+                           role=0)
+        user2.country = 'España'
+        user2.id_bank_data = 6543217890123456
+        user2.name = 'Juan'
+        user2.surname = 'Martínez'
+        user2.national_id_document = '23845467M'
+        user2.save_to_db()
 
     def init_motos(self):
         moto1 = MotosModel('1234AAA', 99, 42.1, 2.1)
@@ -41,3 +53,7 @@ class BaseTestClass(unittest.TestCase):
         moto2.save_to_db()
         moto3.save_to_db()
         moto4.save_to_db()
+
+    def init_rentals(self):
+        rental1 = RentalsModel(1, 1, datetime.now().isoformat())
+        rental1.save_to_db()
