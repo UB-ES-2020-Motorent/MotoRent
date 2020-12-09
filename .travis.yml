@@ -5,8 +5,6 @@ jobs:
         - "3.6"      # current default Python on Travis CI
       install:
         - pip install -r Deployment/requirements.txt
-     before_script:
-        - cd Backend
       script:
         - python -m unittest
       branches:
