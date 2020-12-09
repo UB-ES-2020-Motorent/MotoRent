@@ -15,11 +15,15 @@
   "dependencies": {
     "axios": "^0.21.0",
     "bootstrap-vue": "^2.20.1",
+    "flush-promises": "^1.0.2",
+    "handlebars": "^4.5.0",
     "jquery": "^1.9.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@vue/test-utils": "^1.1.1",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
@@ -63,7 +67,7 @@
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
-    "vue-jest": "^1.0.2",
+    "vue-jest": "^1.4.0",
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",

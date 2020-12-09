@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <h1>Motos</h1>
+    <h1 data-test="motos-title">Motos</h1>
     <div class="container">
-      <b-table responsive striped hover :items="motos" :fields="fields">
+      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields">
         <template #cell(available)="row">
           <b-button :variant="availableButton(row.value)" size="sm" @click="putMotoAvailable(row.item.id, row.value)"> {{row.value}} </b-button>
         </template>
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id, $event.target)"> json </button>
-          <button class="btn btn-secondary btn-sm" disabled @click="modifyMoto(row.item, $event.target)"> modify </button>
-          <button class="btn btn-danger btn-sm" @click="deleteMoto(row.item.id, $event.target)"> X </button>
+          <button class="btn btn-secondary btn-sm" @click="modifyMoto(row.item, $event.target)"> modify </button>
+          <button class="btn btn-danger btn-sm" @click="deleteMoto(row.item.id)"> X </button>
         </template>
       </b-table>
       <button class="btn btn-success btn-md" @click="addMoto($event.target)"> Add Moto </button>
@@ -238,19 +238,6 @@ export default {
           this.getMotos()
         }) */
     },
-    putMotoAvailable (id, available) {
-      const path = this.$heroku + `/moto/${id}`
-      const param = {'available': !available}
-      axios.put(path, param)
-        .then((res) => {
-          console.log(res)
-          this.getMotos()
-        })
-        .catch((error) => {
-          console.error(error)
-          this.getMotos()
-        })
-    },
     resetAddMotoModal () {
       this.addMotoModal = {
         id: 'add-moto-modal',
@@ -268,6 +255,19 @@ export default {
         latitude_state: false,
         longitude_state: false
       }
+    },
+    putMotoAvailable (id, available) {
+      const path = this.$heroku + `/moto/${id}`
+      const param = {'available': !available}
+      axios.put(path, param)
+        .then((res) => {
+          console.log(res)
+          this.getMotos()
+        })
+        .catch((error) => {
+          console.error(error)
+          this.getMotos()
+        })
     },
     availableButton (available) {
       if (available) { return 'outline-success' } else { return 'outline-danger' }
