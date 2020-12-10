@@ -4,6 +4,9 @@ import Home from '@/components/Home'
 import Motos from '@/components/Motos'
 import Users from '@/components/Users'
 import Incidencies from '@/components/Incidents'
+import Bankdatas from '@/components/Bankdatas'
+import Payments from '@/components/Payments'
+import Moto from '@/components/Moto'
 
 Vue.use(Router)
 
@@ -30,6 +33,21 @@ export default new Router({
       path: '/incidents',
       name: 'Incidencies',
       component: Incidencies
+    },
+    {
+      path: '/bankdatas',
+      name: 'BankDatas',
+      component: Bankdatas
+    },
+    {
+      path: '/payments',
+      name: 'Payments',
+      component: Payments
+    },
+    {
+      path: '/moto/:id',
+      name: 'Moto',
+      component: Moto
     }
   ]
 })
