@@ -18,7 +18,7 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'Incidence',
+  name: 'Incident',
   data () {
     return {
       incidents: [],
