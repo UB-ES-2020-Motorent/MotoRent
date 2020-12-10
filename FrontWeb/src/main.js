@@ -10,6 +10,8 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 Vue.prototype.$heroku = 'https://motorent-apitest.herokuapp.com'
 
+Vue.use(require('vue-moment'))
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
