@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Motos from '@/components/Motos'
 import Users from '@/components/Users'
-import Incidencies from '@/components/Incidents'
+import Rentals from '@/components/Rentals'
+import Incidents from '@/components/Incidents'
 
 Vue.use(Router)
 
@@ -23,13 +24,18 @@ export default new Router({
     },
     {
       path: '/users',
-      name: 'Usuaris',
+      name: 'Users',
       component: Users
     },
     {
+      path: '/rentals',
+      name: 'Rentalss',
+      component: Rentals
+    },
+    {
       path: '/incidents',
-      name: 'Incidencies',
-      component: Incidencies
+      name: 'Incidents',
+      component: Incidents
     }
   ]
 })

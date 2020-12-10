@@ -88,15 +88,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onProviderEnabled(p0: String?) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onProviderDisabled(p0: String?) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     /**
