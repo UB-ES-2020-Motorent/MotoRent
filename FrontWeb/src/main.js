@@ -24,6 +24,7 @@ const configOptions = {
 }
 
 firebase.initializeApp(configOptions)
+Vue.use(require('vue-moment'))
 
 /* eslint-disable no-new */
 new Vue({

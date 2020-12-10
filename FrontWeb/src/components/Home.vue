@@ -1,20 +1,14 @@
 <template>
   <div id="app">
-    <button class="btn btn-dark btn-lg" @click="goToMotos"> MOTOS </button>
+    <h1> Welcome to MotoRent DataBase Control Center </h1>
+    <img src="../assets/moto_toast.png" height="250">
   </div>
 </template>
 
 <script>
 export default {
   name: 'Home',
-  data () {
-    return {
-    }
-  },
   methods: {
-    goToMotos () {
-      this.$router.replace({path: '/motos'})
-    }
   }
 }
 </script>

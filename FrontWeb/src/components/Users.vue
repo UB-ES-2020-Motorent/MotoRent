@@ -88,9 +88,6 @@
               required
             ></b-form-input>
           </b-form-group>
-          {{this.addUserModal.user.national_id_document}}
-          {{addUserModal.user.country}}
-          {{addUserModal.user.name}}
         </form>
       </b-modal>
     </div>
