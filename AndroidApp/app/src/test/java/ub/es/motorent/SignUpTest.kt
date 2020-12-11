@@ -7,7 +7,7 @@ import ub.es.motorent.app.view.SignUpActivity
 
 
 class SignUpTest {
-
+    
     val presenter = SignUpPresenter(activity = SignUpActivity())
 
     @Test fun checkNumberInStringTest(){
@@ -29,9 +29,15 @@ class SignUpTest {
         assertEquals(presenter.checkPassword("qwerty1", "qwer"), false)
     }
 */
-     /*@Test fun checkNumberInStringTest(){
-        assertEquals(
-     }*/
+    @Test
+    fun createAccount() {
+
+    }
+
+    @Test
+    fun checkPassword() {
+
+    }
 
 
 }

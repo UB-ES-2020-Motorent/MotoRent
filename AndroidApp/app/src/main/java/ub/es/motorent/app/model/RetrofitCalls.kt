@@ -166,9 +166,9 @@ interface RestApi {
         @Query("user_id") user_id:Int?
     ): Call<RentalJson>
 
-    @GET("rental")
+    @GET("rental/{id}")
     fun getRentalById(
-        @Query("id") id:Int
+        @Path("id") id:Int
     ): Call<RentalJson>
 
     @GET("activerental/{user_id}")
@@ -216,6 +216,39 @@ interface RestApi {
     fun getAllIncidents(
 
     ): Call<IncidencesList>
+
+    /******************** PAYMENTS ********************/
+
+    @GET("payments")
+    fun getAllPayments(
+
+    ): Call<PaymentsList>
+
+    @GET("payments")
+    fun getPaymentsByUserId(
+        @Query("user_id") moto_id: Int?
+    ):Call<PaymentsList>
+
+    @GET("payments")
+    fun getPaymentsByMotoId(
+        @Query("moto_id") moto_id: Int?
+    ):Call<PaymentsList>
+
+    @GET("payment")
+    fun getPaymentById(
+        @Path("payment_id") id: Int
+    ):Call<PaymentsJson>
+
+    @POST("payment")
+    fun addPayment(
+        @Query("id_rental") rental_id:Int,
+        @Query("id_bank_data") id_bank_data:Int,
+        @Query("payment_import") payment_import:Float,
+        @Query("payment_date") payment_date:String?
+
+    ): Call<PaymentsJson>
+
+
 }
 
 class RestApiService {
@@ -730,7 +763,87 @@ class RestApiService {
         )
     }
 
+    /******************** PAYMENTS ********************/
 
+    fun getAllPayments(onResult: (PaymentsList?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getAllPayments().enqueue(
+            object : Callback<PaymentsList> {
+                override fun onFailure(call: Call<PaymentsList>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getAllPayments: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<PaymentsList>, response: Response<PaymentsList>) {
+                    logResult(response, "getAllPayments: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getPaymentsByUserId(user_id: Int,  onResult: (PaymentsList?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getPaymentsByUserId(user_id).enqueue(
+            object : Callback<PaymentsList> {
+                override fun onFailure(call: Call<PaymentsList>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getPaymentsByUserId: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<PaymentsList>, response: Response<PaymentsList>) {
+                    logResult(response, "getPaymentsByUserId: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getPaymentsByMotoId(moto_id: Int, onResult: (PaymentsList?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getPaymentsByUserId(moto_id).enqueue(
+            object : Callback<PaymentsList> {
+                override fun onFailure(call: Call<PaymentsList>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getPaymentsByMotoId: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<PaymentsList>, response: Response<PaymentsList>) {
+                    logResult(response, "getPaymentsByMotoId: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun getPaymentById(id: Int, onResult: (PaymentsJson?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getPaymentById(id).enqueue(
+            object : Callback<PaymentsJson> {
+                override fun onFailure(call: Call<PaymentsJson>, t: Throwable) {
+                    Log.e(TAG, "onFailure - getPaymentById: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<PaymentsJson>, response: Response<PaymentsJson>) {
+                    logResult(response, "getPaymentById: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
+    fun addPayment(id_rental: Int, id_bank_data: Int, payment_import: Float, payment_date:String?, onResult: (PaymentsJson?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.addPayment(id_rental, id_bank_data, payment_import, payment_date).enqueue(
+            object : Callback<PaymentsJson> {
+                override fun onFailure(call: Call<PaymentsJson>, t: Throwable) {
+                    Log.e(TAG, "onFailure - addPayment: ", t)
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<PaymentsJson>, response: Response<PaymentsJson>) {
+                    logResult(response, "addPayment: ")
+                    onResult(response.body())
+                }
+            }
+        )
+    }
 
     companion object {
         private const val ADMIN_CODE = "admin_secret_code"
