@@ -1,6 +1,8 @@
 from flask_restful import Resource, reqparse
 from models.motos import MotosModel
 from models.rentals import RentalsModel
+from models.users import auth
+from flask import g
 
 parser = reqparse.RequestParser()
 parser.add_argument('id', type=int)
@@ -17,6 +19,7 @@ class Motos(Resource):
     """
     API Restful methods for Accounts
     """
+
     def get(self, id):
         """
         GET method
@@ -31,7 +34,7 @@ class Motos(Resource):
         else:
             return {'message': "Moto with id [{}] Not found.".format(id)}, 404
 
-
+    @auth.login_required(role='admin')
     def post(self):
         """
         POST method
@@ -74,6 +77,7 @@ class Motos(Resource):
         except:
             return {"message": "Something went wrong"}, 500
 
+    @auth.login_required(role='admin')
     def put(self, id):
         """
         PUT method
@@ -103,6 +107,7 @@ class Motos(Resource):
         except:
             return {"message": "Error Description"}, 500
 
+    @auth.login_required(role='admin')
     def delete(self, id):
         """
         DELETE method
@@ -150,6 +155,7 @@ class LastRentals(Resource):
     API Restful methods for LastRentals
     """
 
+    @auth.login_required(role='admin')
     def get(self, id):
         """
         GET method

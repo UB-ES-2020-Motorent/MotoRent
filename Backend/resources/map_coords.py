@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 from models.map_coords import MapCoordsModel
+from models.users import auth
+from flask import g
 
 parser = reqparse.RequestParser()
 parser.add_argument('from_latitude', type=str, required=False, help="Origin latitude, This field cannot be left blank")
@@ -41,6 +43,7 @@ class MapCoords(Resource):
             return {'message': "Coords with origin Lat[{}] - Long[{}] Not found".format(
                 data['from_latitude'], data['from_longitude'])}, 404
 
+    @auth.login_required(role='admin')
     def post(self):
         """
         POST method
@@ -84,6 +87,7 @@ class MapCoords(Resource):
         except:
             return {"message": "Error Description"}, 500
 
+    @auth.login_required(role='admin')
     def put(self):
         """
         PUT method
@@ -117,6 +121,7 @@ class MapCoords(Resource):
         except:
             return {"message": "Error Description"}, 500
 
+    @auth.login_required(role='admin')
     def delete(self):
         """
         DELETE method
@@ -155,6 +160,7 @@ class MapCoordsList(Resource):
     """
     API Restful methods for MotoCoordsList
     """
+
     def get(self):
         """
         GET method
