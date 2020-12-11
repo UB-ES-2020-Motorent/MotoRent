@@ -2,7 +2,7 @@
   <div id="app">
     <h1 data-test="motos-title">Motos</h1>
     <div class="container">
-      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields">
+      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields" sort-by="id">
         <template #cell(available)="row">
           <b-button :variant="availableButton(row.value)" size="sm" @click="putMotoAvailable(row.item.id, row.value)"> {{row.value}} </b-button>
         </template>
