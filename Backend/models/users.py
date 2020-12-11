@@ -27,29 +27,23 @@ class UsersModel(db.Model):
         self.role = role
         self.id_bank_data = None
 
-    def json(self, role):
+    def json(self):
         """
         Converts Users to JSON and returns it
         Return: dict
         """
-        if role == 1:
-            return {
-                'id': self.id,
-                'id_bank_data': self.id_bank_data,
-                'national_id_document': self.national_id_document,
-                'country': self.country,
-                'name': self.name,
-                'surname': self.surname,
-                'mail': self.mail,
-                'google_token': self.google_token,
-                'role': self.role
-            }
-        else:
-            return {
-                'name': self.name,
-                'surname': self.surname,
-                'country': self.country
-            }
+        return {
+            'id': self.id,
+            'id_bank_data': self.id_bank_data,
+            'national_id_document': self.national_id_document,
+            'country': self.country,
+            'name': self.name,
+            'surname': self.surname,
+            'mail': self.mail,
+            'google_token': self.google_token,
+            'role': self.role
+        }
+
 
     def save_to_db(self):
         """
