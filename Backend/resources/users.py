@@ -13,7 +13,6 @@ parser.add_argument('google_token', type=str, required=False, help="Associated t
 parser.add_argument('role', type=str, required=False, help="Account role, This field cannot be left blank")
 parser.add_argument('id_bank_data', type=str, required=False, help="Account bank data id, This field cannot be left "
                                                                    "blank")
-parser.add_argument('admin_code', type=str, required=False, help="Account code for admins for special post")
 
 
 class Users(Resource):
@@ -33,7 +32,7 @@ class Users(Resource):
 
         arguments = sum([1 if value else 0 for value in data.values()])
 
-        if arguments > 1 and not data['admin_code']:
+        if arguments > 1:
             return {'message': "Please filter by only one feature"}, 400
         if arguments <= 0:
             return {'message': "Please filter by at least one feature: id or google_token"}, 400
@@ -48,13 +47,7 @@ class Users(Resource):
             return {'message': "Please filter by a valid feature: id or google_token"}, 400
 
         if user:
-            if not data['admin_code']:
-                return {'user': user.json(0)}, 200
-            else:
-                if data['admin_code'] != 'admin_secret_code':
-                    return {'message': "Wrong admin code"}, 400
-                else:
-                    return {'user': user.json(1)}, 200
+            return {'user': user.json()}, 200
         else:
             return {'message': "User with {} [{}] Not found".format(search_by[0], search_by[1])}, 404
 
@@ -87,21 +80,15 @@ class Users(Resource):
         user = UsersModel(google_token=data['google_token'], mail=data['mail'], role=data['role'])
 
         if data['role'] != '0':
-            if not data['admin_code']:
-                return {"message": "You need admin code to create an user with this role"}, 400
-            else:
-                if data['admin_code'] != 'admin_secret_code':
-                    return {"message": "Wrong admin code"}, 400
-                else:
-                    try:
-                        user.save_to_db()
-                        return {'user': UsersModel.find_by_mail(user.mail).json(1)}, 201
-                    except:
-                        return {"message": "Error Description"}, 500
+            try:
+                user.save_to_db()
+                return {'user': UsersModel.find_by_mail(user.mail).json()}, 201
+            except:
+                return {"message": "Error Description"}, 500
         else:
             try:
                 user.save_to_db()
-                return {'user': UsersModel.find_by_mail(user.mail).json(1)}, 201
+                return {'user': UsersModel.find_by_mail(user.mail).json()}, 201
             except:
                 return {"message": "Error Description"}, 500
 
@@ -114,43 +101,37 @@ class Users(Resource):
         """
         data = parser.parse_args()
 
-        if not data['admin_code']:
-            return {"message": "You need an admin code to modify user data"}, 400
-        else:
-            if data['admin_code'] != 'admin_secret_code':
-                return {"message": "Wrong admin code"}, 400
-            else:
-                user = UsersModel.find_by_id(user_id=user_id)
+        user = UsersModel.find_by_id(user_id=user_id)
 
-                if data['name']:
-                    user.name = data["name"]
+        if data['name']:
+            user.name = data["name"]
 
-                if data['surname']:
-                    user.surname = data["surname"]
+        if data['surname']:
+            user.surname = data["surname"]
 
-                if data['national_id_document']:
-                    user.national_id_document = data["national_id_document"]
+        if data['national_id_document']:
+            user.national_id_document = data["national_id_document"]
 
-                if data['country']:
-                    user.country = data["country"]
+        if data['country']:
+            user.country = data["country"]
 
-                if data['mail']:
-                    user.mail = data["mail"]
+        if data['mail']:
+            user.mail = data["mail"]
 
-                if data['google_token']:
-                    user.google_token = data["google_token"]
+        if data['google_token']:
+            user.google_token = data["google_token"]
 
-                if data['role']:
-                    user.role = data["role"]
+        if data['role']:
+            user.role = data["role"]
 
-                if data['id_bank_data']:
-                    user.id_bank_data = data["id_bank_data"]
+        if data['id_bank_data']:
+            user.id_bank_data = data["id_bank_data"]
 
-                try:
-                    user.save_to_db()
-                    return {'user': UsersModel.find_by_id(user_id).json(1)}, 200
-                except:
-                    return {"message": "Error Description"}, 500
+        try:
+            user.save_to_db()
+            return {'user': UsersModel.find_by_id(user_id).json()}, 200
+        except:
+            return {"message": "Error Description"}, 500
 
     def delete(self, user_id):
         """
@@ -164,21 +145,15 @@ class Users(Resource):
 
         user = UsersModel.find_by_id(user_id=user_id)
 
-        if not data['admin_code']:
-            return {"message": "You need an admin code to delete an user"}, 400
+        if user:
+            try:
+                user.delete_from_db()
+                return {'message': "User with id [{}] and all associated info deleted".format(
+                    user_id)}, 200
+            except:
+                return {"message": "Error Description"}, 500
         else:
-            if data['admin_code'] != 'admin_secret_code':
-                return {"message": "Wrong admin code"}, 400
-            else:
-                if user:
-                    try:
-                        user.delete_from_db()
-                        return {'message': "User with id [{}] and all associated info deleted".format(
-                            user_id)}, 200
-                    except:
-                        return {"message": "Error Description"}, 500
-                else:
-                    return {'message': "User with id [{}] Not found".format(user_id)}, 404
+            return {'message': "User with id [{}] Not found".format(user_id)}, 404
 
 
 class UsersList(Resource):
@@ -194,10 +169,4 @@ class UsersList(Resource):
 
         users = UsersModel.all_users()
 
-        if not data['admin_code']:
-            return {'users': [user.json(0) for user in users]}, 200
-        else:
-            if data['admin_code'] != 'admin_secret_code':
-                return {'message': "Wrong admin code"}, 400
-            else:
-                return {'users': [user.json(1) for user in users]}, 200
+        return {'users': [user.json() for user in users]}, 200

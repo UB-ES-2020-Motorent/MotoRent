@@ -13,7 +13,7 @@ class GsonTest {
         val gson = Gson()
         val userInfo = UserInfo(1, "judit@motorent.com", "5555", 0, null)
         val jsonString = gson.toJson(userInfo)
-        Assert.assertEquals(jsonString, """{"id":1,"mail":"judit@motorent.com","google_token":"5555","role":0}""")//,"admin_code":null}""")
+        Assert.assertEquals(jsonString, """{"id":1,"mail":"judit@motorent.com","google_token":"5555","role":0}""")}""")
     }
 
     @Test
