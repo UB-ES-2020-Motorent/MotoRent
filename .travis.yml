@@ -8,6 +8,7 @@ jobs:
       script:
         - cd Backend
         - python -m unittest
+        - cd ..
       branches:
       only:
       - main

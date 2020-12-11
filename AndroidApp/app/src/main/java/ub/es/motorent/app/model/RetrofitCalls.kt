@@ -18,15 +18,13 @@ interface RestApi {
     fun addUser(
                 @Query("mail") mail:String?,
                 @Query("google_token") google_token:String,
-                @Query("role") role:Int,
-                @Query("admin_code") admin_code:String?
+                @Query("role") role:Int
                 ): Call<UserJson>
 
     @GET("user")
     fun getUserByIdOrGoogleToken(
                                 @Query("id") id:Int?,
-                                @Query("google_token") google_token:String?,
-                                @Query("admin_code") admin_code:String?
+                                @Query("google_token") google_token:String?
                                 ): Call<UserJson>
 
     @PUT("user/{id}")
@@ -39,18 +37,16 @@ interface RestApi {
                     @Query("mail") mail:String?,
                     @Query("google_token") google_token:String?,
                     @Query("role") role:Int?,
-                    @Query("id_bank_data") id_bank_data:Int?,
-                    @Query("admin_code") admin_code:String
+                    @Query("id_bank_data") id_bank_data:Int?
                     ): Call<UserJson>
 
     @DELETE("user/{id}")
     fun deleteUser(
-                    @Path("id") id: Int,
-                    @Query("admin_code") admin_code:String
+                    @Path("id") id: Int
                     ): Call<UserJson>
 
     @GET("users")
-    fun getUsers(@Query("admin_code") admin_code:String) : Call<UserList>
+    fun getUsers() : Call<UserList>
 
     /******************** MOTOS ********************/
     @POST("moto")
@@ -86,15 +82,13 @@ interface RestApi {
                     @Query("from_latitude") from_latitude:Float,
                     @Query("from_longitude") from_longitude:Float,
                     @Query("to_latitude") to_latitude:Float,
-                    @Query("to_longitude") to_longitude:Float,
-                    @Query("admin_code") admin_code:String
+                    @Query("to_longitude") to_longitude:Float
                     ): Call<MapCoordJson>
 
     @GET("mapcoord")
     fun getMapCoordsByPair(
                             @Query("from_latitude") from_latitude:Float,
-                            @Query("from_longitude") from_longitude:Float,
-                            @Query("admin_code") admin_code:String
+                            @Query("from_longitude") from_longitude:Float
                             ): Call<MapCoordJson>
 
     @PUT("mapcoord")
@@ -102,19 +96,17 @@ interface RestApi {
                                 @Query("from_latitude") from_latitude:Float,
                                 @Query("from_longitude") from_longitude:Float,
                                 @Query("to_latitude") to_latitude:Float?,
-                                @Query("to_longitude") to_longitude:Float?,
-                                @Query("admin_code") admin_code:String
+                                @Query("to_longitude") to_longitude:Float?
                                 ): Call<MapCoordJson>
 
     @DELETE("mapcoord")
     fun deleteMapCoordByOrigin(
                                 @Query("from_latitude") from_latitude:Float,
-                                @Query("from_longitude") from_longitude:Float,
-                                @Query("admin_code") admin_code:String
+                                @Query("from_longitude") from_longitude:Float
                                 ): Call<MapCoordJson>
 
     @GET("mapcoords")
-    fun getAllMapCoords(@Query("admin_code") admin_code:String) : Call<MapCoordList>
+    fun getAllMapCoords() : Call<MapCoordList>
 
     /******************** BANKDATA ********************/
     @POST("bankdata")
@@ -223,7 +215,7 @@ class RestApiService {
     /******************** USERS ********************/
     fun getUsers(onResult: (UserList?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.getUsers(ADMIN_CODE).enqueue(
+        retrofit.getUsers().enqueue(
             object : Callback<UserList> {
                 override fun onFailure(call: Call<UserList>, t: Throwable) {
                     Log.e(TAG, "onFailure - getUsers : ", t)
@@ -239,7 +231,7 @@ class RestApiService {
 
     fun getUserByIdOrGoogleToken(id: Int?, google_token: String?, onResult: (UserJson?) -> Unit) {
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.getUserByIdOrGoogleToken(id, google_token, ADMIN_CODE).enqueue(
+        retrofit.getUserByIdOrGoogleToken(id, google_token).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - getUserByIdOrGoogleToken: ", t)
@@ -255,7 +247,7 @@ class RestApiService {
 
     fun addUser(mail:String?, google_token:String, role:Int, onResult: (UserJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.addUser(mail, google_token, role, ADMIN_CODE).enqueue(
+        retrofit.addUser(mail, google_token, role).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - addUser: ", t)
@@ -274,7 +266,7 @@ class RestApiService {
                    id_bank_data:Int?, onResult: (UserJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
         retrofit.updateUser(id, name, surname, national_id_document, country, mail, google_token,
-                            role, id_bank_data, ADMIN_CODE).enqueue(
+                            role, id_bank_data).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - updateUser: ", t)
@@ -290,7 +282,7 @@ class RestApiService {
 
     fun deleteUser(id: Int, onResult: (UserJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.deleteUser(id, ADMIN_CODE).enqueue(
+        retrofit.deleteUser(id).enqueue(
             object : Callback<UserJson> {
                 override fun onFailure(call: Call<UserJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - deleteUser: ", t)
@@ -389,7 +381,7 @@ class RestApiService {
     /******************** MAPCOORDS ********************/
     fun getAllMapCoords(onResult: (MapCoordList?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.getAllMapCoords(ADMIN_CODE).enqueue(
+        retrofit.getAllMapCoords().enqueue(
             object : Callback<MapCoordList> {
                 override fun onFailure(call: Call<MapCoordList>, t: Throwable) {
                     Log.e(TAG, "onFailure - getAllMapCoords", t)
@@ -407,7 +399,7 @@ class RestApiService {
 
     fun getMapCoordsByPair(from_longitude: Float, from_latitude: Float, onResult: (MapCoordJson?) -> Unit) {
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.getMapCoordsByPair(from_longitude, from_latitude, ADMIN_CODE).enqueue(
+        retrofit.getMapCoordsByPair(from_longitude, from_latitude).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - getMapCoordsByPair", t)
@@ -423,7 +415,7 @@ class RestApiService {
 
     fun addMapCoords(from_longitude: Float, from_latitude: Float, to_longitude: Float, to_latitude: Float, onResult: (MapCoordJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.addMapCoords(from_longitude, from_latitude, to_longitude, to_latitude, ADMIN_CODE).enqueue(
+        retrofit.addMapCoords(from_longitude, from_latitude, to_longitude, to_latitude).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - addMapCoords: ", t)
@@ -439,7 +431,7 @@ class RestApiService {
 
     fun updateMapCoordsByOrigin(from_longitude: Float, from_latitude: Float, to_longitude: Float?, to_latitude: Float?, onResult: (MapCoordJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.updateMapCoordsByOrigin(from_longitude, from_latitude, to_longitude, to_latitude, ADMIN_CODE).enqueue(
+        retrofit.updateMapCoordsByOrigin(from_longitude, from_latitude, to_longitude, to_latitude).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - updateMapCoordsByOrigin: ", t)
@@ -455,7 +447,7 @@ class RestApiService {
 
     fun deleteMapCoordByOrigin(from_longitude: Float, from_latitude: Float, onResult: (MapCoordJson?) -> Unit){
         val retrofit = ServiceBuilder.buildService(RestApi::class.java)
-        retrofit.deleteMapCoordByOrigin(from_longitude, from_latitude, ADMIN_CODE).enqueue(
+        retrofit.deleteMapCoordByOrigin(from_longitude, from_latitude).enqueue(
             object : Callback<MapCoordJson> {
                 override fun onFailure(call: Call<MapCoordJson>, t: Throwable) {
                     Log.e(TAG, "onFailure - deleteMapCoordByOrigin: ", t)
@@ -733,7 +725,6 @@ class RestApiService {
 
 
     companion object {
-        private const val ADMIN_CODE = "admin_secret_code"
         private const val TAG = "Retrofit"
     }
 
