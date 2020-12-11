@@ -2,12 +2,13 @@
   <div id="app">
     <h1 data-test="motos-title">Motos</h1>
     <div class="container">
-      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields">
+      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields" sort-by="id">
         <template #cell(available)="row">
           <b-button :variant="availableButton(row.value)" size="sm" @click="putMotoAvailable(row.item.id, row.value)"> {{row.value}} </b-button>
         </template>
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id, $event.target)"> json </button>
+          <button class="btn btn-warning btn-sm" @click="goToMoto(row.item.id, $event.target)"> moto </button>
           <button class="btn btn-secondary btn-sm" @click="modifyMoto(row.item, $event.target)"> modify </button>
           <button class="btn btn-danger btn-sm" @click="deleteMoto(row.item.id)"> X </button>
         </template>
@@ -271,6 +272,9 @@ export default {
     },
     availableButton (available) {
       if (available) { return 'outline-success' } else { return 'outline-danger' }
+    },
+    goToMoto (id, button) {
+      this.$router.replace({path: `/moto/${id}`})
     },
     info (item, id, button) {
       this.infoModal.title = `Moto Detail of moto ${id}`

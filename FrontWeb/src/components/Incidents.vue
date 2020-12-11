@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Incidents</h1>
     <div class="container">
-      <b-table hover :items="incidents" :fields="fields">
+      <b-table hover :items="incidents" :fields="fields" :filter="filter" :filter-included-fields="filterOn">
         <template #cell(comment)="row">
           <b-button size="sm" @click="info(row.item.comment, row.item.id, $event.target)" class="mr-1">Comment user {{row.item.id}}</b-button>
         </template>
@@ -19,6 +19,10 @@
 import axios from 'axios'
 export default {
   name: 'Incident',
+  computed: {
+    filter () { if (this.motoIdId != null) { return this.motoIdId } else { return null } },
+    filterOn () { return ['moto_id'] }
+  },
   data () {
     return {
       incidents: [],
@@ -27,7 +31,8 @@ export default {
         id: 'info-modal',
         title: '',
         content: ''
-      }
+      },
+      motoIdId: null
     }
   },
   methods: {
@@ -56,6 +61,8 @@ export default {
   },
   created () {
     this.getIncidents()
+    const id = this.$route.params.id
+    if (id != null) { this.motoIdId = id.toString() }
   }
 }
 </script>

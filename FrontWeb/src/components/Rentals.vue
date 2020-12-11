@@ -2,7 +2,7 @@
   <div id="app">
     <h1 data-test="rentals-title">Rentals</h1>
     <div class="container">
-      <b-table data-test="rentals-b-table" responsive striped hover :items="rentals" :fields="fields">
+      <b-table data-test="rentals-b-table" striped hover :items="rentals" :fields="fields" :filter="filter" :filter-included-fields="filterOn" sort-by="id">
         <template #cell(actions)="row">
             <b-button variant="secondary" size="sm" @click="row.toggleDetails"> details </b-button>
         </template>
@@ -51,6 +51,10 @@ import axios from 'axios'
 import moment from 'moment'
 export default {
   name: 'Rentals',
+  computed: {
+    filter () { if (this.motoIdId != null) { return this.motoIdId } else { return null } },
+    filterOn () { return ['moto_id'] }
+  },
   data () {
     return {
       rentals: [],
@@ -66,6 +70,7 @@ export default {
         title: '',
         content: ''
       },
+      motoIdId: null,
       isPostNotPut: true
     }
   },
@@ -138,6 +143,8 @@ export default {
   },
   created () {
     this.getRentals()
+    const id = this.$route.params.id
+    if (id != null) { this.motoIdId = id.toString() }
   }
 }
 </script>
