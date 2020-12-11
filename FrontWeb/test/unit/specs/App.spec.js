@@ -6,6 +6,10 @@ import Home from '@/components/Home'
 import Motos from '@/components/Motos'
 import Users from '@/components/Users'
 import router from '@/router/index'
+import BankDatas from '@/components/Bankdatas'
+import Payments from '@/components/Payments'
+import Rentals from '@/components/Rentals'
+import Incidents from '@/components/Incidents'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -55,6 +59,46 @@ describe('App', () => {
         console.log('Catch an error: ', e)
       }
       expect(wrapper.findComponent(Users).exists()).toBe(true)
+      expect(wrapper.findComponent(Home).exists()).toBe(false)
+    });
+    it('buttons routes /rentals correctly', async () => {
+      const wrapper = mount(App, { localVue, router });
+      try{
+        await wrapper.find('input[id="rentalsID"]').trigger('click')
+      } catch(e) {
+        console.log('Catch an error: ', e)
+      }
+      expect(wrapper.findComponent(Rentals).exists()).toBe(true)
+      expect(wrapper.findComponent(Home).exists()).toBe(false)
+    });
+    it('buttons routes /incidents correctly', async () => {
+      const wrapper = mount(App, { localVue, router });
+      try{
+        await wrapper.find('input[id="incidentsID"]').trigger('click')
+      } catch(e) {
+        console.log('Catch an error: ', e)
+      }
+      expect(wrapper.findComponent(Incidents).exists()).toBe(true)
+      expect(wrapper.findComponent(Home).exists()).toBe(false)
+    });
+    it('buttons routes /bankdatas correctly', async () => {
+      const wrapper = mount(App, { localVue, router });
+      try{
+        await wrapper.find('input[id="bankdatasID"]').trigger('click')
+      } catch(e) {
+        console.log('Catch an error: ', e)
+      }
+      expect(wrapper.findComponent(BankDatas).exists()).toBe(true)
+      expect(wrapper.findComponent(Home).exists()).toBe(false)
+    });
+    it('buttons routes /payments correctly', async () => {
+      const wrapper = mount(App, { localVue, router });
+      try{
+        await wrapper.find('input[id="paymentsID"]').trigger('click')
+      } catch(e) {
+        console.log('Catch an error: ', e)
+      }
+      expect(wrapper.findComponent(Payments).exists()).toBe(true)
       expect(wrapper.findComponent(Home).exists()).toBe(false)
     });
 });

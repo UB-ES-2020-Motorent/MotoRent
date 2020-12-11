@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     getUsers () {
-      const path = this.$heroku + '/users?admin_code=admin_secret_code'
+      const path = this.$heroku + '/users'
 
       axios.get(path)
         .then((res) => {
@@ -138,7 +138,7 @@ export default {
         })
     },
     deleteUser (userId) {
-      const path = this.$heroku + `/user/${userId}?admin_code=admin_secret_code`
+      const path = this.$heroku + `/user/${userId}`
       axios.delete(path)
         .then((res) => {
           this.getUsers()
@@ -174,8 +174,7 @@ export default {
       const user = {
         'mail': this.addUserModal.user.mail,
         'google_token': this.addUserModal.user.google_token,
-        'role': this.addUserModal.user.role,
-        'admin_code': 'admin_secret_code'
+        'role': this.addUserModal.user.role
       }
       axios.post(path, user)
         .then((res) => {
@@ -194,8 +193,7 @@ export default {
         'national_id_document': this.addUserModal.user.national_id_document,
         'country': this.addUserModal.user.country,
         'name': this.addUserModal.user.name,
-        'surname': this.addUserModal.user.surname,
-        'admin_code': 'admin_secret_code'
+        'surname': this.addUserModal.user.surname
       }
       this.aux = this.addUserModal.user.national_id_document
       axios.put(path, user)

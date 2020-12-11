@@ -10,16 +10,16 @@
           <input type="radio" name="options" id="usersID" autocomplete="off" checked @click="goToUsers"> Users
         </label>
         <label class="btn btn-secondary">
-          <input type="radio" name="options" id="RentalsID" autocomplete="off" checked @click="goToRentals"> Rentals
+          <input type="radio" name="options" id="rentalsID" autocomplete="off" checked @click="goToRentals"> Rentals
         </label>
         <label class="btn btn-secondary">
-          <input type="radio" name="options" id="IncidentsID" autocomplete="off" checked @click="goToIncidents"> Incidents
+          <input type="radio" name="options" id="incidentsID" autocomplete="off" checked @click="goToIncidents"> Incidents
         </label>
         <label class="btn btn-secondary">
-          <input type="radio" name="options" id="BancdatasID" autocomplete="off" checked @click="goToBankdatas"> BankDatas
+          <input type="radio" name="options" id="bankdatasID" autocomplete="off" checked @click="goToBankdatas"> BankDatas
         </label>
         <label class="btn btn-secondary">
-          <input type="radio" name="options" id="PaymentsID" autocomplete="off" checked @click="goToPayments"> Payments
+          <input type="radio" name="options" id="paymentsID" autocomplete="off" checked @click="goToPayments"> Payments
         </label>
       </div>
     </div>
