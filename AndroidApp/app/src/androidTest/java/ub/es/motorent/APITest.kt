@@ -14,9 +14,11 @@ import ub.es.motorent.app.model.UserDB
  */
 @RunWith(AndroidJUnit4::class)
 class APIAndroidTest {
+
     @Test
     fun getUsers() {
         //Log.i("test", UserDB.getUsersFromDataBase().toString())
         UserDB.getUsers()
     }
+
 }

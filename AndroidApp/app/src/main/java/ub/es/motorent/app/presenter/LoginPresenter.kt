@@ -34,8 +34,33 @@ class LoginPresenter (private val activity: LoginActivity) {
                 }
         }
     }
+
+    fun checkSuccessSignIn(email: String, password: String): Boolean {
+        var success : Boolean = false
+        if(notEmptyInfoField(email, password)) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity) { task ->
+                    if (task.isSuccessful) {
+                        success = true
+                    } else {
+                        success = false
+                    }
+                }
+        }
+        return success
+    }
+
     fun notEmptyInfoField(email: String, password: String): Boolean {
         return !(email.isEmpty() or password.isEmpty())
+    }
+
+    fun checkUserInfoToAdd(email: String, password: String): Boolean {
+        if (email.length<6 || !email.contains("@") || !email.contains(".")){
+            return false
+        } else if (password.length < 6){
+            return false
+        }
+        return true
     }
 
     fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {

@@ -11,8 +11,9 @@ import ub.es.motorent.app.model.*
 import java.lang.Integer.parseInt
 import ub.es.motorent.app.view.BankFormActivity
 
+private var auth: FirebaseAuth = Firebase.auth
+
 class BankFormPresenter(var activity: BankFormActivity){
-    private var auth: FirebaseAuth = Firebase.auth
 
     fun addCardToUser(card_number: String, card_owner: String, card_cvv: Int, card_expiration: String) {
         val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
@@ -60,5 +61,33 @@ class BankFormPresenter(var activity: BankFormActivity){
             }
             return dataisvalid
         }
+    }
+
+    fun checkBankDataIsValid(name:String, numtargeta:String, caducitat: String, cvv: String): Boolean {
+        if(name.length==0){
+            return false
+        }else if(numtargeta.length!=16){
+            return false
+        } else if (caducitat.length==0 || !caducitat.contains("/")){
+            return false
+        } else if (cvv.length!=3){
+            return false
+        } else {
+            if(caducitat.split("/").get(0).length!=2 && caducitat.split("/").get(1).length!=2){
+                return false
+            }
+            var dataisvalid = true
+            try {
+                val datamonth = parseInt(caducitat.split("/").get(0))
+                val datayear = parseInt(caducitat.split("/").get(1))
+            } catch (e: NumberFormatException) {
+                dataisvalid = false
+            }
+            return dataisvalid
+        }
+    }
+
+    fun notEmptyInfoField(name:String, numtargeta:String, caducitat: String, cvv: String): Boolean {
+        return !(name.isEmpty() or numtargeta.isEmpty() or caducitat.isEmpty() or cvv.isEmpty())
     }
 }

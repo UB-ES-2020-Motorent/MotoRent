@@ -14,19 +14,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-
-        // tests
-        testImplementation 'junit:junit:4.12'
-        androidTestImplementation 'junit:junit:4.12'
-        // unit test with mokito
-        testImplementation 'org.mockito:mockito-android:2.23.4'
-
-    }
-}
-
-android {
-    defaultConfig {
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 }
 allprojects {

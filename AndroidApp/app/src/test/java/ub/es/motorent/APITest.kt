@@ -4,6 +4,7 @@ import android.util.Log
 import org.junit.Assert
 import org.junit.Test
 import ub.es.motorent.app.model.UserDB
+import ub.es.motorent.app.model.UserInfo
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -11,14 +12,14 @@ import ub.es.motorent.app.model.UserDB
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class APITest {
-    //@Test
+    @Test
     fun postUser() {
         val email = "primerPOST@test.com"
         val token = "aqui0va0el0token"
         val role = 0
-        //val userInfo = UserDB.registerUser(email, token, role)
+        //val userInfo = UserDB.registerUser(email, token, role, Unit)
         //Log.println(1, "POST_USER", userInfo.toString())
-        //Assert.assertEquals(email, userInfo?.mail)
+        //Assert.assertEquals(userInfo, Unit)
         //Assert.assertEquals(token, userInfo?.google_token)
         //Assert.assertEquals(role, userInfo?.role)
 
@@ -28,7 +29,7 @@ class APITest {
          */
     }
 
-    //@Test
+    @Test
     fun getUsers() {
         //Log.i("test", UserDB.getUsersFromDataBase().toString())
         UserDB.getUsers()
