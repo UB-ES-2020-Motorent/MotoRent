@@ -41,7 +41,6 @@ public class LoginActivityTest {
     @Before
     fun setUp(){
         MockitoAnnotations.initMocks(this)
-        intent = Intent()
         loginActivity = LoginActivity()
         presenter = LoginPresenter(loginActivity)
 

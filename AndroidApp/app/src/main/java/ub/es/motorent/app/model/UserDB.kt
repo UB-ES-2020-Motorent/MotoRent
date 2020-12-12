@@ -63,7 +63,7 @@ object UserDB {
         val apiService = RestApiService()
         apiService.updateUser(id, name, surname, national_id_document, country, email, google_token,
                               role, id_bank_data ) {
-            Log.i(TAG, it.toString())
+            //Log.i(TAG, it.toString())
             onResult(it)
         }
     }

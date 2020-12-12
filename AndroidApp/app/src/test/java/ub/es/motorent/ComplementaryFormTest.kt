@@ -43,4 +43,5 @@ class ComplementaryFormTest {
         assertEquals(false, presenter.notEmptyInfoField("", country, id_card, surname))
         assertEquals(false, presenter.notEmptyInfoField(name, "", id_card, surname))
     }
+
 }
