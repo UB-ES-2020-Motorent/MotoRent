@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Motos from '@/components/Motos'
 import Users from '@/components/Users'
+import Bankdatas from '@/components/Bankdatas'
+import Payments from '@/components/Payments'
+import Moto from '@/components/Moto'
 import Rentals from '@/components/Rentals'
 import Incidents from '@/components/Incidents'
 
@@ -36,6 +39,21 @@ export default new Router({
       path: '/incidents',
       name: 'Incidents',
       component: Incidents
+    },
+    {
+      path: '/bankdatas',
+      name: 'BankDatas',
+      component: Bankdatas
+    },
+    {
+      path: '/payments',
+      name: 'Payments',
+      component: Payments
+    },
+    {
+      path: '/moto/:id',
+      name: 'Moto',
+      component: Moto
     }
   ]
 })
