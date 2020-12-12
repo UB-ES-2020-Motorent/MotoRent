@@ -30,11 +30,8 @@ public class LoginActivityTest {
     @Mock
     private lateinit var loginActivity: LoginActivity
 
-
-
     private lateinit var userInfo: UserInfo
     private lateinit var intent: Intent
-    private lateinit var successTask: Task<AuthResult>
 
     val mail:String = "natalia@motorent.com"
     val password:String = "123456"
