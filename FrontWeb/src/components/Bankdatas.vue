@@ -171,7 +171,9 @@ export default {
   methods: {
     getBankDatas () {
       const path = this.$heroku + '/bankdatas'
-      axios.get(path)
+      axios.get(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.bankdatas = res.data.bankdatas
         })
@@ -181,8 +183,9 @@ export default {
     },
     deleteBankData (bankdataId, userId) {
       const path = this.$heroku + `/bankdata/${bankdataId}`
-      const param = { 'user_id': userId }
-      axios.delete(path, param)
+      axios.delete(path, {data: { user_id: userId }}, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getBankDatas()
