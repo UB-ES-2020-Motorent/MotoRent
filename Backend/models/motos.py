@@ -110,7 +110,7 @@ class MotosModel(db.Model):
             if(count < num_rentals):
                 count += 1
                 user = UsersModel.find_by_id(rental['user_id'])
-                final_list.append([rental, user.json(1)])
+                final_list.append([rental, user.json()])
             else:
                 break
 
