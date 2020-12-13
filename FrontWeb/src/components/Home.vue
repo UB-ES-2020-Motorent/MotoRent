@@ -29,6 +29,8 @@
       </form>
       </div>
     <div>
+      {{loginData.token}}
+      {{tokenDB}}
       <button class="btn btn-success btn-md" @click="logIn()"> Sign In </button>
     </div>
   </div>
@@ -52,26 +54,16 @@ export default {
     }
   },
   methods: {
-    openLoginModal (button) {
-      this.$root.$emit('bv::show::modal', this.modalID, button)
-    },
-    resetSignIn () {
-      this.loginData = {
-        mail: '',
-        password: '',
-        token: ''
-      }
-    },
     logIn () {
       this.loginFirebase()
-      this.loginPost()
     },
     loginFirebase () {
       try {
         firebase.auth().signInWithEmailAndPassword(this.loginData.mail, this.loginData.password)
-          .then(
+          .then(() => {
             this.loginData.token = firebase.auth().currentUser.uid
-          )
+            this.loginPost()
+          })
       } catch (err) {
         console.log(err)
       }
@@ -86,13 +78,11 @@ export default {
         .then((res) => {
           console.log(res)
           this.tokenDB = res
+          this.$store.commit('setToken', 'canviat')
         })
         .catch((error) => {
           console.error(error)
         })
-    },
-    goToMotos () {
-      this.$router.replace({path: '/motos'})
     }
   }
 }

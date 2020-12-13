@@ -31,7 +31,7 @@ describe('App', () => {
       const wrapper = mount(App, { localVue, router });
       expect(wrapper.find('[data-test="app-button-group"]').text()).toContain('Rentals');
     });
-    it('routing', async () => {
+    it('routing home', async () => {
       const wrapper = mount(App, { localVue, router });
       try{
         await wrapper.vm.$nextTick()

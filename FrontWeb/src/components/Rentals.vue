@@ -2,7 +2,7 @@
   <div id="app">
     <h1 data-test="rentals-title">Rentals</h1>
     <div class="container">
-      <b-table data-test="rentals-b-table" striped hover :items="rentals" :fields="fields" :filter="filter" :filter-included-fields="filterOn" sort-by="id">
+      <b-table data-test="rentals-b-table" striped hover :items="rentals" :fields="fields" :filter="filter" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id">
         <template #cell(actions)="row">
             <b-button variant="secondary" size="sm" @click="row.toggleDetails"> details </b-button>
         </template>
@@ -51,9 +51,17 @@ import axios from 'axios'
 import moment from 'moment'
 export default {
   name: 'Rentals',
+  props: [ 'moto_id', 'user_id' ],
+  watch: {
+    moto_id () {
+      this.filterOn.push('moto_id')
+    },
+    user_id () {
+      this.filterOn.push('user_id')
+    }
+  },
   computed: {
-    filter () { if (this.motoIdId != null) { return this.motoIdId } else { return null } },
-    filterOn () { return ['moto_id'] }
+    filter () { if (this.filterId != null) { return this.filterId } else { return null } }
   },
   data () {
     return {
@@ -70,14 +78,18 @@ export default {
         title: '',
         content: ''
       },
-      motoIdId: null,
-      isPostNotPut: true
+      filterId: null,
+      filterOn: [],
+      isPostNotPut: true,
+      token: ''
     }
   },
   methods: {
     getRentals () {
       const path = this.$heroku + '/rentals'
-      axios.get(path)
+      axios.get(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.rentals = res.data.rentals
         })
@@ -87,7 +99,9 @@ export default {
     },
     deleteRental (rentalId) {
       const path = this.$heroku + `/rental/${rentalId}`
-      axios.delete(path)
+      axios.delete(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getRentals()
@@ -104,7 +118,9 @@ export default {
     putRentalState (rental) {
       if (rental.finish_rental_hour == null) {
         const motoPath = this.$heroku + `/moto/${rental.moto_id}`
-        axios.get(motoPath)
+        axios.get(motoPath, {
+          auth: { username: this.token }
+        })
           .then((motoRes) => {
             const path = this.$heroku + `/rental/${rental.id}`
             var end = true
@@ -114,7 +130,9 @@ export default {
               'latitude': motoRes.data.moto.latitude,
               'longitude': motoRes.data.moto.longitude
             }
-            axios.put(path, param)
+            axios.put(path, param, {
+              auth: { username: this.token }
+            })
               .then((res) => {
                 console.log(res)
                 this.getRentals()
@@ -139,12 +157,28 @@ export default {
     resetInfoModal () {
       this.infoModal.title = ''
       this.infoModal.content = ''
+    },
+    filterTable (row, filter) {
+      if (this.filterOn.includes('moto_id')) {
+        if (row.moto_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      } else if (this.filterOn.includes('user_id')) {
+        if (row.user_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   created () {
     this.getRentals()
     const id = this.$route.params.id
-    if (id != null) { this.motoIdId = id.toString() }
+    if (id != null) { this.filterId = id.toString() }
+    this.token = this.$store.state.token
   }
 }
 </script>

@@ -8,6 +8,7 @@ import Payments from '@/components/Payments'
 import Moto from '@/components/Moto'
 import Rentals from '@/components/Rentals'
 import Incidents from '@/components/Incidents'
+import User from '@/components/User'
 
 Vue.use(Router)
 
@@ -54,6 +55,11 @@ export default new Router({
       path: '/moto/:id',
       name: 'Moto',
       component: Moto
+    },
+    {
+      path: '/user/:id',
+      name: 'User',
+      component: User
     }
   ]
 })

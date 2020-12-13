@@ -2,14 +2,22 @@
   <div id="app">
     <h1 data-test="payments-title">Payments</h1>
     <div class="container">
-      <b-table data-test="payments-b-table" responsive striped hover :items="payments" :fields="fields">
+      <b-table data-test="payments-b-table" responsive striped hover :items="payments" :fields="fields" :filter-function="filterTable" sort-by="id_payment">
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id_payment, $event.target)"> json </button>
           <button class="btn btn-danger btn-sm" @click="deletePayment(row.item.id_payment)"> X </button>
         </template>
-        <template #cell(payment_date)="row">
-          {{ getParsedTime(row.value) }}
+        <template #cell(payment_import)="row">
+          <money-format :value="row.value"
+            :locale='SPAIN'
+            :currency-code='EUR'
+            :subunits-value=false
+            :hide-subunits=false>
+          </money-format>
         </template>
+        <!--template #cell(payment_date)="row">
+          {{ getParsedTime(row.value) }}
+        </template-->
       </b-table>
       <!-- Modal Json -->
       <b-modal :id="infoModal.id" :title="infoModal.title" ok-only centered @hide="resetInfoModal">
@@ -22,8 +30,12 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import MoneyFormat from 'vue-money-format'
 export default {
   name: 'Payments',
+  components: {
+    'money-format': MoneyFormat
+  },
   data () {
     return {
       payments: [],
@@ -46,7 +58,9 @@ export default {
   methods: {
     getPayments () {
       const path = this.$heroku + '/payments'
-      axios.get(path)
+      axios.get(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.payments = res.data.payments
         })
@@ -56,7 +70,9 @@ export default {
     },
     deletePayment (paymentId) {
       const path = this.$heroku + `/payment/${paymentId}`
-      axios.delete(path)
+      axios.delete(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getPayments()
@@ -76,10 +92,26 @@ export default {
     },
     getParsedTime (time) {
       if (time !== '') { return moment(time).format('LLL') } else { return '-' }
+    },
+    filterTable (row, filter) {
+      if (this.filterOn.includes('moto_id')) {
+        if (row.moto_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      } else if (this.filterOn.includes('user_id')) {
+        if (row.user_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   created () {
     this.getPayments()
+    this.token = this.$store.state.token
   }
 }
 </script>

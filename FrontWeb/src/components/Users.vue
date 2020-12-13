@@ -2,8 +2,9 @@
   <div id="app">
     <h1>Users</h1>
     <div class="container">
-      <b-table striped hover :items="users" :fields="fields">
+      <b-table striped hover :items="users" :fields="fields" :filter-function="filterTable" sort-by="id">
         <template #cell(actions)="row">
+          <button class="btn btn-warning btn-sm" @click="goToUser(row.item.id, $event.target)"> user </button>
           <button class="btn btn-danger btn-sm" @click="deleteUser(row.item.id)"> X </button>
         </template>
       </b-table>
@@ -103,7 +104,6 @@ export default {
   data () {
     return {
       users: [],
-      // fields: ['id', 'id_bank_data', 'national_id_document', 'country', 'name', 'surname', 'mail', 'google_token', 'role']
       fields: ['id', 'id_bank_data', 'national_id_document', 'country', 'name', 'surname', 'mail', 'role', 'actions'],
       isPostNotPut: true,
       addUserModal: {
@@ -118,7 +118,7 @@ export default {
           surname: '',
           password: '',
           mail: '',
-          google_token: '332',
+          google_token: '',
           role: 0
         }
       },
@@ -128,8 +128,9 @@ export default {
   methods: {
     getUsers () {
       const path = this.$heroku + '/users'
-
-      axios.get(path)
+      axios.get(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.users = res.data.users
         })
@@ -139,7 +140,9 @@ export default {
     },
     deleteUser (userId) {
       const path = this.$heroku + `/user/${userId}`
-      axios.delete(path)
+      axios.delete(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.getUsers()
         })
@@ -176,7 +179,9 @@ export default {
         'google_token': this.addUserModal.user.google_token,
         'role': this.addUserModal.user.role
       }
-      axios.post(path, user)
+      axios.post(path, user, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.addUserModal.user.id = res.data.user.id
           this.getUsers()
@@ -196,7 +201,9 @@ export default {
         'surname': this.addUserModal.user.surname
       }
       this.aux = this.addUserModal.user.national_id_document
-      axios.put(path, user)
+      axios.put(path, user, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getUsers()
@@ -214,14 +221,15 @@ export default {
         title: '',
         user: {
           id: '',
-          id_bank_data: '',
+          id_bank_data: 0,
           national_id_document: '',
           country: '',
           name: '',
           surname: '',
+          password: '',
           mail: '',
           google_token: '',
-          role: ''
+          role: 0
         }
       }
     },
@@ -241,10 +249,29 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    goToUser (id, button) {
+      this.$router.replace({path: `/user/${id}`})
+    },
+    filterTable (row, filter) {
+      if (this.filterOn.includes('moto_id')) {
+        if (row.moto_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      } else if (this.filterOn.includes('user_id')) {
+        if (row.user_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   created () {
     this.getUsers()
+    this.token = this.$store.state.token
   }
 }
 </script>
