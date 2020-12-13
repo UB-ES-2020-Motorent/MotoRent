@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/moto_toast.png" height="100" margin>
-    <div class="container">
+    <div class="container" id="button-group-index">
       <div class="btn-group btn-group-toggle mt-20" data-toggle="buttons" id = "buttonGroup" data-test="app-button-group">
         <label class="btn btn-secondary" >
           <input type="radio" name="options" id="motosID" autocomplete="off" checked @click="goToMotos"> Motos
@@ -61,6 +61,15 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  margin-bottom: 20px;
+}
+#button-group-index {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 </style>

@@ -2,16 +2,18 @@
   <div id="app">
     <h1>Incidents</h1>
     <div class="container">
-      <b-table hover :items="incidents" :fields="fields" :filter="filter" :filter-included-fields="filterOn">
+      <b-table hover :items="incidents" :fields="fields" :filter="filter" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id">
         <template #cell(comment)="row">
-          <b-button size="sm" @click="info(row.item.comment, row.item.id, $event.target)" class="mr-1">Comment user {{row.item.id}}</b-button>
+          <b-button size="sm" @click="row.toggleDetails" class="mr-1">Comment user</b-button>
+          <button class="btn btn-danger btn-sm" @click="deleteIncident(row.item.id)"> X </button>
+        </template>
+        <template #row-details="row">
+          <b-card>
+            {{row.item.comment}}
+          </b-card>
         </template>
       </b-table>
     </div>
-    <!-- Modal Json -->
-    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only centered @hide="resetInfoModal">
-      <p>{{ infoModal.content }}</p>
-    </b-modal>
   </div>
 </template>
 
@@ -19,9 +21,17 @@
 import axios from 'axios'
 export default {
   name: 'Incident',
+  props: [ 'moto_id', 'user_id' ],
+  watch: {
+    moto_id () {
+      this.filterOn.push('moto_id')
+    },
+    user_id () {
+      this.filterOn.push('user_id')
+    }
+  },
   computed: {
-    filter () { if (this.motoIdId != null) { return this.motoIdId } else { return null } },
-    filterOn () { return ['moto_id'] }
+    filter () { if (this.filterId != null) { return this.filterId } else { return null } }
   },
   data () {
     return {
@@ -32,13 +42,17 @@ export default {
         title: '',
         content: ''
       },
-      motoIdId: null
+      filterId: null,
+      filterOn: [],
+      token: ''
     }
   },
   methods: {
     getIncidents () {
       const path = this.$heroku + `/incidents`
-      axios.get(path)
+      axios.get(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.incidents = res.data.incidents
         })
@@ -46,23 +60,40 @@ export default {
           console.error(error)
         })
     },
-    deleteIncidences (incident) {
-
+    deleteIncident (id) {
+      const path = this.$heroku + `/incident/${id}`
+      axios.delete(path, {
+        auth: { username: this.token }
+      })
+        .then((res) => {
+          console.log(res)
+          this.getIncidents()
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
-    info (item, index, button) {
-      this.infoModal.title = `Comentari de l'usuari ${index}`
-      this.infoModal.content = item
-      this.$root.$emit('bv::show::modal', this.infoModal.id, button)
-    },
-    resetInfoModal () {
-      this.infoModal.title = ''
-      this.infoModal.content = ''
+    filterTable (row, filter) {
+      if (this.filterOn.includes('moto_id')) {
+        if (row.moto_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      } else if (this.filterOn.includes('user_id')) {
+        if (row.user_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   created () {
     this.getIncidents()
     const id = this.$route.params.id
-    if (id != null) { this.motoIdId = id.toString() }
+    if (id != null) { this.filterId = id.toString() }
+    this.token = this.$store.state.token
   }
 }
 </script>

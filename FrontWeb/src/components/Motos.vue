@@ -2,7 +2,7 @@
   <div id="app">
     <h1 data-test="motos-title">Motos</h1>
     <div class="container">
-      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields" sort-by="id">
+      <b-table data-test="motos-b-table" responsive striped hover :items="motos" :fields="fields" :filter-function="filterTable" sort-by="id">
         <template #cell(available)="row">
           <b-button :variant="availableButton(row.value)" size="sm" @click="putMotoAvailable(row.item.id, row.value)"> {{row.value}} </b-button>
         </template>
@@ -144,7 +144,9 @@ export default {
   methods: {
     getMotos () {
       const path = this.$heroku + '/motos'
-      axios.get(path)
+      axios.get(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           this.motos = res.data.motos
         })
@@ -154,7 +156,9 @@ export default {
     },
     deleteMoto (motoId) {
       const path = this.$heroku + `/moto/${motoId}`
-      axios.delete(path)
+      axios.delete(path, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getMotos()
@@ -210,7 +214,9 @@ export default {
         'latitude': this.addMotoModal.moto.latitude,
         'longitude': this.addMotoModal.moto.longitude
       }
-      axios.post(path, moto)
+      axios.post(path, moto, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getMotos()
@@ -260,7 +266,9 @@ export default {
     putMotoAvailable (id, available) {
       const path = this.$heroku + `/moto/${id}`
       const param = {'available': !available}
-      axios.put(path, param)
+      axios.put(path, param, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getMotos()
@@ -284,10 +292,26 @@ export default {
     resetInfoModal () {
       this.infoModal.title = ''
       this.infoModal.content = ''
+    },
+    filterTable (row, filter) {
+      if (this.filterOn.includes('moto_id')) {
+        if (row.moto_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      } else if (this.filterOn.includes('user_id')) {
+        if (row.user_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   created () {
     this.getMotos()
+    this.token = this.$store.state.token
   }
 }
 </script>

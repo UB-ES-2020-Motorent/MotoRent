@@ -2,14 +2,14 @@
   <div id="app">
     <h1 data-test="bankdatas-title">BankDatas</h1>
     <div class="container">
-      <b-table data-test="bankdatas-b-table" responsive striped hover :items="bankdatas" :fields="fields">
+      <b-table data-test="bankdatas-b-table" responsive striped hover :items="bankdatas" :fields="fields" :filter="filterId" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id_bank_data">
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id_bank_data, $event.target)"> json </button>
           <button class="btn btn-secondary btn-sm" @click="modifyBankData(row.item, $event.target)"> modify </button>
-          <button class="btn btn-danger btn-sm" @click="deleteBankData(row.item.id_bank_data)"> X </button>
+          <button class="btn btn-danger btn-sm" @click="deleteBankData(row.item.id_bank_data, row.item.user_id)"> X </button>
         </template>
       </b-table>
-      <button class="btn btn-success btn-md" @click="addBankData($event.target)"> Add BankData </button>
+      <button class="btn btn-success btn-md" v-if="notDetail" @click="addBankData($event.target)"> Add BankData </button>
       <!-- Modal Json -->
       <b-modal :id="infoModal.id" :title="infoModal.title" ok-only centered @hide="resetInfoModal">
         <pre>{{ infoModal.content }}</pre>
@@ -92,6 +92,15 @@
 import axios from 'axios'
 export default {
   name: 'BankDatas',
+  props: [ 'moto_id', 'user_id' ],
+  watch: {
+    moto_id () {
+      this.filterOn.push('moto_id')
+    },
+    user_id () {
+      this.filterOn.push('user_id')
+    }
+  },
   computed: {
     userIdValidity () {
       if (this.addBankDataModal.user_id_state === false) { return null } else {
@@ -153,7 +162,10 @@ export default {
         card_cvv_state: false,
         card_expiration_state: false
       },
-      isPostNotPut: true
+      isPostNotPut: true,
+      filterId: null,
+      filterOn: [],
+      notDetail: true
     }
   },
   methods: {
@@ -167,9 +179,10 @@ export default {
           console.error(error)
         })
     },
-    deleteBankData (bankdataId) {
+    deleteBankData (bankdataId, userId) {
       const path = this.$heroku + `/bankdata/${bankdataId}`
-      axios.delete(path)
+      const param = { 'user_id': userId }
+      axios.delete(path, param)
         .then((res) => {
           console.log(res)
           this.getBankDatas()
@@ -228,7 +241,9 @@ export default {
         'card_cvv': this.addBankDataModal.bankdata.card_cvv,
         'card_expiration': this.addBankDataModal.bankdata.card_expiration
       }
-      axios.post(path, bankdata)
+      axios.post(path, bankdata, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getBankDatas()
@@ -247,7 +262,9 @@ export default {
         'card_cvv': this.addBankDataModal.bankdata.card_cvv,
         'card_expiration': this.addBankDataModal.bankdata.card_expiration
       }
-      axios.put(path, bankdata)
+      axios.put(path, bankdata, {
+        auth: { username: this.token }
+      })
         .then((res) => {
           console.log(res)
           this.getBankDatas()
@@ -284,10 +301,31 @@ export default {
     resetInfoModal () {
       this.infoModal.title = ''
       this.infoModal.content = ''
+    },
+    filterTable (row, filter) {
+      if (this.filterOn.includes('moto_id')) {
+        if (row.moto_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      } else if (this.filterOn.includes('user_id')) {
+        if (row.user_id.toString() === filter) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   created () {
     this.getBankDatas()
+    const id = this.$route.params.id
+    if (id != null) {
+      this.filterId = id.toString()
+      this.notDetail = false
+    }
+    this.token = this.$store.state.token
   }
 }
 </script>

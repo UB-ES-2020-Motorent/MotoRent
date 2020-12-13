@@ -3,6 +3,7 @@
 import '@/../bootstrap/css/bootstrap.css'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import firebase from 'firebase/app'
@@ -12,6 +13,19 @@ Vue.prototype.$axios = axios
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 Vue.prototype.$heroku = 'https://motorent-apitest.herokuapp.com'
+
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    token: ''
+  },
+  mutations: {
+    setToken (state, newToken) {
+      state.token = newToken
+    }
+  }
+})
 
 const configOptions = {
   apiKey: 'AIzaSyAsADSDi32pUw1L_GMHmuQF5bIHODKALIQ',
@@ -32,5 +46,6 @@ new Vue({
   router,
   render: h => h(App),
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  store: store
 }).$mount('#app')
