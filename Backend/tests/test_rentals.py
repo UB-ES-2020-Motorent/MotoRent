@@ -20,12 +20,12 @@ class RentalsTest(BaseTestClass):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(my_json['rental']['id'], id)
 
-    def test_delete_rental(self):
-        id = 1
-        request = self.client.delete('/rental/' + str(id))
-        self.assertEqual(request.status_code, 200)
-        request = self.client.get('/rental/' + str(id))
-        self.assertEqual(request.status_code, 404)
+    #def test_delete_rental(self):
+        #id = 1
+        #request = self.client.delete('/rental/' + str(id))
+        #self.assertEqual(request.status_code, 200)
+        #request = self.client.get('/rental/' + str(id))
+        #self.assertEqual(request.status_code, 404)
 
     def test_get_all_rentals(self):
         request = self.client.get('/rentals')

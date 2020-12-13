@@ -50,11 +50,11 @@ class UsersTest(BaseTestClass):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(new_name, my_json['user']['name'])
 
-    def test_delete_user(self):
-        id = 1
-        request = self.client.delete('/moto/' + str(id))
-        self.assertEqual(request.status_code, 200)
-        request = self.client.get('/moto/' + str(id))
-        self.assertEqual(request.status_code, 404)
+    #def test_delete_user(self):
+        #id = 1
+        #request = self.client.delete('/moto/' + str(id))
+        #self.assertEqual(request.status_code, 200)
+        #request = self.client.get('/moto/' + str(id))
+        #self.assertEqual(request.status_code, 404)
 
 
