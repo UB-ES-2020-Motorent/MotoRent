@@ -77,8 +77,8 @@ export default {
       axios.post(path, logIn)
         .then((res) => {
           console.log(res)
-          this.tokenDB = res
-          this.$store.commit('setToken', 'canviat')
+          this.tokenDB = res.data.token
+          this.$store.commit('setToken', this.tokenDB)
         })
         .catch((error) => {
           console.error(error)

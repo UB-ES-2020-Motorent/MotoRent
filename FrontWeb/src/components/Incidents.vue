@@ -43,8 +43,7 @@ export default {
         content: ''
       },
       filterId: null,
-      filterOn: [],
-      token: ''
+      filterOn: []
     }
   },
   methods: {
@@ -90,10 +89,10 @@ export default {
     }
   },
   created () {
+    this.token = this.$store.state.token
     this.getIncidents()
     const id = this.$route.params.id
     if (id != null) { this.filterId = id.toString() }
-    this.token = this.$store.state.token
   }
 }
 </script>

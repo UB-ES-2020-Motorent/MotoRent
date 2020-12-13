@@ -110,8 +110,8 @@ export default {
     }
   },
   created () {
-    this.getPayments()
     this.token = this.$store.state.token
+    this.getPayments()
   }
 }
 </script>
