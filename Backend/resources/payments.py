@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 from models.payments import PaymentsModel
+from models.users import auth
+from flask import g
 
 parser = reqparse.RequestParser()
 parser.add_argument('id_payment', type=str, required=False, help="Payment id, This field cannot be left blank")
@@ -17,6 +19,7 @@ class Payment(Resource):
     API Restful methods for Users
     """
 
+    @auth.login_required(role='admin')
     def get(self, id_payment):
         """
         GET method
@@ -70,6 +73,7 @@ class Payment(Resource):
         except:
             return {"message": "Error Description"}, 500
 
+    @auth.login_required(role='admin')
     def put(self, id_payment):
         """
         PUT method
@@ -95,6 +99,7 @@ class Payment(Resource):
         else:
             return {'message': "Payment with id [{}] Not found".format(id_payment)}, 404
 
+    @auth.login_required(role='admin')
     def delete(self, id_payment):
         """
         DELETE method
@@ -117,6 +122,8 @@ class PaymentsList(Resource):
     """
     API Restful methods for PaymentsList
     """
+
+    @auth.login_required(role='admin')
     def get(self):
         """
         GET method

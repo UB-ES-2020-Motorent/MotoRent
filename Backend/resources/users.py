@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 from models.users import UsersModel
+from models.users import auth
+from flask import g
 
 parser = reqparse.RequestParser()
 parser.add_argument('national_id_document', type=str, required=False, help="Associated national id document, This "
@@ -133,6 +135,7 @@ class Users(Resource):
         except:
             return {"message": "Error Description"}, 500
 
+    @auth.login_required(role='admin')
     def delete(self, user_id):
         """
         DELETE method
@@ -160,6 +163,7 @@ class UsersList(Resource):
     """
     API Restful methods for UsersList
     """
+
     def get(self):
         """
         GET method
