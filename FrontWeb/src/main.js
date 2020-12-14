@@ -12,7 +12,7 @@ import axios from 'axios'
 Vue.prototype.$axios = axios
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
-Vue.prototype.$heroku = 'https://motorent-apitest.herokuapp.com'
+Vue.prototype.$heroku = 'http://127.0.0.1:5000/'
 
 Vue.use(Vuex)
 

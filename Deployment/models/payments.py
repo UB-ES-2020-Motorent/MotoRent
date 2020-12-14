@@ -1,5 +1,8 @@
 from db import db
 from models.rentals import RentalsModel
+from datetime import datetime
+import calendar
+from collections import OrderedDict
 
 
 class PaymentsModel(db.Model):
@@ -98,3 +101,39 @@ class PaymentsModel(db.Model):
         Return: all PaymentsModel
         """
         return PaymentsModel.query.all()
+
+    @classmethod
+    def generate_statistics(cls):
+        """
+        Generate statistics by month
+        Return: json
+        """
+        all_payments = PaymentsModel.query.all()
+        payment_list = [payment.json() for payment in all_payments if payment.payment_date]
+        unique_years = {}
+
+        for payment in payment_list:
+            payment['payment_date'] = datetime.strptime(payment['payment_date'], '%Y-%m-%dT%H:%M:%S.%f')
+            if str(payment['payment_date'].year) not in unique_years:
+                unique_years[str(payment['payment_date'].year)] = {}
+            if str(payment['payment_date'].month) not in unique_years[str(payment['payment_date'].year)]:
+                unique_years[str(payment['payment_date'].year)][str(payment['payment_date'].month)] = {
+                    'num_rentals': 0,
+                    'total_money': 0,
+                    'rental_duration_total': 0,
+                }
+
+        for year, months in unique_years.items():
+            unique_years[year] = dict(OrderedDict(sorted(months.items(), reverse=False)))
+        unique_years = dict(OrderedDict(sorted(unique_years.items())))
+
+        for payment in payment_list:
+            year = str(payment['payment_date'].year)
+            month = str(payment['payment_date'].month)
+
+            if unique_years[year][month]:
+                unique_years[year][month]['num_rentals'] += 1
+                unique_years[year][month]['total_money'] += payment['payment_import']
+                unique_years[year][month]['rental_duration_total'] += RentalsModel.find_duration_by_id(payment['id_rental'])
+
+        return unique_years
