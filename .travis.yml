@@ -70,6 +70,6 @@ jobs:
 
       script: 
         - cd FrontWeb
-        - npm run build
+        - npm run test
         - cd ..
         
