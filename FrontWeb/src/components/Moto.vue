@@ -11,6 +11,8 @@
     <b-container>
       <incidents :moto_id="moto.id" />
       <rentals :moto_id="moto.id" />
+      <h1>Last Users</h1>
+      <b-table striped hover :items="justUsers" sort-by="rental_id"></b-table>
     </b-container>
   </div>
 </template>
@@ -29,7 +31,21 @@ export default {
   data () {
     return {
       id: 0,
-      moto: {}
+      moto: {},
+      id_rentals: [],
+      justUsers: [],
+      token: '',
+      userDetails: {
+        rental_id: '',
+        id: '',
+        id_bank_data: '',
+        national_id_document: '',
+        country: '',
+        name: '',
+        surname: '',
+        mail: '',
+        role: ''
+      }
     }
   },
   methods: {
@@ -65,12 +81,57 @@ export default {
     },
     availableButton (available) {
       if (available) { return 'outline-success' } else { return 'outline-danger' }
+    },
+    lastUsersMoto (id, num) {
+      const path = this.$heroku + `/lastrentals/${id}?num_rentals=${num}`
+      axios.get(path, {
+        auth: {username: this.token}
+      })
+        .then((res) => {
+          this.users = res.data.last_rentals
+          this.getJustUsers()
+          console.log(this.users)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
+    getJustUsers () {
+      var i = 1
+      while (this.users[i] != null) {
+        this.userDetails.rental_id = this.users[i][0].id
+        this.userDetails.id = this.users[i][1].id
+        this.userDetails.id_bank_data = this.users[i][1].id_bank_data
+        this.userDetails.national_id_document = this.users[i][1].national_id_document
+        this.userDetails.country = this.users[i][1].country
+        this.userDetails.name = this.users[i][1].name
+        this.userDetails.surname = this.users[i][1].surname
+        this.userDetails.mail = this.users[i][1].mail
+        this.userDetails.role = this.users[i][1].role
+        this.justUsers.push(this.userDetails)
+        this.resetUserDetails()
+        i = i + 1
+      }
+    },
+    resetUserDetails () {
+      this.userDetails = {
+        rental_id: '',
+        id: '',
+        id_bank_data: '',
+        national_id_document: '',
+        country: '',
+        name: '',
+        surname: '',
+        mail: '',
+        role: ''
+      }
     }
   },
   created () {
     this.id = this.$route.params.id
     this.getMoto()
     this.token = this.$store.state.token
+    this.lastUsersMoto(this.id, 10)
   }
 }
 </script>

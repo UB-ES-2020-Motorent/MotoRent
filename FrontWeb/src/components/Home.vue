@@ -23,14 +23,13 @@
           <b-form-input
             id="password-input"
             v-model="loginData.password"
+            type="password"
             required
           ></b-form-input>
         </b-form-group>
       </form>
       </div>
     <div>
-      {{loginData.token}}
-      {{tokenDB}}
       <button class="btn btn-success btn-md" @click="logIn()"> Sign In </button>
     </div>
   </div>
