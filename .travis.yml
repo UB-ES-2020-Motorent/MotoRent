@@ -62,4 +62,14 @@ jobs:
       script:
         - ./gradlew build check
         - cd ..
+    - language: node_js
+      node_js:
+        - "node"
+
+      cache: npm
+
+      script: 
+        - cd FrontWeb
+        - npm run build
+        - cd ..
         
