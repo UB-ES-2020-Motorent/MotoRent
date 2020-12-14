@@ -61,3 +61,17 @@ jobs:
         - chmod +x gradlew
       script:
         - ./gradlew build check
+        - cd ..
+        
+    - language: node_js
+      node_js:
+        - 9
+      cache:
+        directories:
+          - node_moules
+     script:
+        - cd FrontWeb
+        - npm run test
+        - cd ..
+        - cd FrontWeb
+      
