@@ -18,5 +18,8 @@ module.exports = {
     source: 'src',
     img: 'src',
     image: 'xlink:href'
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/my-project/'
+    : '/'
 }
