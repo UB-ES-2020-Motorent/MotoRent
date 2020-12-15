@@ -123,13 +123,13 @@ class LoginActivity : FullScreenActivity(){
         loginTwitterBtn?.setOnClickListener {
             signInWithTwitter()
         }
-
+/*
         // login Facebook
         val loginFacebookBtn : Button = findViewById(R.id.facebook_btn)
         loginFacebookBtn?.setOnClickListener {
             signInWithFacebook()
         }
-
+*/
     }
 
     fun goToMaps(){
@@ -180,6 +180,7 @@ class LoginActivity : FullScreenActivity(){
                 Log.e(TAG, "twitter Fail AUTH")
             }
     }
+
 
     private fun signInWithFacebook() {
         val loginMan =  LoginManager.getInstance()
