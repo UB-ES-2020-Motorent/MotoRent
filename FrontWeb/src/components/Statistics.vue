@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <div v-for="(year) in Object.keys(statistics)" v-bind:key="year">
         <h1>{{ year }}</h1>
         <div v-for="(month) in returnMonths(year)" v-bind:key="month">
@@ -12,7 +12,11 @@
         <h1>&nbsp;</h1>
         <h1>&nbsp;</h1>
       </div>
-      </div>
+    </div>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <h1>Statistics</h1>
+      <img src="@/assets/stop.jpg" height="200" margin>
+    </div>
   </div>
 </template>
 

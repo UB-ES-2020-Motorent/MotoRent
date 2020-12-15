@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Incidents</h1>
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <b-table hover :items="incidents" :fields="fields" :filter="filter" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id">
         <template #cell(comment)="row">
           <b-button size="sm" @click="row.toggleDetails" class="mr-1">Comment user</b-button>
@@ -13,6 +13,9 @@
           </b-card>
         </template>
       </b-table>
+    </div>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <img src="@/assets/stop.jpg" height="200" margin>
     </div>
   </div>
 </template>
