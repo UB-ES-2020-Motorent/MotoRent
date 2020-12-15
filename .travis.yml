@@ -65,15 +65,6 @@ jobs:
     - language: node_js
       node_js:
         - "node"
-      install:
-        - nvm install node
-        - node -v
-        - npm i -g yarn
-        - yarn install
-      cache: npm
+      install: npm ci
 
-      script: 
-        - cd FrontWeb
-        - npm run test
-        - cd ..
         
