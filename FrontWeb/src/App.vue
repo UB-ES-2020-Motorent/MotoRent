@@ -21,9 +21,6 @@
         <label class="btn btn-secondary">
           <input type="radio" name="options" id="paymentsID" autocomplete="off" checked @click="goToPayments"> Payments
         </label>
-        <label class="btn btn-secondary">
-          <input type="radio" name="options" id="statisticsID" autocomplete="off" checked @click="goToStatistics"> Statistics
-        </label>
       </div>
     </div>
     <router-view/>
@@ -51,9 +48,6 @@ export default {
     },
     goToPayments () {
       this.$router.replace({path: '/payments'})
-    },
-    goToStatistics () {
-      this.$router.replace({ path: '/statistics' })
     }
   }
 }
