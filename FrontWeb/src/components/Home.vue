@@ -29,8 +29,6 @@
       </form>
       </div>
     <div>
-      {{loginData.token}}
-      {{tokenDB}}
       <button class="btn btn-success btn-md" @click="logIn()"> Sign In </button>
     </div>
   </div>

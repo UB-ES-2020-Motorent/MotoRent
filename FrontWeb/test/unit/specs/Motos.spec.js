@@ -3,10 +3,26 @@ import BootstrapVue from 'bootstrap-vue'
 import { mount, createLocalVue } from '@vue/test-utils'
 import flushPromises from "flush-promises"
 import axios from 'axios'
+import Vuex from 'vuex'
 import Motos from '@/components/Motos'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
+
+localVue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    token: ''
+  },
+  mutations: {
+    setToken (state, newToken) {
+      state.token = newToken
+    }
+  }
+})
+
+
 
 const motos = { motos: [
   {
@@ -53,7 +69,7 @@ describe('Motos', () => {
       expect(1).toEqual(1);
     });
     test('should render Motos as title', () => {
-      const wrapper = mount(Motos, { localVue });
+      const wrapper = mount(Motos, { localVue, store });
       expect(wrapper.find('[data-test="motos-title"]').text()).toEqual( 'Motos' );
       wrapper.destroy()
     });
