@@ -28,9 +28,12 @@ class PaymentsModel(db.Model):
         Converts Payment to JSON and returns it
         Return: dict
         """
+        rental_uid = None
         rental = RentalsModel.find_by_id(self.id_rental)
+        if rental:
+            rental_uid = rental.user_id
         return {
-            'user_id': rental.user_id,
+            'user_id': rental_uid,
             'id_payment': self.id_payment,
             'id_rental': self.id_rental,
             'id_bank_data': self.id_bank_data,

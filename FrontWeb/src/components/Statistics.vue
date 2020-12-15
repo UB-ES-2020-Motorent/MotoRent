@@ -1,83 +1,70 @@
 <template>
   <div id="app">
-    <h1>User {{id}}</h1>
     <div class="container">
-      <b-table data-test="users-b-table" responsive striped hover :items="[user]" :fields="fields">
-        <template #cell(available)="row">
-          <b-button :variant="availableButton(row.value)" size="sm" @click="putUserAvailable(row.item.id, row.value)"> {{row.value}} </b-button>
-        </template>
-      </b-table>
-    </div>
-    <b-container>
-      <bankdatas :user_id="user.id" detail="true"/>
-      <!--payments :user_id="user.id" /-->
-      <rentals :user_id="user.id" />
-      <incidents :user_id="user.id" />
-    </b-container>
+      <div v-for="(year) in Object.keys(statistics)" v-bind:key="year">
+        <h1>{{ year }}</h1>
+        <div v-for="(month) in returnMonths(year)" v-bind:key="month">
+          <h4>&nbsp;</h4>
+          <h4 style="text-align:left">{{ getMonthName(month) }}</h4>
+          <b-table data-test="statistics-b-table" striped hover :items="[getMonthData(year, month)]" :fields="fields">
+          </b-table>
+        </div>
+        <h1>&nbsp;</h1>
+        <h1>&nbsp;</h1>
+      </div>
+      </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import router from '../router'
-import Rentals from '@/components/Rentals.vue'
-import Incidents from '@/components/Incidents.vue'
-import Payments from './Payments.vue'
-import Bankdatas from './Bankdatas.vue'
 export default {
-  name: 'User',
-  components: {
-    Rentals,
-    Incidents,
-    Payments,
-    Bankdatas
-  },
+  name: 'Statistics',
   data () {
     return {
-      id: 0,
-      user: {},
-      fields: ['id_bank_data', 'national_id_document', 'country', 'name', 'surname', 'mail', 'google_token']
+      statistics: [],
+      fields: [
+        {key: 'total_rentals'},
+        {key: 'rental_earnings'},
+        {key: 'rentals_mean_duration_(minutes)'}
+      ],
+      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     }
   },
   methods: {
     navigate () {
       router.go(-1)
     },
-    getUser () {
-      const path = this.$heroku + `/user?id=${this.id}`
+    getStatistics () {
+      const path = this.$heroku + `/statistics`
       axios.get(path, {
         auth: { username: this.token }
       })
         .then((res) => {
-          console.log(res)
-          this.user = res.data.user
+          this.statistics = res.data.statistics
         })
         .catch((error) => {
           console.error(error)
         })
     },
-    putUserAvailable (id, available) {
-      const path = this.$heroku + `/user/${id}`
-      const param = {'available': !available}
-      axios.put(path, param, {
-        auth: { username: this.token }
-      })
-        .then((res) => {
-          console.log(res)
-          this.getUser()
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+    returnMonths (year) {
+      return Object.keys(this.statistics[year])
     },
-    availableButton (available) {
-      if (available) { return 'outline-success' } else { return 'outline-danger' }
+    getMonthName (month) {
+      return this.monthNames[month - 1]
+    },
+    getMonthData (year, month) {
+      return {
+        'total_rentals': this.statistics[year][month]['num_rentals'],
+        'rental_earnings': this.statistics[year][month]['total_money'] + ' \u20AC',
+        'rentals_mean_duration_(minutes)': this.statistics[year][month]['rental_duration_total'] / this.statistics[year][month]['num_rentals']
+      }
     }
   },
   created () {
-    this.id = this.$route.params.id
-    this.getUser()
     this.token = this.$store.state.token
+    this.getStatistics()
   }
 }
 </script>
