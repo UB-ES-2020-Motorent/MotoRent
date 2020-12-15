@@ -14,6 +14,7 @@ import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions
 import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.model.UserInfo
+import ub.es.motorent.app.model.UserList
 import ub.es.motorent.app.view.LoginActivity
 import ub.es.motorent.app.view.LoginWaitFragment
 import com.facebook.FacebookSdk
@@ -38,8 +39,33 @@ class LoginPresenter (private val activity: LoginActivity) {
                 }
         }
     }
+
+    fun checkSuccessSignIn(email: String, password: String): Boolean {
+        var success : Boolean = false
+        if(notEmptyInfoField(email, password)) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity) { task ->
+                    if (task.isSuccessful) {
+                        success = true
+                    } else {
+                        success = false
+                    }
+                }
+        }
+        return success
+    }
+
     fun notEmptyInfoField(email: String, password: String): Boolean {
         return !(email.isEmpty() or password.isEmpty())
+    }
+
+    fun checkUserInfoToAdd(email: String, password: String): Boolean {
+        if (email.length<6 || !email.contains("@") || !email.contains(".")){
+            return false
+        } else if (password.length < 6){
+            return false
+        }
+        return true
     }
 
     fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
@@ -133,6 +159,10 @@ class LoginPresenter (private val activity: LoginActivity) {
         } else {
             activity.goToMaps()
         }
+    }
+
+    fun getUsers(): UserList {
+        return getUsers()
     }
 
     fun logOutAccount(){
