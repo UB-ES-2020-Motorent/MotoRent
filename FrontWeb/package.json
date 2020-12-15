@@ -21,6 +21,8 @@
     "jquery": "^1.9.1",
     "moment": "^2.29.1",
     "vue": "^2.5.2",
+    "vue-dropdowns": "^1.1.2",
+    "vue-dynamic-dropdown": "^1.0.12",
     "vue-moment": "^4.1.0",
     "vue-money-format": "^1.2.1",
     "vue-router": "^3.4.9",

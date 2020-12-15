@@ -9,6 +9,7 @@ import Moto from '@/components/Moto'
 import Rentals from '@/components/Rentals'
 import Incidents from '@/components/Incidents'
 import User from '@/components/User'
+import Statistics from '@/components/Statistics'
 
 Vue.use(Router)
 
@@ -60,6 +61,11 @@ export default new Router({
       path: '/user/:id',
       name: 'User',
       component: User
+    },
+    {
+      path: '/statistics',
+      name: 'Statistics',
+      component: Statistics
     }
   ]
 })
