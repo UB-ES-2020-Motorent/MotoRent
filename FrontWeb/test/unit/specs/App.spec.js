@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
+import Vuex from 'vuex'
 import App from '@/App.vue'
 import Home from '@/components/Home'
 import Motos from '@/components/Motos'
@@ -11,28 +12,43 @@ import Payments from '@/components/Payments'
 import Rentals from '@/components/Rentals'
 import Incidents from '@/components/Incidents'
 
+
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(VueRouter)
+
+localVue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    token: ''
+  },
+  mutations: {
+    setToken (state, newToken) {
+      state.token = newToken
+    }
+  }
+})
+
 
 describe('App', () => {
     it('should mount for testing', () => {
       expect(1).toEqual(1);
     });
     it('buttons contains motos', () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       expect(wrapper.find('[data-test="app-button-group"]').text()).toContain('Motos');
     });
     it('buttons contains users', () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       expect(wrapper.find('[data-test="app-button-group"]').text()).toContain('Users');
     });
     it('buttons contains rentals', () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       expect(wrapper.find('[data-test="app-button-group"]').text()).toContain('Rentals');
     });
     it('routing home', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.vm.$nextTick()
       } catch(e) {
@@ -42,7 +58,7 @@ describe('App', () => {
       expect(wrapper.findComponent(Motos).exists()).toBe(false)
     });
     it('buttons routes /motos correctly', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.find('input[id="motosID"]').trigger('click')
       } catch(e) {
@@ -52,7 +68,7 @@ describe('App', () => {
       expect(wrapper.findComponent(Home).exists()).toBe(false)
     });
     it('buttons routes /users correctly', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.find('input[id="usersID"]').trigger('click')
       } catch(e) {
@@ -62,7 +78,7 @@ describe('App', () => {
       expect(wrapper.findComponent(Home).exists()).toBe(false)
     });
     it('buttons routes /rentals correctly', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.find('input[id="rentalsID"]').trigger('click')
       } catch(e) {
@@ -72,7 +88,7 @@ describe('App', () => {
       expect(wrapper.findComponent(Home).exists()).toBe(false)
     });
     it('buttons routes /incidents correctly', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.find('input[id="incidentsID"]').trigger('click')
       } catch(e) {
@@ -82,7 +98,7 @@ describe('App', () => {
       expect(wrapper.findComponent(Home).exists()).toBe(false)
     });
     it('buttons routes /bankdatas correctly', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.find('input[id="bankdatasID"]').trigger('click')
       } catch(e) {
@@ -92,7 +108,7 @@ describe('App', () => {
       expect(wrapper.findComponent(Home).exists()).toBe(false)
     });
     it('buttons routes /payments correctly', async () => {
-      const wrapper = mount(App, { localVue, router });
+      const wrapper = mount(App, { localVue, router, store });
       try{
         await wrapper.find('input[id="paymentsID"]').trigger('click')
       } catch(e) {

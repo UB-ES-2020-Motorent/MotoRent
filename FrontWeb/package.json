@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "start": "npm run build",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "bootstrap-vue": "^2.20.1",
+    "express": "^4.17.1",
     "firebase": "^8.1.2",
     "flush-promises": "^1.0.2",
     "jquery": "^1.9.1",
@@ -23,7 +24,8 @@
     "vue-moment": "^4.1.0",
     "vue-money-format": "^1.2.1",
     "vue-router": "^3.4.9",
-    "vuex": "^3.6.0"
+    "vuex": "^3.6.0",
+    "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

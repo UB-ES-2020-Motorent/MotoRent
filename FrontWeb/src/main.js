@@ -8,6 +8,7 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase/app'
 import axios from 'axios'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.prototype.$axios = axios
 Vue.use(BootstrapVue)
@@ -24,7 +25,12 @@ const store = new Vuex.Store({
     setToken (state, newToken) {
       state.token = newToken
     }
-  }
+  },
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage
+    })
+  ]
 })
 
 const configOptions = {
