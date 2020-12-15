@@ -14,7 +14,6 @@ import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.presenter.BankFormPresenter
 import ub.es.motorent.app.view.BankFormActivity
 
-@RunWith(MockitoJUnitRunner::class)
 class BankFormActivityTest {
 
     @Mock
@@ -30,6 +29,7 @@ class BankFormActivityTest {
 
     @Before
     fun setUp() {
+        // init mocks
         MockitoAnnotations.initMocks(this)
         BankFormActivity = BankFormActivity()
         presenter = BankFormPresenter(BankFormActivity)

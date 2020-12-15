@@ -1,10 +1,5 @@
 package ub.es.motorent
 
-import android.content.Context
-import android.content.Intent
-import androidx.test.core.app.ApplicationProvider
-import bolts.Task
-import com.google.firebase.auth.AuthResult
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -13,8 +8,6 @@ import org.mockito.MockitoAnnotations
 import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.view.ComplementaryFormActivity
 import ub.es.motorent.app.presenter.ComplementaryFormPresenter
-import ub.es.motorent.app.presenter.LoginPresenter
-import ub.es.motorent.app.view.LoginActivity
 
 class ComplementaryFormTest {
     @Mock
@@ -31,6 +24,7 @@ class ComplementaryFormTest {
 
     @Before
     fun setUp(){
+        //init mocks
         MockitoAnnotations.initMocks(this)
         complementaryFormActivity = ComplementaryFormActivity()
         presenter = ComplementaryFormPresenter(complementaryFormActivity)

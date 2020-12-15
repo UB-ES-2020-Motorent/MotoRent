@@ -1,20 +1,13 @@
 package ub.es.motorent
 
-import android.content.Intent
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import org.mockito.runners.MockitoJUnitRunner
-import ub.es.motorent.app.model.UserInfo
-import ub.es.motorent.app.presenter.LoginPresenter
 import ub.es.motorent.app.presenter.SignUpPresenter
-import ub.es.motorent.app.view.LoginActivity
 import ub.es.motorent.app.view.SignUpActivity
 
-@RunWith(MockitoJUnitRunner::class)
 class SignUpTest {
 
     @Mock
@@ -27,6 +20,7 @@ class SignUpTest {
 
     @Before
     fun setUp(){
+        // init mocks
         MockitoAnnotations.initMocks(this)
         signUpActivity = SignUpActivity()
         presenter = SignUpPresenter(signUpActivity)
@@ -40,6 +34,7 @@ class SignUpTest {
     }
 
     @Test
+    //checks if the user and the mail are not empty
     fun userAndMailNotEmptyTest(){
         assertEquals(presenter.userAndMailNotEmpty(mail,password), true )
         assertEquals(presenter.userAndMailNotEmpty("Pepe","pepe@sech.com"), true )
@@ -49,6 +44,7 @@ class SignUpTest {
     }
 
     @Test
+    // checks if the password is valid
     fun checkPasswordTest(){
         assertEquals(presenter.checkPasswordisValid(mail,password), true )
         assertEquals(presenter.checkPasswordisValid("qwerty1", "qwerty1"), true)

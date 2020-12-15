@@ -41,6 +41,7 @@ public class ResetPswdTest {
 
     @Before
     fun setUp() {
+        // init mocks
         MockitoAnnotations.initMocks(this)
         resetPswdActivity = ResetPswdActivity()
         presenter = ResetPswdPresenter(resetPswdActivity)
@@ -55,6 +56,7 @@ public class ResetPswdTest {
 
     @Test
     fun verifyMailTest() {
+        // checks if the email data is correct
         assertEquals(true, presenter.verifyMail(mail))
         assertEquals(false, presenter.verifyMail("testing.motorent.com"))
         assertEquals(true, presenter.verifyMail("testing@motorent.es"))

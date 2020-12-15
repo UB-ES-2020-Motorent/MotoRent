@@ -1,30 +1,18 @@
 package ub.es.motorent
 
 import android.content.Intent
-import android.widget.Button
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import com.google.common.base.Verify.verify
 import ub.es.motorent.app.presenter.LoginPresenter
 import ub.es.motorent.app.view.LoginActivity
 import org.junit.Assert.*
-import org.junit.Rule
 import ub.es.motorent.app.model.UserInfo
-import android.content.Context
-import bolts.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import org.mockito.runners.MockitoJUnitRunner
 import ub.es.motorent.app.model.UserDB
-import javax.annotation.meta.When
 
-@RunWith(MockitoJUnitRunner::class)
 public class LoginActivityTest {
-
+    // mock
     @Mock
     private lateinit var presenter: LoginPresenter
     @Mock
@@ -40,6 +28,7 @@ public class LoginActivityTest {
 
     @Before
     fun setUp(){
+        // init mocks
         MockitoAnnotations.initMocks(this)
         loginActivity = LoginActivity()
         presenter = LoginPresenter(loginActivity)
@@ -48,12 +37,13 @@ public class LoginActivityTest {
     }
 
     @Test
+    // checks if fields are not empty
     fun checkIfNotEmptyField() {
-        // assert if not empty
         assertEquals(presenter.notEmptyInfoField(mail, password), true)
     }
 
      @Test
+     // checks if the user info is valid
      fun checkUserInfoToAdd(){
          assertEquals(presenter.checkUserInfoToAdd(mail, password), true)
          assertEquals(presenter.checkUserInfoToAdd("testing.motorent.com", "123567"), false)
