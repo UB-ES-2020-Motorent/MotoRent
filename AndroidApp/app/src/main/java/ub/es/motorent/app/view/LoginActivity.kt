@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.replace
 
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.facebook.*
 import com.facebook.AccessToken.getCurrentAccessToken
 import com.facebook.internal.WebDialog
@@ -29,8 +31,7 @@ import com.facebook.login.LoginResult
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
+
 
 
 
@@ -73,7 +74,6 @@ class LoginActivity : FullScreenActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FacebookSdk.fullyInitialize()
         setContentView(R.layout.activity_login)
         presenter = LoginPresenter(this)
 

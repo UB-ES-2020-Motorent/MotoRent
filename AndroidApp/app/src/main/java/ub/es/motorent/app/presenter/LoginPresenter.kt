@@ -61,6 +61,7 @@ class LoginPresenter (private val activity: LoginActivity) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
+         Log.d(TAG, "handleFacebookCredential:$credential")
         auth.signInWithCredential(credential).addOnCompleteListener{task ->
             if(task.isSuccessful) {
                 val user = auth.currentUser
