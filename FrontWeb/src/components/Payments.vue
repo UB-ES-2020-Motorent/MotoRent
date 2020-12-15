@@ -2,7 +2,7 @@
   <div id="app">
     <h1 data-test="payments-title">Payments</h1>
     <div class="container" v-if="$store.getters.isLoggedIn">
-      <b-table data-test="payments-b-table" responsive striped hover :items="payments" :fields="fields" :filter-function="filterTable" sort-by="id_payment">
+      <b-table data-test="payments-b-table" responsive striped hover :items="payments" :fields="fields" :filter="filterId" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id_payment">
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id_payment, $event.target)"> json </button>
           <button class="btn btn-danger btn-sm" @click="deletePayment(row.item.id_payment)"> X </button>
@@ -28,16 +28,22 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
-import MoneyFormat from 'vue-money-format'
 export default {
   name: 'Payments',
-  components: {
-    'money-format': MoneyFormat
+  props: [ 'moto_id', 'user_id' ],
+  watch: {
+    moto_id () {
+      this.filterOn.push('moto_id')
+    },
+    user_id () {
+      this.filterOn.push('user_id')
+    }
   },
   data () {
     return {
       payments: [],
       fields: [
+        {key: 'user_id', sortable: true},
         {key: 'id_payment', sortable: true},
         {key: 'id_rental', sortable: true},
         {key: 'id_bank_data', sortable: false},
@@ -50,7 +56,10 @@ export default {
         title: '',
         content: ''
       },
-      isPostNotPut: true
+      filterId: null,
+      filterOn: [],
+      isPostNotPut: true,
+      token: ''
     }
   },
   methods: {
@@ -108,6 +117,8 @@ export default {
     }
   },
   created () {
+    const id = this.$route.params.id
+    if (id != null) { this.filterId = id.toString() }
     this.token = this.$store.state.token
     this.getPayments()
   }

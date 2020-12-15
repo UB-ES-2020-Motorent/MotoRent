@@ -10,6 +10,7 @@ import Rentals from '@/components/Rentals'
 import Incidents from '@/components/Incidents'
 import User from '@/components/User'
 import Statistics from '@/components/Statistics'
+import MapCoords from '@/components/MapCoords'
 
 Vue.use(Router)
 
@@ -53,6 +54,16 @@ export default new Router({
       component: Payments
     },
     {
+      path: '/mapcoords',
+      name: 'MapCoords',
+      component: MapCoords
+    },
+    {
+      path: '/statistics',
+      name: 'Statistics',
+      component: Statistics
+    },
+    {
       path: '/moto/:id',
       name: 'Moto',
       component: Moto
@@ -61,11 +72,6 @@ export default new Router({
       path: '/user/:id',
       name: 'User',
       component: User
-    },
-    {
-      path: '/statistics',
-      name: 'Statistics',
-      component: Statistics
     }
   ]
 })

@@ -27,6 +27,9 @@
         <label class="btn btn-secondary">
           <input type="radio" name="options" id="statisticsID" autocomplete="off" checked @click="goToStatistics"> Statistics
         </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="mapcoordsID" autocomplete="off" checked @click="goToMapCoords"> MapCoords
+        </label>
       </div>
     </div>
     <router-view/>
@@ -60,6 +63,9 @@ export default {
     },
     goToStatistics () {
       this.$router.replace({ path: '/statistics' })
+    },
+    goToMapCoords () {
+      this.$router.replace({ path: '/mapcoords' })
     }
   }
 }

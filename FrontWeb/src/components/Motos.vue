@@ -9,7 +9,7 @@
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id, $event.target)"> json </button>
           <button class="btn btn-warning btn-sm" @click="goToMoto(row.item.id, $event.target)"> moto </button>
-          <button class="btn btn-secondary btn-sm" @click="modifyMoto(row.item, $event.target)"> modify </button>
+          <button class="btn btn-secondary btn-sm" disabled @click="modifyMoto(row.item, $event.target)"> modify </button>
           <button class="btn btn-danger btn-sm" @click="deleteMoto(row.item.id)"> X </button>
         </template>
       </b-table>

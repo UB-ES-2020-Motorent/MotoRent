@@ -9,12 +9,18 @@ import router from './router'
 import firebase from 'firebase/app'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.prototype.$axios = axios
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 Vue.prototype.$heroku = 'https://motorent-apitest.herokuapp.com'
-
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDNBDKhSoYVhvd8SWPVCavLPspiE1UJ01c',
+    libraries: 'places' // necessary for places input
+  }
+})
 Vue.use(Vuex)
 
 const store = new Vuex.Store({

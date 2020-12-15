@@ -10,7 +10,7 @@
     </div>
     <b-container>
       <bankdatas :user_id="user.id" detail="true"/>
-      <!--payments :user_id="user.id" /-->
+      <payments :user_id="user.id"/>
       <rentals :user_id="user.id" />
       <incidents :user_id="user.id" />
     </b-container>
