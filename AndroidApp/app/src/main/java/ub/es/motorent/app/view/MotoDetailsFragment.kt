@@ -14,13 +14,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import ub.es.motorent.R
-import ub.es.motorent.app.model.CommonFunctions
-import ub.es.motorent.app.model.PaymentsDB
-import ub.es.motorent.app.model.RentalDB
-import ub.es.motorent.app.model.UserDB
-import java.text.ParseException
+import ub.es.motorent.app.model.*
 import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -57,6 +52,7 @@ class MotoDetailsFragment : Fragment() {
                 mainHandler.postDelayed(this, 50)
             }
         })
+
     }
 
     override fun onCreateView(
@@ -79,6 +75,9 @@ class MotoDetailsFragment : Fragment() {
         rentbtn.setOnClickListener {updateRentButton()}
         licenseText.text = license
         batteryText.text = battery.toString()
+
+        val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
+        updateStatus(userId)
 
         updateRentButtonText(rentalStatus)
     }
@@ -129,10 +128,33 @@ class MotoDetailsFragment : Fragment() {
             }
     }
 
+
+    fun updateStatus(userId: Int?){
+        RentalDB.getActiveRentalByUserId(userId!!){rentalAct ->
+            when {
+                rentalAct == null -> {
+                    rentalStatus = 0
+                }
+                (rentalAct?.book_hour != null) and (rentalAct?.finish_book_hour == null) -> {
+                    rentalStatus = 1
+                }
+                (rentalAct?.finish_book_hour != null) and (rentalAct != null) -> {
+                    rentalStatus = 2
+                }
+
+            }
+        }
+    }
+
+
+
     fun updateRentButton(){
         val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
         UserDB.getUserByIdOrGoogleToken(userId){
             val userBankData = it?.id_bank_data
+            val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
+
+
             when (rentalStatus) {
                 0 -> {
                     updateRentButtonText(1)
@@ -249,6 +271,8 @@ class MotoDetailsFragment : Fragment() {
         fun launchReport(id: Int)
         fun inZone(): Boolean
         fun setRentalStatus(status: Int)
+        fun setCurrentRentalInfo(rentalDB: RentalInfo)
+        fun getStatus(): Int
     }
 
     private fun startFragmentReport(id:Int){

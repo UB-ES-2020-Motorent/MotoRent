@@ -231,6 +231,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         if (rentalDB == null || !rentalDB.active){
                             loadMotosOnMap(motoList)
                         } else {
+
                             setCurrentRentalInfo(rentalDB)
                             loadMotoRentalOnMap(rentalDB.moto_id, motoList)
                         }
@@ -244,7 +245,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         CommonFunctions.saveCurrentRentalInfoToSharedPref(rentalDB, this)
     }
 
-    private fun setCurrentRentalInfo(rentalDB: RentalInfo) {
+     override fun setCurrentRentalInfo(rentalDB: RentalInfo) {
         //val fragment: MotoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail) as MotoDetailsFragment
         if (rentalDB.finish_book_hour != null){
             //fragment.updateRentButtonText(2)
@@ -280,6 +281,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, holePolyg, true) else false
     }
 
+    override fun getStatus(): Int {
+        return rentalStatus
+    }
     companion object {
         private const val TAG = "MapsActivity"
     }
