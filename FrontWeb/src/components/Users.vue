@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Users</h1>
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <b-table striped hover :items="users" :fields="fields" :filter-function="filterTable" sort-by="id">
         <template #cell(actions)="row">
           <button class="btn btn-warning btn-sm" @click="goToUser(row.item.id, $event.target)"> user </button>
@@ -91,6 +91,9 @@
           </b-form-group>
         </form>
       </b-modal>
+    </div>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <img src="@/assets/stop.jpg" height="200" margin>
     </div>
   </div>
 </template>

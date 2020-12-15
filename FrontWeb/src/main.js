@@ -26,6 +26,11 @@ const store = new Vuex.Store({
       state.token = newToken
     }
   },
+  getters: {
+    isLoggedIn: state => {
+      return state.token !== ''
+    }
+  },
   plugins: [
     createPersistedState({
       storage: window.sessionStorage

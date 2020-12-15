@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1 data-test="rentals-title">Rentals</h1>
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <b-table data-test="rentals-b-table" striped hover :items="rentals" :fields="fields" :filter="filter" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id">
         <template #cell(actions)="row">
             <b-button variant="secondary" size="sm" @click="row.toggleDetails"> details </b-button>
@@ -42,6 +42,9 @@
       <b-modal :id="infoModal.id" :title="infoModal.title" ok-only centered @hide="resetInfoModal">
         <pre>{{ infoModal.content }}</pre>
       </b-modal>
+    </div>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <img src="@/assets/stop.jpg" height="200" margin>
     </div>
   </div>
 </template>

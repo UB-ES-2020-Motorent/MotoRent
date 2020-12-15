@@ -29,8 +29,11 @@
         </form>
       </div>
     </div>
-    <div>
-      <button class="btn btn-success btn-md" @click="logIn()"> Sign In </button>
+    <div class="container" style="margin-top: 20px">
+      <button class="btn btn-success btn-md block" @click="logIn()"> Sign In </button>
+    </div>
+    <div class="container" style="margin-top: 10px">
+      <button class="btn btn-danger btn-md block" @click="logOut()"> Sign Out </button>
     </div>
   </div>
 </template>
@@ -82,6 +85,9 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    logOut () {
+      this.$store.commit('setToken', '')
     }
   }
 }
