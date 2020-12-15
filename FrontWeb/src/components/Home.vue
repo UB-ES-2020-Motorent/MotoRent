@@ -11,6 +11,7 @@
           >
             <b-form-input
               id="mail-input"
+              type="email"
               v-model="loginData.mail"
               required
             ></b-form-input>
@@ -22,6 +23,7 @@
           >
             <b-form-input
               id="password-input"
+              type="password"
               v-model="loginData.password"
               required
             ></b-form-input>

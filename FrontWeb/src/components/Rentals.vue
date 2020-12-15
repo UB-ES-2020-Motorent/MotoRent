@@ -126,7 +126,7 @@ export default {
         })
           .then((motoRes) => {
             const path = this.$heroku + `/rental/${rental.id}`
-            var end = true
+            var end = false
             if (rental.finish_book_hour != null) { end = true }
             const param = {
               'end_rental': end,
