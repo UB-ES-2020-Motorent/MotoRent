@@ -77,9 +77,9 @@ class MotoDetailsFragment : Fragment() {
         batteryText.text = battery.toString()
 
         val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
-        updateStatus(userId)
 
-        updateRentButtonText(rentalStatus)
+        //updateStatus(userId)
+        //updateRentButtonText(rentalStatus)
     }
 
     override fun onAttach(context: Context) {
@@ -131,9 +131,11 @@ class MotoDetailsFragment : Fragment() {
 
     fun updateStatus(userId: Int?){
         RentalDB.getActiveRentalByUserId(userId!!){rentalAct ->
+            Log.d(TAG, "EL PEPE")
             when {
                 rentalAct == null -> {
                     rentalStatus = 0
+
                 }
                 (rentalAct?.book_hour != null) and (rentalAct?.finish_book_hour == null) -> {
                     rentalStatus = 1
@@ -153,7 +155,8 @@ class MotoDetailsFragment : Fragment() {
         UserDB.getUserByIdOrGoogleToken(userId){
             val userBankData = it?.id_bank_data
             val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
-
+            //updateStatus(userId)
+            //updateRentButtonText(rentalStatus)
 
             when (rentalStatus) {
                 0 -> {
@@ -271,7 +274,7 @@ class MotoDetailsFragment : Fragment() {
         fun launchReport(id: Int)
         fun inZone(): Boolean
         fun setRentalStatus(status: Int)
-        fun setCurrentRentalInfo(rentalDB: RentalInfo)
+        fun setCurrentRentalInfo(rentalDB: RentalInfo?)
         fun getStatus(): Int
     }
 
