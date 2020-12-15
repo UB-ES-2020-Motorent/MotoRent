@@ -71,7 +71,7 @@ class ReportFragment : Fragment() {
 
             val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
 
-            IncidencesDB.addIncident(userId, id, missatge ){incidence ->
+            IncidencesDB.addIncident(id, userId, missatge ){incidence ->
                 CommonFunctions.saveCurrentIncidenceInfoToSharedPref(incidence, activity)
             }
 

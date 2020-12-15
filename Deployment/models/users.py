@@ -1,4 +1,23 @@
-from db import db
+from db import db, secret_key
+from passlib.apps import custom_app_context as pwd_context
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+from flask_httpauth import HTTPBasicAuth
+from flask import g
+
+auth = HTTPBasicAuth()
+
+
+@auth.verify_password
+def verify_password(token, password):
+    user = UsersModel.verify_auth_token(token)
+    if user:
+        g.user = user
+        return user
+
+
+@auth.get_user_roles
+def get_user_roles(user):
+    return ['user'] if user.role == 0 else ['admin']
 
 
 class UsersModel(db.Model):
@@ -27,29 +46,23 @@ class UsersModel(db.Model):
         self.role = role
         self.id_bank_data = None
 
-    def json(self, role):
+    def json(self):
         """
         Converts Users to JSON and returns it
         Return: dict
         """
-        if role == 1:
-            return {
-                'id': self.id,
-                'id_bank_data': self.id_bank_data,
-                'national_id_document': self.national_id_document,
-                'country': self.country,
-                'name': self.name,
-                'surname': self.surname,
-                'mail': self.mail,
-                'google_token': self.google_token,
-                'role': self.role
-            }
-        else:
-            return {
-                'name': self.name,
-                'surname': self.surname,
-                'country': self.country
-            }
+        return {
+            'id': self.id,
+            'id_bank_data': self.id_bank_data,
+            'national_id_document': self.national_id_document,
+            'country': self.country,
+            'name': self.name,
+            'surname': self.surname,
+            'mail': self.mail,
+            'google_token': self.google_token,
+            'role': self.role
+        }
+
 
     def save_to_db(self):
         """
@@ -108,3 +121,31 @@ class UsersModel(db.Model):
         Return: all AccountsModels
         """
         return UsersModel.query.all()
+
+    def generate_auth_token(self, expiration=3600):
+        s = Serializer(secret_key, expires_in=expiration)
+        return s.dumps({'google_token': self.google_token})
+
+    @classmethod
+    def verify_auth_token(cls, token):
+        s = Serializer(secret_key)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # valid token, but expired
+        except BadSignature:
+            return None  # invalid token
+        user = cls.query.filter_by(google_token=data['google_token']).first()
+        return user
+
+    def hash_password(self, google_token):
+        """
+        Encrypts and adds a password to user
+        """
+        self.google_token = pwd_context.encrypt(google_token)
+
+    def verify_password(self, google_token):
+        """
+        Cheques if password is correct
+        """
+        return google_token == self.google_token

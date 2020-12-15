@@ -15,14 +15,19 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import ub.es.motorent.R
 import ub.es.motorent.app.model.CommonFunctions
+import ub.es.motorent.app.model.PaymentsDB
 import ub.es.motorent.app.model.RentalDB
+import ub.es.motorent.app.model.UserDB
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
  * Use the [MotoDetailsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-@Suppress("DEPRECATION")
+
 class MotoDetailsFragment : Fragment() {
     private var license: String? = null
     private var id : Int? = null
@@ -126,33 +131,52 @@ class MotoDetailsFragment : Fragment() {
 
     fun updateRentButton(){
         val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
-        when (rentalStatus) {
-            0 -> {
-                updateRentButtonText(1)
-                RentalDB.addRental(this.id, userId){rental ->
-                    CommonFunctions.saveCurrentRentalInfoToSharedPref(rental, activity)
+        UserDB.getUserByIdOrGoogleToken(userId){
+            val userBankData = it?.id_bank_data
+            when (rentalStatus) {
+                0 -> {
+                    updateRentButtonText(1)
+                    RentalDB.addRental(this.id, userId){rental ->
+                        CommonFunctions.saveCurrentRentalInfoToSharedPref(rental, activity)
+                    }
                 }
-            }
-            1 -> {
-                val rentalId = getRentalIdFromDB()
-                updateRentButtonText(2)
-                RentalDB.updateRentalById(rentalId, "False", null, null)
-            }
-            2 -> {
-                if (inZone){
+                1 -> {
                     val rentalId = getRentalIdFromDB()
-                    updateRentButtonText(0)
-                    RentalDB.updateRentalById(rentalId, "True", motoLat?.toFloat(), motoLong?.toFloat())
-                    CommonFunctions.saveCurrentRentalInfoToSharedPref(null, activity)
-                    Toast.makeText(activity, "Viatje finalitzat. S'ha carregat l'import a la teva targeta per defecte.", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(activity, "No pots deixar la moto fora de l'àrea delimitada.", Toast.LENGTH_SHORT).show()
+                    updateRentButtonText(2)
+                    RentalDB.updateRentalById(rentalId, "False", null, null)
                 }
-            }
-            else -> {
-                Log.e(TAG, "wrong rental status = $rentalStatus")
+                2 -> {
+                    if (inZone){
+                        val rentalId = getRentalIdFromDB()
+                        updateRentButtonText(0)
+                        RentalDB.updateRentalById(rentalId, "True", motoLat?.toFloat(), motoLong?.toFloat())
+                        CommonFunctions.saveCurrentRentalInfoToSharedPref(null, activity)
+
+                        if (rentalId != null) {
+                            if(userBankData != null){
+                                getImportRental(rentalId){ listRet ->
+                                    PaymentsDB.addPayment(rentalId!!,userBankData!!, listRet[0]!!.toFloat(), listRet[1] ){it3->
+                                        CommonFunctions.saveCurrentPaymentInfoToSharedPref(it3, activity)
+                                    }
+                                }
+                                Toast.makeText(activity, "Viatje finalitzat. S'ha carregat l'import a la teva targeta per defecte.", Toast.LENGTH_LONG).show()
+                            }else{
+                                Toast.makeText(activity, "Viatje finalitzat. Pagament pendent a falta d'associar targeta.", Toast.LENGTH_LONG).show()
+                            }
+
+                        }
+
+                    } else {
+                        Toast.makeText(activity, "No pots deixar la moto fora de l'àrea delimitada.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                else -> {
+                    Log.e(TAG, "wrong rental status = $rentalStatus")
+                }
             }
         }
+
+
     }
 
     fun updateRentButtonText(status: Int){
@@ -179,6 +203,45 @@ class MotoDetailsFragment : Fragment() {
         Log.i(TAG, rentalId.toString())
         return rentalId
     }
+
+
+    fun getImportRental(rentalId : Int, onResult: (List<String?>) -> Unit ) {
+        var totalImport : Float? = 0.00F
+
+        RentalDB.getRentalById(rentalId){rentalImport->
+            var listReturn = listOf<String?>(null)
+            val startTravel = rentalImport?.finish_book_hour
+            val finishTravel = rentalImport?.finish_rental_hour
+            val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+
+            val startDate = formatter.parse(startTravel)
+            val endDate = formatter.parse(finishTravel)
+
+            if ((startDate != null) and (endDate != null)){
+                val diff: Long = endDate.time - startDate.time
+                val seconds = (diff / 1000).toFloat()
+                var minutes = (seconds / 60)
+
+                if (minutes < 1.00F){
+                    minutes = 1.00F
+                }
+
+                totalImport = minutes * 0.22F
+
+                listReturn = listOf<String?>(totalImport.toString(), finishTravel)
+
+                // "finish_book_hour": "2020-12-02T15:10:02.558473"
+                // "finish_rental_hour": "2020-12-02T15:10:50.782567"
+                onResult(listReturn)
+            }
+            
+        }
+
+    }
+
+
+
+
 
     interface FromFragmentToActivity {
         fun onOptionChosenFromFragment(option: Int)
