@@ -3,7 +3,9 @@ package ub.es.motorent.app.presenter
 import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -14,6 +16,9 @@ import ub.es.motorent.app.model.UserDB
 import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.view.LoginActivity
 import ub.es.motorent.app.view.LoginWaitFragment
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+
 
 // Initialize Firebase Auth
 private var auth: FirebaseAuth = Firebase.auth
@@ -51,6 +56,29 @@ class LoginPresenter (private val activity: LoginActivity) {
                 }
             }
     }
+
+     fun firebaseAuthWithFacebook(token: AccessToken) {
+        Log.d(TAG, "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+         Log.d(TAG, "handleFacebookCredential:$credential")
+        auth.signInWithCredential(credential).addOnCompleteListener{task ->
+            if(task.isSuccessful) {
+                val user = auth.currentUser
+                Log.w(TAG, "signInWithFacebook:success")
+                getUserFromDBAndSaveItToSP(user?.email)
+                goToNextActivity()
+
+            }else{   // entra aqui
+                Log.w(TAG, "signInWithFacebook:failure")
+                Log.w(TAG, token.toString())
+                activity.customImageToast(
+                    R.drawable.moto_toast, activity.getString(R.string.fail_auth), Toast.LENGTH_SHORT,
+                    Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
+                }
+        }
+    }
+
 
     fun getUserFromDBAndSaveItToSP(email: String?, name: String? = null, surname: String? = null){
         // show loading to the user while waiting for the database
