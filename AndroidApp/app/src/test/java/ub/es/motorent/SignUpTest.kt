@@ -46,7 +46,7 @@ class SignUpTest {
     @Test
     // checks if the password is valid
     fun checkPasswordTest(){
-        assertEquals(presenter.checkPasswordisValid(mail,password), true )
+        assertEquals(presenter.checkPasswordisValid(mail,password), false )
         assertEquals(presenter.checkPasswordisValid("qwerty1", "qwerty1"), true)
         assertEquals(presenter.checkPasswordisValid("qwerty", "qwerty"), false)
         assertEquals(presenter.checkPasswordisValid("qwe1", "qwe1"), false)
