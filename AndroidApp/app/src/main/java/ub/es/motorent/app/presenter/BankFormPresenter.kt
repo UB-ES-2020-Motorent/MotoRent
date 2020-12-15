@@ -24,70 +24,106 @@ class BankFormPresenter(var activity: BankFormActivity){
         }
     }
 
-        fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
+    fun getAllCardFromUser(onResult: (BankDataList?) -> Unit){
             val userInfo = CommonFunctions.loadUserInfoFromSharedPref(activity)
             if(userInfo != null) {
                 BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(userInfo.id, null) {
                     onResult(it)
                 }
             }
-        }
+    }
 
-    fun checkBankData(name:String, numtargeta:String, caducitat: String, cvv: String): Boolean {
-        if(name.length==0){
-            activity.customToast("El nom del titular no pot ser buit", Toast.LENGTH_LONG).show()
-            return false
-        }else if(numtargeta.length!=16){
-            activity.customToast("El número de targeta no és vàlid", Toast.LENGTH_LONG).show()
-            return false
-        } else if (caducitat.length==0 || !caducitat.contains("/")){
-            activity.customToast("La data no pot ser buida i ha de contenir el separador '/' entre mes i any", Toast.LENGTH_LONG).show()
-            return false
-        } else if (cvv.length!=3){
-            activity.customToast("El codi de seguretat ha de ser de 3 dígits", Toast.LENGTH_LONG).show()
-            return false
-        } else {
-            if(caducitat.split("/").get(0).length!=2 && caducitat.split("/").get(1).length!=2){
-                activity.customToast("El mes i l'any s'han d'escriure amb dues xifres (MM/YY)", Toast.LENGTH_LONG).show()
+    fun getAllCard(user_id: Int?) {
+        BankDataDB.getBankDataByCardNumberOrAllCardsByUserId(user_id, null) {
+        }
+    }
+
+        fun checkBankData(
+            name: String,
+            numtargeta: String,
+            caducitat: String,
+            cvv: String
+        ): Boolean {
+            if (name.length == 0) {
+                activity.customToast("El nom del titular no pot ser buit", Toast.LENGTH_LONG).show()
                 return false
-            }
-            var dataisvalid = true
-            try {
-                val datamonth = parseInt(caducitat.split("/").get(0))
-                val datayear = parseInt(caducitat.split("/").get(1))
-            } catch (e: NumberFormatException) {
-                activity.customToast("La data ha de tenir el format MM/YY escrit en xifres", Toast.LENGTH_LONG).show()
-                dataisvalid = false
-            }
-            return dataisvalid
-        }
-    }
-
-    fun checkBankDataIsValid(name:String, numtargeta:String, caducitat: String, cvv: String): Boolean {
-        if(name.length==0){
-            return false
-        }else if(numtargeta.length!=16){
-            return false
-        } else if (caducitat.length==0 || !caducitat.contains("/")){
-            return false
-        } else if (cvv.length!=3){
-            return false
-        } else {
-            if(caducitat.split("/").get(0).length!=2 && caducitat.split("/").get(1).length!=2){
+            } else if (numtargeta.length != 16) {
+                activity.customToast("El número de targeta no és vàlid", Toast.LENGTH_LONG).show()
                 return false
+            } else if (caducitat.length == 0 || !caducitat.contains("/")) {
+                activity.customToast(
+                    "La data no pot ser buida i ha de contenir el separador '/' entre mes i any",
+                    Toast.LENGTH_LONG
+                ).show()
+                return false
+            } else if (cvv.length != 3) {
+                activity.customToast(
+                    "El codi de seguretat ha de ser de 3 dígits",
+                    Toast.LENGTH_LONG
+                ).show()
+                return false
+            } else {
+                if (caducitat.split("/").get(0).length != 2 && caducitat.split("/")
+                        .get(1).length != 2
+                ) {
+                    activity.customToast(
+                        "El mes i l'any s'han d'escriure amb dues xifres (MM/YY)",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return false
+                }
+                var dataisvalid = true
+                try {
+                    val datamonth = parseInt(caducitat.split("/").get(0))
+                    val datayear = parseInt(caducitat.split("/").get(1))
+                } catch (e: NumberFormatException) {
+                    activity.customToast(
+                        "La data ha de tenir el format MM/YY escrit en xifres",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    dataisvalid = false
+                }
+                return dataisvalid
             }
-            var dataisvalid = true
-            try {
-                val datamonth = parseInt(caducitat.split("/").get(0))
-                val datayear = parseInt(caducitat.split("/").get(1))
-            } catch (e: NumberFormatException) {
-                dataisvalid = false
+        }
+
+        fun checkBankDataIsValid(
+            name: String,
+            numtargeta: String,
+            caducitat: String,
+            cvv: String
+        ): Boolean {
+            if (name.length == 0) {
+                return false
+            } else if (numtargeta.length != 16) {
+                return false
+            } else if (caducitat.length == 0 || !caducitat.contains("/")) {
+                return false
+            } else if (cvv.length != 3) {
+                return false
+            } else {
+                if (caducitat.split("/").get(0).length != 2 && caducitat.split("/")
+                        .get(1).length != 2
+                ) {
+                    return false
+                }
+                var dataisvalid = true
+                try {
+                    val datamonth = parseInt(caducitat.split("/").get(0))
+                    val datayear = parseInt(caducitat.split("/").get(1))
+                } catch (e: NumberFormatException) {
+                    dataisvalid = false
+                }
+                return dataisvalid
             }
-            return dataisvalid
+        }
+
+        fun notEmptyInfoField(
+            name: String,
+            numtargeta: String,
+            caducitat: String,
+            cvv: String
+        ): Boolean {
+            return !(name.isEmpty() or numtargeta.isEmpty() or caducitat.isEmpty() or cvv.isEmpty())
         }
     }
-
-    fun notEmptyInfoField(name:String, numtargeta:String, caducitat: String, cvv: String): Boolean {
-        return !(name.isEmpty() or numtargeta.isEmpty() or caducitat.isEmpty() or cvv.isEmpty())
-    }
-}

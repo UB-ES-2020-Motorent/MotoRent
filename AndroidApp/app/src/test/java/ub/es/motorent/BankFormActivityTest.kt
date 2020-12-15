@@ -81,5 +81,13 @@ class BankFormActivityTest {
     // verifies that the bank data can be get correctly (returns BankDataJson)
     fun checkGetBankDataByCardNumberOrAllCardsByUserId(){
         assertEquals(BankDataDB.getDefaultBankDataByUidOrBid(1, 1), Unit)
+        assertEquals(BankDataDB.getDefaultBankDataByUidOrBid(2, 2), Unit)
+    }
+
+    @Test
+    // verifies that the bank data can be get correctly (returns BankDataList)
+    fun checkGetAllCard(){
+        assertEquals(presenter.getAllCard(1), Unit)
+        assertEquals(presenter.getAllCard(2), Unit)
     }
 }

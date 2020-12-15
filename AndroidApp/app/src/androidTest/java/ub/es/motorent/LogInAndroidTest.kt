@@ -1,6 +1,7 @@
 package ub.es.motorent
 
 import android.content.Intent
+import android.provider.ContactsContract
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
@@ -16,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import ub.es.motorent.app.model.UserInfo
 import ub.es.motorent.app.presenter.LoginPresenter
 import ub.es.motorent.app.view.LoginActivity
