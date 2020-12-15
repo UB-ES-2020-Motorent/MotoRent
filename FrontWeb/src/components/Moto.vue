@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Moto {{id}}</h1>
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <b-table data-test="motos-b-table" responsive striped hover :items="[moto]">
         <template #cell(available)="row">
           <b-button :variant="availableButton(row.value)" size="sm" @click="putMotoAvailable(row.item.id, row.value)"> {{row.value}} </b-button>
@@ -14,6 +14,9 @@
       <h1>Last Users</h1>
       <b-table striped hover :items="justUsers" sort-by="rental_id"></b-table>
     </b-container>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <img src="@/assets/stop.jpg" height="200" margin>
+    </div>
   </div>
 </template>
 

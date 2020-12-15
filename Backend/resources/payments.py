@@ -118,6 +118,20 @@ class Payment(Resource):
             return {'message': "Payment with id [{}] Not found".format(id_payment)}, 404
 
 
+class Statistics(Resource):
+    """
+    API Restful methods for Statistics
+    """
+
+    @auth.login_required(role='admin')
+    def get(self):
+        """
+        GET method
+        Return: dict (payments)
+        """
+        return{'statistics': PaymentsModel.generate_statistics()}, 200
+
+
 class PaymentsList(Resource):
     """
     API Restful methods for PaymentsList

@@ -1,28 +1,26 @@
 <template>
   <div id="app">
     <h1 data-test="payments-title">Payments</h1>
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <b-table data-test="payments-b-table" responsive striped hover :items="payments" :fields="fields" :filter-function="filterTable" sort-by="id_payment">
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id_payment, $event.target)"> json </button>
           <button class="btn btn-danger btn-sm" @click="deletePayment(row.item.id_payment)"> X </button>
         </template>
         <template #cell(payment_import)="row">
-          <money-format :value="row.value"
-            :locale='SPAIN'
-            :currency-code='EUR'
-            :subunits-value=false
-            :hide-subunits=false>
-          </money-format>
+          {{row.value}} €
         </template>
-        <!--template #cell(payment_date)="row">
+        <template #cell(payment_date)="row">
           {{ getParsedTime(row.value) }}
-        </template-->
+        </template>
       </b-table>
       <!-- Modal Json -->
       <b-modal :id="infoModal.id" :title="infoModal.title" ok-only centered @hide="resetInfoModal">
         <pre>{{ infoModal.content }}</pre>
       </b-modal>
+    </div>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <img src="@/assets/stop.jpg" height="200" margin>
     </div>
   </div>
 </template>

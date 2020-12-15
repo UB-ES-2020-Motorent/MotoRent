@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1 data-test="bankdatas-title">BankDatas</h1>
-    <div class="container">
+    <div class="container" v-if="$store.getters.isLoggedIn">
       <b-table data-test="bankdatas-b-table" responsive striped hover :items="bankdatas" :fields="fields" :filter="filterId" :filter-included-fields="filterOn" :filter-function="filterTable" sort-by="id_bank_data">
         <template #cell(actions)="row">
           <button class="btn btn-info btn-sm" @click="info(row.item, row.item.id_bank_data, $event.target)"> json </button>
@@ -84,6 +84,9 @@
           </b-form-group>
         </form>
       </b-modal>
+    </div>
+    <div class="container" v-if="!$store.getters.isLoggedIn">
+      <img src="@/assets/stop.jpg" height="200" margin>
     </div>
   </div>
 </template>

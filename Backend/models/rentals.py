@@ -118,6 +118,22 @@ class RentalsModel(db.Model):
         """
         return RentalsModel.query.all()
 
+    @classmethod
+    def find_duration_by_id(cls, id):
+        """
+        Finds a Rental by id
+        Param: number id
+        Return: RentalModel
+        """
+        rental = RentalsModel.query.filter_by(id=id).first()
+        if rental:
+            start_rental = datetime.strptime(rental.book_hour, '%Y-%m-%dT%H:%M:%S.%f')
+            finish_rental = datetime.strptime(rental.finish_rental_hour, '%Y-%m-%dT%H:%M:%S.%f')
+            total_time = (finish_rental - start_rental).total_seconds() / 60.0
+            return total_time
+        else:
+            return 0
+
 
 def add_15_minutes_srting_datetime(date):
     date_time = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')

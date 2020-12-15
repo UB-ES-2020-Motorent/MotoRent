@@ -9,7 +9,7 @@ from resources.motos import Motos, MotosList, LastRentals
 from resources.map_coords import MapCoords, MapCoordsList
 from resources.rentals import Rentals, ActiveRentals, RentalsList
 from resources.bank_data import BankData, BankDataList
-from resources.payments import Payment, PaymentsList
+from resources.payments import Payment, PaymentsList, Statistics
 from resources.login import Login
 
 from db import db, secret_key
@@ -54,6 +54,7 @@ api.add_resource(Incident, '/incident', '/incident/<string:incident_id>')
 api.add_resource(IncidentsList, '/incidents')
 
 api.add_resource(Payment, '/payment', '/payment/<string:id_payment>')
+api.add_resource(Statistics, '/statistics')
 api.add_resource(PaymentsList, '/payments')
 
 api.add_resource(Login, '/login')

@@ -1,36 +1,39 @@
 <template>
   <div id="app">
     <h1> Welcome to MotoRent DataBase Control Center </h1>
-    <img src="../assets/moto_toast.png" height="250">
-    <div class="mx-auto" style="width: 300px">
-      <form ref="form">
-        <b-form-group
-          label="Mail"
-          label-for="mail-input"
-          invalid-feedback="Mail is required"
-        >
-          <b-form-input
-            id="mail-input"
-            v-model="loginData.mail"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Password"
-          label-for="password-input"
-          invalid-feedback="Password is required"
-        >
-          <b-form-input
-            id="password-input"
-            v-model="loginData.password"
-            type="password"
-            required
-          ></b-form-input>
-        </b-form-group>
-      </form>
+    <div id="app">
+      <div class="mx-auto" style="width: 300px">
+        <form ref="form">
+          <b-form-group
+            label="Mail"
+            label-for="mail-input"
+            invalid-feedback="Mail is required"
+          >
+            <b-form-input
+              id="mail-input"
+              v-model="loginData.mail"
+              required
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label="Password"
+            label-for="password-input"
+            invalid-feedback="Password is required"
+          >
+            <b-form-input
+              id="password-input"
+              v-model="loginData.password"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </form>
       </div>
-    <div>
-      <button class="btn btn-success btn-md" @click="logIn()"> Sign In </button>
+    </div>
+    <div class="container" style="margin-top: 20px">
+      <button class="btn btn-success btn-md block" @click="logIn()"> Sign In </button>
+    </div>
+    <div class="container" style="margin-top: 10px">
+      <button class="btn btn-danger btn-md block" @click="logOut()"> Sign Out </button>
     </div>
   </div>
 </template>
@@ -82,6 +85,9 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    logOut () {
+      this.$store.commit('setToken', '')
     }
   }
 }

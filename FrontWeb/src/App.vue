@@ -1,9 +1,12 @@
 <template>
   <div id="app">
-    <img src="./assets/moto_toast.png" height="100" margin>
+    <img src="./assets/moto_toast.png" height="110" margin>
     <div class="container" id="button-group-index">
-      <div class="btn-group btn-group-toggle mt-20" data-toggle="buttons" id = "buttonGroup" data-test="app-button-group">
-        <label class="btn btn-secondary" >
+      <div class="btn-group btn-group-toggle mt-20" data-toggle="buttons" id="buttonGroup" data-test="app-button-group">
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="homeID" autocomplete="off" checked @click="goToHome"> Home
+        </label>
+        <label class="btn btn-secondary">
           <input type="radio" name="options" id="motosID" autocomplete="off" checked @click="goToMotos"> Motos
         </label>
         <label class="btn btn-secondary">
@@ -21,6 +24,9 @@
         <label class="btn btn-secondary">
           <input type="radio" name="options" id="paymentsID" autocomplete="off" checked @click="goToPayments"> Payments
         </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="statisticsID" autocomplete="off" checked @click="goToStatistics"> Statistics
+        </label>
       </div>
     </div>
     <router-view/>
@@ -31,6 +37,9 @@
 export default {
   name: 'App',
   methods: {
+    goToHome () {
+      this.$router.replace({path: '/'})
+    },
     goToMotos () {
       this.$router.replace({path: '/motos'})
     },
@@ -48,6 +57,9 @@ export default {
     },
     goToPayments () {
       this.$router.replace({path: '/payments'})
+    },
+    goToStatistics () {
+      this.$router.replace({ path: '/statistics' })
     }
   }
 }
