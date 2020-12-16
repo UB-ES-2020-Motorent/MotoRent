@@ -39,22 +39,8 @@ class SignUpPresenter (private val activity: SignUpActivity) {
                 return false;
             }
         }else{
-            activity.toast("Les contrasenyes no coincideixen.")
-            return false;
-        }
-        return true
-    }
 
-    fun checkPasswordisValid(password1:String, password2: String): Boolean {
-        if(password1 == password2){
-            if(password1.length>5){
-                if(!checkNumberInString(password1)) {
-                    return false;
-                }
-            }else{
-                return false;
-            }
-        }else{
+            activity.toast("Les contrasenyes no coincideixen.")
             return false;
         }
         return true

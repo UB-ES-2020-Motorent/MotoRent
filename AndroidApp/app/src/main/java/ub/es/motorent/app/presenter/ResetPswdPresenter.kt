@@ -7,9 +7,9 @@ import com.google.firebase.ktx.Firebase
 import ub.es.motorent.app.view.FullScreenActivity
 import ub.es.motorent.app.view.ResetPswdActivity
 
-private var auth: FirebaseAuth = Firebase.auth
-
 class ResetPswdPresenter (var activity: ResetPswdActivity){
+
+    private var auth: FirebaseAuth = Firebase.auth
 
     fun sendMail(email: String){
         if(email != ""){
@@ -24,16 +24,6 @@ class ResetPswdPresenter (var activity: ResetPswdActivity){
         }else{
             activity.customToast("Ompla el camp amb l'email", Toast.LENGTH_LONG).show()
         }
-    }
-
-    fun notEmptyInfoField(email: String): Boolean{
-        return !email.isEmpty()
-    }
-
-    fun verifyMail(email: String): Boolean{
-        if (email.length<6 || !email.contains("@") || !email.contains(".")) {
-            return false
-        }else return true
     }
 
 

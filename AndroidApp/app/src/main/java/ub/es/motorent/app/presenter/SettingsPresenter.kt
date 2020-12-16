@@ -15,6 +15,9 @@ private var auth: FirebaseAuth = Firebase.auth
 
 class SettingsPresenter(var activity: SettingsActivity) {
 
+
+
+
     fun logOutAccount(){
         auth.signOut()
     }

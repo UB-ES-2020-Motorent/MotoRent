@@ -88,15 +88,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-        // TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
 
     override fun onProviderEnabled(p0: String?) {
-        // TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
 
     override fun onProviderDisabled(p0: String?) {
-        // TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
 
     /**
@@ -166,7 +166,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
         for (moto in motoList.motos) { // add new motos ( only available )
             if (moto.available?.toBoolean() == true){
-                val location = LatLng(moto.latitude.toDouble(), moto.longitude.toDouble())
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
                 val marker = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
                 fromResource(R.drawable.motoicon))
                 markersToUpdate.add(marker)
@@ -189,7 +189,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         markersInDisplay.forEach { it.remove() }
         motoList.motos.forEach { moto ->
             if (moto.id == motoId){
-                val location = LatLng(moto.latitude.toDouble(), moto.longitude.toDouble())
+                val location = LatLng(moto.longitude.toDouble(), moto.latitude.toDouble())
                 val markerOp = MarkerOptions().position(location).icon(BitmapDescriptorFactory.
                 fromResource(R.drawable.motoicon))
                 val marker = mMap.addMarker(markerOp)
@@ -227,13 +227,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         if (rentalDB != rentalSP) {
                             doSthWithWrongRentalOnSP(rentalDB)
                         }
-                        setCurrentRentalInfo(rentalDB)
 
                         if (rentalDB == null || !rentalDB.active){
                             loadMotosOnMap(motoList)
                         } else {
-
-
+                            setCurrentRentalInfo(rentalDB)
                             loadMotoRentalOnMap(rentalDB.moto_id, motoList)
                         }
                     }
@@ -246,27 +244,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         CommonFunctions.saveCurrentRentalInfoToSharedPref(rentalDB, this)
     }
 
-     override fun setCurrentRentalInfo(rentalDB: RentalInfo?) {
-        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail)
-         if (fragment != null){
-             val frag = fragment as MotoDetailsFragment
-             when {
-                 rentalDB == null -> {
-                     frag.updateRentButtonText(0)
-                     rentalStatus = 0
-                 }
-                 (rentalDB?.book_hour != null) and (rentalDB?.finish_book_hour == null) -> {
-                     frag.updateRentButtonText(1)
-                     rentalStatus = 1
-                 }
-                 (rentalDB?.finish_book_hour != null) and (rentalDB != null) -> {
-                     frag.updateRentButtonText(2)
-                     rentalStatus = 2
-
-                 }
-             }
-         }
-
+    private fun setCurrentRentalInfo(rentalDB: RentalInfo) {
+        //val fragment: MotoDetailsFragment = supportFragmentManager.findFragmentById(R.id.fragment_moto_detail) as MotoDetailsFragment
+        if (rentalDB.finish_book_hour != null){
+            //fragment.updateRentButtonText(2)
+            rentalStatus = 2
+        } else {
+            //fragment.updateRentButtonText(1)
+            rentalStatus = 1
+        }
     }
 
     override fun setRentalStatus(status: Int) {
@@ -294,9 +280,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         return if(this::coordenadas.isInitialized) PolyUtil.containsLocation(coordenadas, holePolyg, true) else false
     }
 
-    override fun getStatus(): Int {
-        return rentalStatus
-    }
     companion object {
         private const val TAG = "MapsActivity"
     }
@@ -323,10 +306,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         }
                     }
                 }
-                /*for (i in 0 until holePolyg.size){
+                for (i in 0 until holePolyg.size){
                     Log.i("LATITUD", holePolyg.get(i).latitude.toString())
                     Log.i("LONGITUD", holePolyg.get(i).longitude.toString())
-                }*/
+                }
 
                 hollowPolygon = mMap.addPolygon(
                     PolygonOptions().add(
