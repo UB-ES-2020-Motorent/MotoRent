@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="container" style="margin-top: 20px">
-      <button class="btn btn-success btn-md block" @click="logIn()"> Sign In </button>
+      <button data-test="login-button" class="btn btn-success btn-md block" @click="logIn()"> Sign In </button>
     </div>
     <div class="container" style="margin-top: 10px">
       <button class="btn btn-danger btn-md block" @click="logOut()"> Sign Out </button>
@@ -48,7 +48,7 @@ export default {
   name: 'Home',
   data () {
     return {
-      modalID: 'modaliD',
+      modalID: 'modalID',
       loginData: {
         mail: '',
         password: '',

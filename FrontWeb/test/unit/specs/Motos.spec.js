@@ -72,13 +72,12 @@ describe('Motos', () => {
       const wrapper = mount(Motos, { localVue, store });
       expect(wrapper.find('[data-test="motos-title"]').text()).toEqual( 'Motos' );
       wrapper.destroy()
-    });
-    /*
+    });/*
     it('getMotos when created', async () => {
-      const wrapper = mount(Motos, { localVue });
+      const wrapper = mount(Motos, { localVue, store });
       await flushPromises();
-      // expect(axios.get).toHaveBeenCalledTimes(1)
-      // expect(wrapper.vm.motos.length).toBe(2);
+      expect(axios.get).toHaveBeenCalledTimes(2)
+      expect(wrapper.vm.motos.length).toBe(2)
       expect(wrapper.find('[data-test="motos-b-table"]').element.tagName).toBe('TABLE')
       expect(wrapper.find('[data-test="motos-b-table"]').classes()).toContain('b-table')
       expect(wrapper.find('[data-test="motos-b-table"]').findAll('tbody > tr').length).toBe(2)
