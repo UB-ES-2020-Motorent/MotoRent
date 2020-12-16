@@ -11,7 +11,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import ub.es.motorent.R
-import ub.es.motorent.app.model.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,27 +52,23 @@ class ReportFragment : Fragment() {
 
         sendReport.setOnClickListener {
             var missatge = ""
-            if (check1.isChecked){
+            if (check1.isChecked == true){
                 missatge += (check1.text.toString() + ", ")
             }
-            if(check2.isChecked){
+            if(check2.isChecked == true){
                 missatge += (check2.text.toString() + ", ")
             }
-            if(check3.isChecked){
+            if(check3.isChecked == true){
                 missatge += (check3.text.toString() + ", ")
             }
-            if(check4.isChecked){
+            if(check4.isChecked == true){
                 missatge += (check4.text.toString() + ", ")
             }
             if(reportText.text.toString() != ""){
                 missatge += (reportText.text.toString() + ".")
             }
 
-            val userId = CommonFunctions.loadUserInfoFromSharedPrefFragment(activity)?.id
-
-            IncidencesDB.addIncident(id, userId, missatge ){incidence ->
-                CommonFunctions.saveCurrentIncidenceInfoToSharedPref(incidence, activity)
-            }
+            //A FALTA DE UNA CRIDA A BACK, CRIDA AMB ID DE LA MOTO I AUTH.USER
 
             Log.d("ReportFragment", missatge)
             Toast.makeText(context, "Incidència reportada correctament", Toast.LENGTH_LONG).show()

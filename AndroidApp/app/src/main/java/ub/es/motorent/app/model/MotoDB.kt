@@ -1,7 +1,6 @@
 package ub.es.motorent.app.model
 
 import android.util.Log
-import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -42,13 +41,6 @@ object MotoDB {
     fun addMoto(license_number: String, battery: Int, longitude: Float, latitude: Float){
         val apiService = RestApiService()
         apiService.addMoto(license_number, battery, longitude, latitude) {
-            Log.i(TAG, it.toString())
-        }
-    }
-
-    fun updateMotoById(id: Int, available: String){
-        val apiService = RestApiService()
-        apiService.updateMotoById(id, available) {
             Log.i(TAG, it.toString())
         }
     }
