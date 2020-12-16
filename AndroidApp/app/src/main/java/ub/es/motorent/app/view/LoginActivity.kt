@@ -19,22 +19,12 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.replace
-
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.*
-import com.facebook.AccessToken.getCurrentAccessToken
-import com.facebook.internal.WebDialog
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-
-
-
-
+import com.facebook.internal.WebDialog
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -46,11 +36,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
-
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.identity.TwitterLoginButton
-
 import kotlinx.android.synthetic.main.activity_login.*
 import ub.es.motorent.R
 import com.google.android.gms.tasks.Task;
@@ -75,9 +63,8 @@ class LoginActivity : FullScreenActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         presenter = LoginPresenter(this)
-
-
 
         val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
@@ -92,6 +79,14 @@ class LoginActivity : FullScreenActivity(){
         mAuth = FirebaseAuth.getInstance()
 
 
+        //val loginFacebookBtn : Button = findViewById(R.id.facebook_btn)
+        //loginFacebookBtn?.setOnClickListener { loginFacebook() }
+
+        val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
+        loginTwitterBtn?.setOnClickListener {
+            signInWithTwitter()
+        }
+
         val btnResetPsw: Button= findViewById(R.id.recu_psw)
         btnResetPsw.setOnClickListener {
             val intentI = Intent(this, ResetPswdActivity::class.java)
@@ -104,7 +99,7 @@ class LoginActivity : FullScreenActivity(){
             startActivity(intentI)
         }
 
-        // login eMail
+        // login email
         val txtEmail : TextView = findViewById(R.id.login_txt_email)
         val txtPassword : TextView = findViewById(R.id.login_txt_password)
         val btnRegister : Button = findViewById(R.id.login_btn)
@@ -118,18 +113,6 @@ class LoginActivity : FullScreenActivity(){
             signInWithGoogle()
         }
 
-        // login Twitter
-        val loginTwitterBtn : Button = findViewById(R.id.twitter_btn)
-        loginTwitterBtn?.setOnClickListener {
-            signInWithTwitter()
-        }
-/*
-        // login Facebook
-        val loginFacebookBtn : Button = findViewById(R.id.facebook_btn)
-        loginFacebookBtn?.setOnClickListener {
-            signInWithFacebook()
-        }
-*/
     }
 
     fun goToMaps(){
@@ -163,9 +146,6 @@ class LoginActivity : FullScreenActivity(){
                     getString(R.string.fail_google_auth),
                     Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
             }
-        }else {
-            // Pass the activity result back to the Facebook SDK
-            callbackManager.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -181,17 +161,34 @@ class LoginActivity : FullScreenActivity(){
             }
     }
 
+    /*
+    private fun loginFacebook() {
 
-    private fun signInWithFacebook() {
-        val loginMan =  LoginManager.getInstance()
+        LoginManager.getInstance().logInWithReadPermissions(this, listOf("email"))
 
-        loginMan.logInWithReadPermissions(this, listOf("email"))
-        loginMan.registerCallback(callbackManager,
-            object : FacebookCallback<LoginResult> {
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult>{
+
                 override fun onSuccess(result: LoginResult?) {
                     result?.let {
-                        val token = it.accessToken
-                        presenter.firebaseAuthWithFacebook(token)
+                        val facebookToken = it.accessToken
+                        val credential = FacebookAuthProvider.getCredential(facebookToken.token)
+
+                        mAuth.signInWithCredential(credential).addOnCompleteListener {
+                            if(it.isSuccessful){
+                                val user = mAuth.currentUser
+                                //setAuth(user)
+
+                                val intentI = Intent(this@LoginActivity, MapsActivity::class.java)
+                                startActivity(intentI)
+                            } else {
+                                Log.w(TAG, "signInWithFAcebook:failure")
+                                customImageToast(
+                                    R.drawable.moto_toast, getString(R.string.fail_auth),
+                                    Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
+                                supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
+                            }
+                        }
                     }
                 }
 
@@ -200,21 +197,15 @@ class LoginActivity : FullScreenActivity(){
                 }
 
                 override fun onError(error: FacebookException?) {
-                    Log.w(TAG, "signInWithFacebook:onError")
-                    Log.w(TAG, error.toString())
+                    Log.w(TAG, "signInWithFAcebook:failure")
                     customImageToast(
                         R.drawable.moto_toast, getString(R.string.fail_auth),
                         Toast.LENGTH_SHORT, Gravity.BOTTOM or Gravity.FILL_HORIZONTAL,0,100).show()
-                    if (error is FacebookAuthorizationException){
-                        if (getCurrentAccessToken() != null){
-                            LoginManager.getInstance().logOut()
-                            Log.w(TAG, "signInWithFacebook:LogOut")
-                        }
-                    }
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_login, LoginSignFragment()).commit()
                 }
             })
     }
-
+     */
 
     private fun getTwitterSession(): TwitterSession? {
         /*TwitterAuthToken authToken = session.getAuthToken();

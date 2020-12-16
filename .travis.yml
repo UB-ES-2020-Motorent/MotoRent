@@ -6,9 +6,7 @@ jobs:
       install:
         - pip install -r Deployment/requirements.txt
       script:
-        - cd Backend
-        - python -m unittest
-        - cd ..
+        - python -c "print ('Python is running in Travis.')"
       branches:
       only:
       - main
@@ -61,18 +59,3 @@ jobs:
         - chmod +x gradlew
       script:
         - ./gradlew build check
-        - cd ..
-    - language: node_js
-      node_js:
-        - "node"
-      before_install: cd FrontWeb
-      install: npm ci
-      deploy:
-        - provider: heroku
-          skip_cleanup: true
-          api_key:
-            secure: jkGxxiERVLdItazOzfdOxNPAfqxHIg3N98PB24aZ6MEO8sHvWDhCqi1S1a2TtDuoTl5SPrWRUyaS7KLe61Vuo8Z8h2TNBxCV8XJpIjRRND9H9qHLWLEvWHMM5BQOjRUlh0/RLYPolVnfjBiFgEwfSqsGdmcXsj+6j6wgQJmJPLEGeSCufbEkVCpN4XSak+h9tN8AzE0Sl5790SmaBEb8BkcGYG4YwPJVyJ2rF1mhtTetu3hdwmzSXFBmdzMLnkhQDw5ffGO9cLV3WIrUrsMaQRBsdl0jeJOM8KM0jvuEYgRpHOOEFo7MWIRO+ezhhuN2O3iMVz7TC3rhb51oVDqukLLmsG9UDVFVtaaygSSiIX9OsbprDkhQr3BHSEGnrFKtLMyijaTGY4x+UNCfc1wI62Kyfd3AgTPnZrc7CKaS9GnVuX2HiTGzas+psCHDHfJRPSh6mVcKNm2ywB0U0fnFz5VqabhM7Zh5/GAIzxgASdPrhwvqvEFUTYm5EbZT9exxVjuhP9j52YMQJTtm1Kdmk8VDNisjVqVV6YiCNFg+f6tU3Jrt/uwInHN77/y0G5dZoePRHf/k6rZbZtuE4Gio8lxGItnBKx3SS2rjz/I9FbeoxgWwiqT3nmJliC09shTBGcRMeagDqdkqkYTbkxhDRuoKFDRodMH30gg0jfes+Ck=
-          app:
-            develop: motorent-frontweb
-            main: motorent-frontweb-deploy
-        

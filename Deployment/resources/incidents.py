@@ -1,7 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.incidents import IncidentsModel
-from models.users import auth
-from flask import g
+import sys
 
 parser = reqparse.RequestParser()
 parser.add_argument('moto_id', type=int, required=False, help='Moto id of incident.')
@@ -15,7 +14,6 @@ class Incident(Resource):
     API Restful methods for Rentals
     """
 
-    @auth.login_required(role='admin')
     def get(self, incident_id):
         """
         GET method. Gets a Incident by id
@@ -57,7 +55,6 @@ class Incident(Resource):
         except Exception as e:
             return {'message': 'Internal server error.\n' + str(e)}, 500
 
-    @auth.login_required(role='admin')
     def delete(self, incident_id):
         """
         DELETE method
@@ -80,7 +77,6 @@ class IncidentsList(Resource):
     API restful methods for incidents list
     """
 
-    @auth.login_required(role='admin')
     def get(self):
         """
         GET method

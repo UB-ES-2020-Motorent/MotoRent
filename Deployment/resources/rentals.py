@@ -2,8 +2,7 @@ from flask_restful import Resource, reqparse
 from models.rentals import RentalsModel
 from datetime import datetime, timedelta
 from models.motos import MotosModel
-from models.users import auth
-from flask import g
+
 
 
 parser = reqparse.RequestParser()
@@ -111,7 +110,6 @@ class Rentals(Resource):
         else:
             return {'message': 'Bad request, you must pass end_rental param'}, 400
 
-    @auth.login_required(role='admin')
     def delete(self, id):
         """
         DELETE method
@@ -133,7 +131,6 @@ class ActiveRentals(Resource):
     """
     API Restful methods for ActiveRentals
     """
-
     def get(self, user_id):
         """
         GET method
@@ -153,7 +150,6 @@ class RentalsList(Resource):
     """
     API Restful methods for RentalsList
     """
-
     def get(self):
         """
         GET method
@@ -167,9 +163,10 @@ class RentalsList(Resource):
 
 
 def str_to_bool(s):
-    if s.lower() == 'true':
-         return True
-    elif s.lower() == 'false':
+    print(s)
+    if s == 'True':
+        return True
+    elif s == 'False':
          return False
     else:
          raise ValueError
