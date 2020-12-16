@@ -62,7 +62,7 @@ export default {
       return {
         'total_rentals': this.statistics[year][month]['num_rentals'],
         'rental_earnings': this.statistics[year][month]['total_money'] + ' \u20AC',
-        'rentals_mean_duration_(minutes)': this.statistics[year][month]['rental_duration_total'] / this.statistics[year][month]['num_rentals']
+        'rentals_mean_duration_(minutes)': (this.statistics[year][month]['rental_duration_total'] / this.statistics[year][month]['num_rentals']).toFixed(2)
       }
     }
   },
