@@ -116,17 +116,17 @@
                 android:text="@string/google"
                 android:textColor="#b50703"
                 android:background="@drawable/google_btn"/>
-
-            <Button
-                android:id="@+id/facebook_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:text="@string/facebook"
-                android:textColor="#1A14EB"
-                android:background="@drawable/facebook_btn"/>
-
+            <!---
+                        <Button
+                            android:id="@+id/facebook_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:text="@string/facebook"
+                            android:textColor="#1A14EB"
+                            android:background="@drawable/facebook_btn"/>
+-->
             <Button
                 android:id="@+id/twitter_btn"
                 android:layout_width="wrap_content"
