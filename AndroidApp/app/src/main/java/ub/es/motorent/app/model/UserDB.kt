@@ -28,6 +28,7 @@ object UserDB {
         apiService.getUsers() {
             Log.i(TAG, it.toString())
         }
+        return@getUsers
     }
 
     fun getUserByIdOrGoogleToken(id: Int? = null, google_token: String? = null, onResult: (UserInfo?) -> Unit) {
@@ -62,7 +63,7 @@ object UserDB {
         val apiService = RestApiService()
         apiService.updateUser(id, name, surname, national_id_document, country, email, google_token,
                               role, id_bank_data ) {
-            Log.i(TAG, it.toString())
+            //Log.i(TAG, it.toString())
             onResult(it)
         }
     }
