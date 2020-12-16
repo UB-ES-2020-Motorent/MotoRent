@@ -1,6 +1,8 @@
 from flask_restful import Resource, reqparse
 from models.bank_data import BankDataModel
 from models.users import UsersModel
+from models.users import auth
+from flask import g
 
 parser = reqparse.RequestParser()
 parser.add_argument('id_bank_data', type=str, required=False, help="Account bank data id, This field cannot be left "
@@ -60,7 +62,6 @@ class BankData(Resource):
         else:
             return {'message': "Please filter by a valid feature: user id, bank data id or card number"}, 400
 
-
     def post(self):
         """
         POST method
@@ -117,6 +118,7 @@ class BankData(Resource):
         else:
             return {'message': "User with id [{}] does not exist".format(data['user_id'])}, 409
 
+    @auth.login_required(role='admin')
     def put(self, id_bank_data):
         """
         PUT method
@@ -192,6 +194,7 @@ class BankDataList(Resource):
     """
     API Restful methods for BankDataList
     """
+
     def get(self):
         """
         GET method
