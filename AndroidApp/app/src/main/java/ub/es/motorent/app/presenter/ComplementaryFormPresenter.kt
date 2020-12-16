@@ -37,7 +37,6 @@ class ComplementaryFormPresenter (var activity: ComplementaryFormActivity): Full
             UserDB.updateUserInfoInDataBase(userInfo.id!!, name = name, surname = surname, country = country, national_id_document = idCard) {
                 CommonFunctions.saveUserInfoToSharedPref(it!!.user, activity)
             }
-
             activity.goToMap()
         }
     }
@@ -54,6 +53,10 @@ class ComplementaryFormPresenter (var activity: ComplementaryFormActivity): Full
         val user = CommonFunctions.loadUserInfoFromSharedPref(activity)
         //return if (user != null) listOf(user.name, user.surname) else null
         return if (user != null) listOf(user.name, user.surname) else emptyList()
+    }
+
+    fun notEmptyInfoField(name: String, country: String, idCard: String, surname: String):Boolean{
+        return !(name.isEmpty() or country.isEmpty() or idCard.isEmpty() or surname.isEmpty())
     }
 
     companion object{
