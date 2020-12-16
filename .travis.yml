@@ -66,9 +66,7 @@ jobs:
       node_js:
         - "node"
       before_install: cd FrontWeb
-      install: 
-        - npm ci
-        - npm install shelljs --save
+      install: npm ci
       deploy:
         - provider: heroku
           skip_cleanup: true
