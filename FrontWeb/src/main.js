@@ -14,7 +14,7 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 Vue.prototype.$axios = axios
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
-Vue.prototype.$heroku = 'https://motorent-apitest.herokuapp.com'
+Vue.prototype.$heroku = 'https://motorent-deploy.herokuapp.com'
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyDNBDKhSoYVhvd8SWPVCavLPspiE1UJ01c',

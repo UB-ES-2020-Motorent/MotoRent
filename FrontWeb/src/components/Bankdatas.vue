@@ -277,7 +277,6 @@ export default {
         })
         .catch((error) => {
           console.error(error)
-          this.getBankDatas()
         })
     },
     resetAddBankDataModal () {

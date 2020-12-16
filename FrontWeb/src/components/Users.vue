@@ -5,11 +5,12 @@
       <b-table striped hover :items="users" :fields="fields" :filter-function="filterTable" sort-by="id">
         <template #cell(actions)="row">
           <button class="btn btn-warning btn-sm" @click="goToUser(row.item.id, $event.target)"> user </button>
+          <button class="btn btn-secondary btn-sm" @click="modifyUser(row.item, $event.target)"> modify </button>
           <button class="btn btn-danger btn-sm" @click="deleteUser(row.item.id)"> X </button>
         </template>
       </b-table>
       <button class="btn btn-success btn-md" @click="addUser($event.target)"> Add User </button>
-       <!-- Modal Add Moto -->
+       <!-- Modal Add User -->
       <b-modal :id="addUserModal.id" :title="addUserModal.title" centered  @ok="handleOk" @hidden="resetAddUserModal">
         <form ref="form">
           <b-form-group
@@ -63,6 +64,7 @@
           >
             <b-form-input
               id="passwword-input"
+              :disabled="!isPostNotPut"
               v-model="addUserModal.user.password"
               required
             ></b-form-input>
@@ -74,6 +76,7 @@
           >
             <b-form-input
               id="mail-input"
+              :disabled="!isPostNotPut"
               v-model="addUserModal.user.mail"
               required
             ></b-form-input>
@@ -107,7 +110,7 @@ export default {
   data () {
     return {
       users: [],
-      fields: ['id', 'id_bank_data', 'national_id_document', 'country', 'name', 'surname', 'mail', 'role', 'actions'],
+      fields: ['id', 'national_id_document', 'country', 'name', 'surname', 'mail', 'role', 'actions'],
       isPostNotPut: true,
       addUserModal: {
         id: 'add-user-modal',
@@ -160,7 +163,7 @@ export default {
     modifyUser (user, button) {
       this.isPostNotPut = false
       this.addUserModal.user = user
-      this.openMotoModal(`Modify User with id: ${user.id}`, button)
+      this.openUserModal(`Modify User with id: ${user.id}`, button)
     },
     openUserModal (title, button) {
       this.addUserModal.title = title
@@ -172,8 +175,6 @@ export default {
     },
     handleSubmit () {
       this.postUser()
-      this.$nextTick(() => {
-      })
     },
     postUser () {
       const path = this.$heroku + `/user`
@@ -237,39 +238,28 @@ export default {
       }
     },
     submit () {
-      try {
-        firebase.auth().createUserWithEmailAndPassword(this.addUserModal.user.mail, this.addUserModal.user.password)
-          .then((user) => {
-            const u = firebase.auth().currentUser
-            if (u != null) {
-              console.log(u)
-              this.addUserModal.user.google_token = u.uid
-              this.handleSubmit()
-            } else {
-              console.log(u)
-            }
-          })
-      } catch (err) {
-        console.log(err)
+      if (this.isPostNotPut) {
+        try {
+          firebase.auth().createUserWithEmailAndPassword(this.addUserModal.user.mail, this.addUserModal.user.password)
+            .then((user) => {
+              const u = firebase.auth().currentUser
+              if (u != null) {
+                console.log(u)
+                this.addUserModal.user.google_token = u.uid
+                this.handleSubmit()
+              } else {
+                console.log(u)
+              }
+            })
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        this.putUser()
       }
     },
     goToUser (id, button) {
       this.$router.replace({path: `/user/${id}`})
-    },
-    filterTable (row, filter) {
-      if (this.filterOn.includes('moto_id')) {
-        if (row.moto_id.toString() === filter) {
-          return true
-        } else {
-          return false
-        }
-      } else if (this.filterOn.includes('user_id')) {
-        if (row.user_id.toString() === filter) {
-          return true
-        } else {
-          return false
-        }
-      }
     }
   },
   created () {
